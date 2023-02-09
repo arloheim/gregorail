@@ -6,7 +6,7 @@ import dev.danae.gregorail.handlers.LocateCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class RailPlugin extends JavaPlugin
+public final class RailPlugin extends JavaPlugin
 {
   // Enable the plugin
   @Override
@@ -22,18 +22,5 @@ public class RailPlugin extends JavaPlugin
   @Override
   public void onDisable()
   {
-  }
-  
-  
-  // Run a delayed task
-  public void runDelayed(Runnable runnable, long delayTicks)
-  {
-    this.getServer().getScheduler().scheduleSyncDelayedTask(this, runnable, delayTicks);
-  }
-  
-  // Run a repeating task
-  public void runRepeating(Runnable runnable, long delayTicks, long periodTicks)
-  {
-    this.getServer().getScheduler().scheduleSyncRepeatingTask(this, runnable, delayTicks, periodTicks);
   }
 }

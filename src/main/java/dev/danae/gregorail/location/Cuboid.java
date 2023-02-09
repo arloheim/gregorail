@@ -72,7 +72,7 @@ public final class Cuboid
   public Collection<Block> blocks()
   {    
     return this.locationsStream()
-      .map(l -> this.world.getBlockAt(l))
+      .map(l -> l.getBlock())
       .collect(Collectors.toCollection(ArrayList::new));
   }
   

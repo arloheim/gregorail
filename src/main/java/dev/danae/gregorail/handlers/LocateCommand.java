@@ -33,13 +33,10 @@ public class LocateCommand extends CommandHandler
       if (location == null)
         throw new CommandException("No location found");
       
-      // Get the block
-      var block = location.getWorld().getBlockAt(location);
-      
       // Send information about the location and block
-      context.getSender().sendMessage(String.format("Location [%d %d %d], Block %s", 
-        location.getBlockX(), location.getBlockY(), location.getBlockZ(), 
-        block.getType().name()));
+      context.getSender().sendMessage(String.format("Block %s at [%d %d %d]", 
+        location.getBlock().getType().name(),
+        location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
     catch (LocationException ex)
     {

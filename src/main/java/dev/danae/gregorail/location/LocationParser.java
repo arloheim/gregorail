@@ -1,8 +1,11 @@
 package dev.danae.gregorail.location;
 
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 
 
 public class LocationParser
@@ -81,5 +84,36 @@ public class LocationParser
     
     // No suitable location found
     return null;
+  }
+  
+  
+  // Return the nearest entity matching the predicate from a location string
+  public static Entity parseEntity(Location loc, String string, int radius, Predicate<Entity> predicate) throws LocationException
+  {
+    var location = parse(loc, string);
+    if (location == null)
+      return null;
+    
+    return Cuboid.of(location, radius).findNearestEntityToCenter(predicate);
+  }
+  
+  // Return the nearest entity of the specified class from a location string
+  public static <T extends Entity> T parseEntity(Location loc, String string, int radius, Class<T> cls) throws LocationException
+  {
+    var location = parse(loc, string);
+    if (location == null)
+      return null;
+    
+    return Cuboid.of(location, radius).findNearestEntityToCenter(cls);
+  }
+  
+  // Return the block from a location string
+  public static Block parseBlock(Location loc, String string) throws LocationException
+  {
+    var location = parse(loc, string);
+    if (location == null)
+      return null;
+    
+    return location.getBlock();
   }
 }
