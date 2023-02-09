@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public abstract class CommandHandler implements CommandExecutor
 {
   // Reference to the plugin
-  private final RailPlugin plugin;
+  protected final RailPlugin plugin;
   
   
   // Constructor

@@ -5,14 +5,16 @@ import dev.danae.gregorail.commands.CommandException;
 import dev.danae.gregorail.commands.CommandHandler;
 import dev.danae.gregorail.commands.CommandHandlerContext;
 import dev.danae.gregorail.commands.CommandUsageException;
+import dev.danae.gregorail.location.Cuboid;
 import dev.danae.gregorail.location.LocationException;
 import dev.danae.gregorail.location.LocationParser;
+import org.bukkit.entity.Minecart;
 
 
-public class LocateCommand extends CommandHandler
+public class LocateCartCommand extends CommandHandler
 {
   // Constructor
-  public LocateCommand(RailPlugin plugin)
+  public LocateCartCommand(RailPlugin plugin)
   {
     super(plugin);
   }
@@ -33,13 +35,18 @@ public class LocateCommand extends CommandHandler
       if (location == null)
         throw new CommandException("No location found");
       
-      // Get the block
-      var block = location.getWorld().getBlockAt(location);
+      // Get the nearest cart at the location
+      var cart = Cuboid.of(location, 10).findNearestEntityToCenter(Minecart.class);
+      if (cart == null)
+        throw new CommandException("No cart found");
       
-      // Send information about the location and block
-      context.getSender().sendMessage(String.format("Location [%d %d %d], Block %s", 
+      // TODO: Glow the cart for an instant
+        
+      // Send information about the location and cart
+      context.getSender().sendMessage(String.format("Location [%d %d %d], Cart \"%s\" at [%d %d %d]", 
         location.getBlockX(), location.getBlockY(), location.getBlockZ(), 
-        block.getType().name()));
+        cart.isCustomNameVisible() ? cart.getCustomName() : cart.getName(),
+        cart.getLocation().getBlockX(), cart.getLocation().getBlockY(), cart.getLocation().getBlockZ()));
     }
     catch (LocationException ex)
     {
