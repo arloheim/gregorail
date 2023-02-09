@@ -27,6 +27,10 @@ public class SwitchCommand extends CommandHandler
   {
     try
     {
+      // Check for permissions
+      if (!context.hasPermissions("gregorail.switch"))
+        throw new CommandException("You have insufficient permissions to execute the command");
+      
       // Assert that the command sender has a location
       var senderLocation = context.assertHasLocation();
       

@@ -11,6 +11,18 @@ commands:
     usage: "Usage: /<command> assign <code> [location] | locate <location> | locatecart <location> | switch <shape> <location> | switchif <code> <shape> <location>"
     
 permissions:
-  gregorail.rail:
-    description: Allows the player to use the /rail command.
+  gregorail.assign:
+    description: Allows the player to use the /rail assign command.
+    default: true
+  gregorail.locate:
+    description: Allows the player to use the /rail locate command.
+    default: op
+  gregorail.locatecart:
+    description: Allows the player to use the /rail locatecart command.
+    default: op
+  gregorail.switch:
+    description: Allows the player to use the /rail switch command.
+    default: op
+  gregorail.switchif:
+    description: Allows the player to use the /rail switchif command.
     default: op
