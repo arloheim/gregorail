@@ -36,7 +36,7 @@ public class CommandGroupHandler extends CommandHandler
   
   // Handle a command
   @Override
-  public void handle(CommandHandlerContext context) throws CommandException, CommandUsageException
+  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
     // Check if the arguments provide a subcommand
     if (context.getArguments().length < 1)

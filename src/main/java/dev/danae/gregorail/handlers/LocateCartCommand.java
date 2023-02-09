@@ -1,12 +1,12 @@
 package dev.danae.gregorail.handlers;
 
 import dev.danae.gregorail.RailPlugin;
+import dev.danae.gregorail.commands.CommandContext;
 import dev.danae.gregorail.commands.CommandException;
 import dev.danae.gregorail.commands.CommandHandler;
-import dev.danae.gregorail.commands.CommandHandlerContext;
 import dev.danae.gregorail.commands.CommandUsageException;
 import dev.danae.gregorail.location.LocationException;
-import dev.danae.gregorail.location.LocationParser;
+import dev.danae.gregorail.location.LocationUtils;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
@@ -21,23 +21,23 @@ public class LocateCartCommand extends CommandHandler
   
   // Handle the command
   @Override
-  public void handle(CommandHandlerContext context) throws CommandException, CommandUsageException
+  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
     try
     {
       // Assert that the command sender has a location
-      var senderLocation = context.assertSenderHasLocation();
+      var senderLocation = context.assertHasLocation();
     
-      // Parse the cart
-      var string = context.getJoinedArguments();
-      var cart = LocationParser.parseEntity(senderLocation, string, 10, RideableMinecart.class);
+      // Parse the arguments
+      if (!context.hasAtLeastArgumentsCount(1))
+        throw new CommandUsageException();
+      
+      var cart = LocationUtils.parseEntity(senderLocation, context.getJoinedArguments(), RideableMinecart.class);
       if (cart == null)
-        throw new CommandException("No cart found");
-        
-      // Send information about the location and cart
-      context.getSender().sendMessage(String.format("Cart \"%s\" at [%d %d %d]",
-        cart.getCustomName() != null ? cart.getCustomName() : cart.getName(),
-        cart.getLocation().getBlockX(), cart.getLocation().getBlockY(), cart.getLocation().getBlockZ()));
+        throw new CommandException(String.format("No cart found for \"%s\"", context.getJoinedArguments()));
+      
+      // Send information about the cart
+      context.getSender().sendMessage(LocationUtils.formatEntity(cart));
     }
     catch (LocationException ex)
     {

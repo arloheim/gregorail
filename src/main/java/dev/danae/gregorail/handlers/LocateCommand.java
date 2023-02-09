@@ -1,12 +1,12 @@
 package dev.danae.gregorail.handlers;
 
 import dev.danae.gregorail.RailPlugin;
+import dev.danae.gregorail.commands.CommandContext;
 import dev.danae.gregorail.commands.CommandException;
 import dev.danae.gregorail.commands.CommandHandler;
-import dev.danae.gregorail.commands.CommandHandlerContext;
 import dev.danae.gregorail.commands.CommandUsageException;
 import dev.danae.gregorail.location.LocationException;
-import dev.danae.gregorail.location.LocationParser;
+import dev.danae.gregorail.location.LocationUtils;
 
 
 public class LocateCommand extends CommandHandler
@@ -20,23 +20,23 @@ public class LocateCommand extends CommandHandler
   
   // Handle the command
   @Override
-  public void handle(CommandHandlerContext context) throws CommandException, CommandUsageException
+  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
     try
     {
       // Assert that the command sender has a location
-      var senderLocation = context.assertSenderHasLocation();
+      var senderLocation = context.assertHasLocation();
     
-      // Parse the location
-      var string = context.getJoinedArguments();
-      var location = LocationParser.parse(senderLocation, string);
-      if (location == null)
-        throw new CommandException("No location found");
+      // Parse the arguments
+      if (!context.hasAtLeastArgumentsCount(1))
+        throw new CommandUsageException();
       
-      // Send information about the location and block
-      context.getSender().sendMessage(String.format("Block %s at [%d %d %d]", 
-        location.getBlock().getType().name(),
-        location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+      var block = LocationUtils.parseBlock(senderLocation, context.getJoinedArguments());
+      if (block == null)
+        throw new CommandException(String.format("No location found for \"%s\"", context.getJoinedArguments()));
+      
+      // Send information about the block
+      context.getSender().sendMessage(LocationUtils.formatBlock(block));
     }
     catch (LocationException ex)
     {

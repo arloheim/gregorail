@@ -32,7 +32,7 @@ public abstract class CommandHandler implements CommandExecutor
   {
     try
     {
-      var context = new CommandHandlerContext(command, args, sender);
+      var context = new CommandContext(command, args, sender);
       this.handle(context);
       return true;
     }
@@ -48,5 +48,5 @@ public abstract class CommandHandler implements CommandExecutor
   }
   
   // Actual function to handle a command
-  public abstract void handle(CommandHandlerContext context) throws CommandException, CommandUsageException;
+  public abstract void handle(CommandContext context) throws CommandException, CommandUsageException;
 }

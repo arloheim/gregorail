@@ -8,11 +8,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 
-public class CommandHandlerContext
+public class CommandContext
 {
   // The command that is being executed
   private final Command command;
@@ -25,7 +24,7 @@ public class CommandHandlerContext
   
   
   // Constructor
-  public CommandHandlerContext(Command command, String[] arguments, CommandSender sender)
+  public CommandContext(Command command, String[] arguments, CommandSender sender)
   {
     this.command = command;
     this.arguments = arguments;
@@ -52,75 +51,99 @@ public class CommandHandlerContext
   
   
   // Return a context with a new command
-  public CommandHandlerContext withCommand(Command command)
+  public CommandContext withCommand(Command command)
   {
-    return new CommandHandlerContext(command, this.arguments, this.sender);
+    return new CommandContext(command, this.arguments, this.sender);
   }
   
   // Return a context with new arguments
-  public CommandHandlerContext withArguments(String[] arguments)
+  public CommandContext withArguments(String[] arguments)
   {
-    return new CommandHandlerContext(this.command, arguments, this.sender);
+    return new CommandContext(this.command, arguments, this.sender);
   }
   
   // Return a context with a new sender
-  public CommandHandlerContext withSender(CommandSender sender)
+  public CommandContext withSender(CommandSender sender)
   {
-    return new CommandHandlerContext(this.command, this.arguments, sender);
+    return new CommandContext(this.command, this.arguments, sender);
   }
   
   
-  // Check if the number of arguments matches
-  public boolean checkArgumentsLength(int length)
+  // Return if the context has exactly the specified number of arguments
+  public boolean hasArgumentsCount(int length)
   {
     return this.arguments.length == length;
   }
   
-  // Return a single argument of the command that is being executed
+  // Return if the context has at least the specified number of arguments
+  public boolean hasAtLeastArgumentsCount(int length)
+  {
+    return this.arguments.length >= length;
+  }
+  
+  // Return if the context has at most the specified number of arguments
+  public boolean hasAtMostArgumentsCount(int length)
+  {
+    return this.arguments.length <= length;
+  }
+  
+  
+  // Return a single argument
   public String getArgument(int index)
   {
     return this.arguments[index];
   }
   
-  // Return the arguments joined by a single space
+  // Return multiple arguments joined by a single space starting at the specified index
+  public String getJoinedArguments(int index)
+  {
+    return String.join(" ", Arrays.copyOfRange(this.arguments, index, this.arguments.length));
+  }
+  
+  // Return all arguments joined by a single space
   public String getJoinedArguments()
   {
     return String.join(" ", this.arguments);
   }
   
   
-  // Check if the sender is a console
-  public ConsoleCommandSender checkSenderIsConsole()
+  // Check if the sender is a console command sender
+  public ConsoleCommandSender isConsoleSender()
   {
     if (this.sender instanceof ConsoleCommandSender console)
       return console;
     return null;
   }
-  public ConsoleCommandSender assertSenderIsConsole() throws CommandException
+  
+  // Assert if the sender is a console sender
+  public ConsoleCommandSender assertIsConsoleSender() throws CommandException
   {
-    var console = this.checkSenderIsConsole();
+    var console = this.isConsoleSender();
     if (console == null)
       throw new CommandException("This command must be executed by the console");
     return console;
   }  
   
-  // Check if the sender is a player
-  public Player checkSenderIsPlayer()
+  // Check if the sender is a player sender
+  public Player isPlayerSender()
   {
     if (this.sender instanceof Player player)
       return player;
     return null;
   }
-  public Player assertSenderIsPlayer() throws CommandException
+  
+  // Assert if the sender is a player sender
+  public Player assertIsPlayerSender() throws CommandException
   {
-    var player = this.checkSenderIsPlayer();
+    var player = this.isPlayerSender();
     if (player == null)
       throw new CommandException("This command must be executed by a player");
     return player;
   }
   
+  
   // Check if the sender has a location
-  public Location checkSenderHasLocation()
+  public Location hasLocation()
   {
     if (this.sender instanceof BlockCommandSender blockCommandSender)
       return blockCommandSender.getBlock().getLocation();
@@ -129,9 +152,11 @@ public class CommandHandlerContext
     else
       return null;
   }
-  public Location assertSenderHasLocation() throws CommandException
+  
+  // Assert if the sender has a location
+  public Location assertHasLocation() throws CommandException
   {
-    var location = this.checkSenderHasLocation();
+    var location = this.hasLocation();
     if (location == null)
       throw new CommandException("This command must be executed by a block or entity");
     return location;
@@ -139,21 +164,23 @@ public class CommandHandlerContext
 
   
   // Check if the sender has sufficient permissions
-  public boolean checkPermissions(List<String> permissions)
+  public boolean hasPermissions(List<String> permissions)
   {
     return permissions.stream().allMatch(p -> this.sender.hasPermission(p));
   }
-  public boolean checkPermissions(String... permissions)
+  public boolean hasPermissions(String... permissions)
   {
-    return this.checkPermissions(Arrays.asList(permissions));
+    return this.hasPermissions(Arrays.asList(permissions));
   }
-  public void assertPermissions(List<String> permissions) throws CommandException
+  
+  // Assert if the sender has sufficient permissions
+  public void assertHasPermissions(List<String> permissions) throws CommandException
   {
-    if (!this.checkPermissions(permissions))
+    if (!this.hasPermissions(permissions))
       throw new CommandException("You don't have sufficient permission to execute this command");
   }
-  public void assertPermissions(String... permissions) throws CommandException
+  public void assertHasPermissions(String... permissions) throws CommandException
   {
-    this.assertPermissions(Arrays.asList(permissions));
+    this.assertHasPermissions(Arrays.asList(permissions));
   }
 }
