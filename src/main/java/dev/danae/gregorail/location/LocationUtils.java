@@ -14,10 +14,8 @@ public class LocationUtils
   private static final Pattern PATTERN = Pattern.compile(
     // Current location: "~"
     "(?<cur>~)|" +
-    // Absolute location: "[x,y,z]"
-    "(?<abs>\\[(?<x>0|-?[1-9][0-9]*)\\s+(?<y>0|-?[1-9][0-9]*)\\s+(?<z>0|-?[1-9][0-9]*)\\])|" + 
-    // Relative location: "[~x,~y,~z]"
-    "(?<rel>\\[~(?<dx>-?[1-9][0-9]*)?\\s+~(?<dy>-?[1-9][0-9]*)?\\s+~(?<dz>-?[1-9][0-9]*)?\\])|" + 
+    // Numeric location: "x y z" or "~x ~y ~z
+    "(?<xyz>(?:(?<x>0|-?[1-9][0-9]*)|(?<rx>~(?<dx>-?[1-9][0-9]*)?))\\s+(?:(?<y>0|-?[1-9][0-9]*)|(?<ry>~(?<dy>-?[1-9][0-9]*)?))\\s+(?:(?<z>0|-?[1-9][0-9]*)|(?<rz>~(?<dz>-?[1-9][0-9]*)?)))|" + 
     // Block location: "@block" or "^block"
     "(?<block>(?<mode>[@^])(?<name>[a-z_][a-z0-9_]*))");
   
@@ -37,24 +35,14 @@ public class LocationUtils
     if (m.group("cur") != null)
       return loc;
     
-    // Check for an absolute location
-    if (m.group("abs") != null)
+    // Check for a numeric location
+    if (m.group("xyz") != null)
     {
-      var x = Integer.parseInt(m.group("x"));
-      var y = Integer.parseInt(m.group("y"));
-      var z = Integer.parseInt(m.group("z"));
+      var x = m.group("rx") != null ? loc.getBlockX() + (m.group("dx") != null ? Integer.parseInt(m.group("dx")) : 0) : Integer.parseInt(m.group("x"));
+      var y = m.group("ry") != null ? loc.getBlockY() + (m.group("dy") != null ? Integer.parseInt(m.group("dy")) : 0) : Integer.parseInt(m.group("y"));
+      var z = m.group("rz") != null ? loc.getBlockZ() + (m.group("dz") != null ? Integer.parseInt(m.group("dz")) : 0) : Integer.parseInt(m.group("z"));
       
       return new Location(loc.getWorld(), x, y, z);
-    }
-    
-    // Check for a relative location
-    if (m.group("rel") != null)
-    {
-      var dx = m.group("dx") != null ? Integer.parseInt(m.group("dx")) : 0;
-      var dy = m.group("dy") != null ? Integer.parseInt(m.group("dy")) : 0;
-      var dz = m.group("dz") != null ? Integer.parseInt(m.group("dz")) : 0;
-      
-      return new Location(loc.getWorld(), loc.getBlockX() + dx, loc.getBlockY() + dy, loc.getBlockZ() + dz);
     }
     
     // Check for a block location
