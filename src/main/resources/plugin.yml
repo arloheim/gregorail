@@ -8,7 +8,7 @@ api-version: 1.19
 commands:
   rail:
     description: Executes various rail management commands.
-    usage: "Usage: /<command> locate <location> | locatecart <location>"
+    usage: "Usage: /<command> locate <location> | locatecart <location> | switch <shape> <location>"
     
 permissions:
   gregorail.rail:
