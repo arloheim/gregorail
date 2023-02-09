@@ -34,7 +34,7 @@ public class LocateCartCommand extends CommandHandler
       
       var cart = LocationUtils.parseEntity(senderLocation, context.getJoinedArguments(), RideableMinecart.class);
       if (cart == null)
-        throw new CommandException(String.format("No cart found for \"%s\"", context.getJoinedArguments()));
+        throw new CommandException("No cart found");
       
       // Send information about the cart
       context.getSender().sendMessage(LocationUtils.formatEntity(cart));

@@ -81,7 +81,7 @@ public class LocationUtils
     if (location == null)
       return null;
     
-    return Cuboid.of(location, SEARCH_RADIUS).findNearestEntityToCenter(predicate);
+    return getEntity(location, predicate);
   }
   
   // Parse the nearest entity of the specified class from a string
@@ -91,7 +91,7 @@ public class LocationUtils
     if (location == null)
       return null;
     
-    return Cuboid.of(location, SEARCH_RADIUS).findNearestEntityToCenter(cls);
+    return getEntity(location, cls);
   }
   
   // Return the block from a location string
@@ -102,6 +102,19 @@ public class LocationUtils
       return null;
     
     return location.getBlock();
+  }
+  
+  
+  // Get the nearest entity matching the predicate at a location
+  public static Entity getEntity(Location loc, Predicate<Entity> predicate)
+  {
+    return Cuboid.of(loc, SEARCH_RADIUS).findNearestEntityToCenter(predicate);
+  }
+  
+  // Get the nearest entity of the specified class at a location
+  public static <T extends Entity> T getEntity(Location loc, Class<T> cls)
+  {
+    return Cuboid.of(loc, SEARCH_RADIUS).findNearestEntityToCenter(cls);
   }
   
   

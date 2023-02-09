@@ -33,7 +33,7 @@ public class LocateCommand extends CommandHandler
       
       var block = LocationUtils.parseBlock(senderLocation, context.getJoinedArguments());
       if (block == null)
-        throw new CommandException(String.format("No location found for \"%s\"", context.getJoinedArguments()));
+        throw new CommandException("No location found");
       
       // Send information about the block
       context.getSender().sendMessage(LocationUtils.formatBlock(block));
