@@ -66,7 +66,7 @@ public class RailSwitchIfCommand extends CommandHandler
       else
       {
         // Send information about the block
-        context.getSender().sendMessage(String.format("%s still has its original shape (code \"%s\")", LocationUtils.formatBlock(block), MinecartUtils.getCode(cart)));
+        context.getSender().sendMessage(String.format("%s still has its original shape", LocationUtils.formatBlock(block)));
       }
     }
     catch (LocationException | InvalidQueryException ex)
