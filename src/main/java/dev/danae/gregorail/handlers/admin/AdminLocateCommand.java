@@ -1,4 +1,4 @@
-package dev.danae.gregorail.handlers;
+package dev.danae.gregorail.handlers.admin;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.commands.CommandContext;
@@ -9,12 +9,12 @@ import dev.danae.gregorail.location.LocationException;
 import dev.danae.gregorail.location.LocationUtils;
 
 
-public class LocateCommand extends CommandHandler
+public class AdminLocateCommand extends CommandHandler
 {
   // Constructor
-  public LocateCommand(RailPlugin plugin)
+  public AdminLocateCommand(RailPlugin plugin)
   {
-    super(plugin);
+    super(plugin, "gregorail.admin.locate");
   }
     
   
@@ -23,10 +23,7 @@ public class LocateCommand extends CommandHandler
   public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
     try
-    {
-      // Check for permissions
-      context.assertSenderHasPermissions("gregorail.locate");
-      
+    {      
       // Assert that the command sender has a location
       var senderLocation = context.assertSenderHasLocation();
     

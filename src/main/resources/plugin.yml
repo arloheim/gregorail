@@ -1,31 +1,37 @@
 name: GregoRail
 description: Powerful railroad management tools for Minecraft.
-version: 0.1.0
+version: 0.2.0
 author: danae
 main: dev.danae.gregorail.RailPlugin
 api-version: 1.19
 
 commands:
-  rail:
+  gcart:
+    description: Executes various minecart management commands.
+    usage: "Usage: /<command> set <code> [location] | unset [location]"
+  grail:
     description: Executes various rail management commands.
-    usage: "Usage: /<command> assign <code> [location] | locate <location> | locatecart <location> | switch <shape> <location> | switchif <code> <shape> <location> | unassign [location]"
+    usage: "Usage: /<command> switch <shape> <location> | switchif <code> <shape> <location>"
+  gadmin:
+    description: Executes various administration commands.
+    usage: "Usage: /<command> locate <location> | locatecart <location>"
     
 permissions:
-  gregorail.assign:
-    description: Allows the player to use the /rail assign command.
+  gregorail.cart.set:
+    description: Allows the player to use the /gcart set command.
     default: true
-  gregorail.locate:
-    description: Allows the player to use the /rail locate command.
-    default: op
-  gregorail.locatecart:
-    description: Allows the player to use the /rail locatecart command.
-    default: op
-  gregorail.switch:
-    description: Allows the player to use the /rail switch command.
-    default: op
-  gregorail.switchif:
-    description: Allows the player to use the /rail switchif command.
-    default: op
-  gregorail.unassign:
-    description: Allows the player to use the /rail unassign command.
+  gregorail.cart.unset:
+    description: Allows the player to use the /gcart unset command.
     default: true
+  gregorail.rail.switch:
+    description: Allows the player to use the /grail switch command.
+    default: true
+  gregorail.rail.switchif:
+    description: Allows the player to use the /grail switchif command.
+    default: true
+  gregorail.admin.locate:
+    description: Allows the player to use the /gadmin locate command.
+    default: op
+  gregorail.admin.locatecart:
+    description: Allows the player to use the /gadmin locatecart command.
+    default: op

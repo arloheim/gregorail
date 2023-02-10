@@ -1,21 +1,21 @@
-package dev.danae.gregorail.handlers;
+package dev.danae.gregorail.handlers.admin;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.commands.CommandContext;
 import dev.danae.gregorail.commands.CommandException;
+import dev.danae.gregorail.commands.CommandHandler;
 import dev.danae.gregorail.commands.CommandUsageException;
 import dev.danae.gregorail.location.LocationException;
 import dev.danae.gregorail.location.LocationUtils;
-import dev.danae.gregorail.minecart.InvalidMinecartCodeException;
 import dev.danae.gregorail.minecart.MinecartUtils;
 
 
-public class AssignCommand extends AbstractMinecartCommand
+public class AdminLocateCartCommand extends CommandHandler
 {
   // Constructor
-  public AssignCommand(RailPlugin plugin)
+  public AdminLocateCartCommand(RailPlugin plugin)
   {
-    super(plugin);
+    super(plugin, "gregorail.admin.locatecart");
   }
     
   
@@ -24,33 +24,26 @@ public class AssignCommand extends AbstractMinecartCommand
   public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
     try
-    {
-      // Check for permissions
-      context.assertSenderHasPermissions("gregorail.assign");
-      
+    {      
       // Assert that the command sender has a location
-      context.assertSenderHasLocation();
+      var senderLocation = context.assertSenderHasLocation();
     
       // Parse the arguments
       if (!context.hasAtLeastArgumentsCount(1))
         throw new CommandUsageException();
       
-      var code = context.getArgument(0);
+      var cartLocation = LocationUtils.parseLocation(senderLocation, context.getJoinedArguments());
+      if (cartLocation == null)
+        throw new CommandException("No location found");
       
-      var cart = this.findMinecart(context, 1);
+      var cart = MinecartUtils.findMinecart(cartLocation);
       if (cart == null)
         throw new CommandException("No cart found");
       
-      // Assign the code to the cart
-      MinecartUtils.setCode(cart, code);
-      
-      cart.setCustomNameVisible(true);
-      cart.setCustomName(code);
-      
-      // Send information about the updated cart
-      context.getSender().sendMessage(String.format("%s now has code \"%s\"", LocationUtils.formatEntity(cart), code));
+      // Send information about the cart
+      context.getSender().sendMessage(LocationUtils.formatEntity(cart));
     }
-    catch (LocationException | InvalidMinecartCodeException ex)
+    catch (LocationException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

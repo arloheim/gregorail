@@ -1,4 +1,4 @@
-package dev.danae.gregorail.handlers;
+package dev.danae.gregorail.handlers.cart;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.commands.CommandContext;
@@ -7,14 +7,23 @@ import dev.danae.gregorail.commands.CommandHandler;
 import dev.danae.gregorail.location.LocationException;
 import dev.danae.gregorail.location.LocationUtils;
 import dev.danae.gregorail.minecart.MinecartUtils;
+import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
-public abstract class AbstractMinecartCommand extends CommandHandler
+public abstract class CartCommand extends CommandHandler
 {
   // Constructor
-  public AbstractMinecartCommand(RailPlugin plugin)
+  public CartCommand(RailPlugin plugin, List<String> permissions)
+  {
+    super(plugin, permissions);
+  }
+  public CartCommand(RailPlugin plugin, String... permissions)
+  {
+    super(plugin, permissions);
+  }
+  public CartCommand(RailPlugin plugin)
   {
     super(plugin);
   }

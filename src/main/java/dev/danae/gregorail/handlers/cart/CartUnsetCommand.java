@@ -1,4 +1,4 @@
-package dev.danae.gregorail.handlers;
+package dev.danae.gregorail.handlers.cart;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.commands.CommandContext;
@@ -10,12 +10,12 @@ import dev.danae.gregorail.minecart.InvalidMinecartCodeException;
 import dev.danae.gregorail.minecart.MinecartUtils;
 
 
-public class UnassignCommand extends AbstractMinecartCommand
+public class CartUnsetCommand extends CartCommand
 {
   // Constructor
-  public UnassignCommand(RailPlugin plugin)
+  public CartUnsetCommand(RailPlugin plugin)
   {
-    super(plugin);
+    super(plugin, "gregorail.cart.unset");
   }
     
   
@@ -24,10 +24,7 @@ public class UnassignCommand extends AbstractMinecartCommand
   public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
     try
-    {
-      // Check for permissions
-      context.assertSenderHasPermissions("gregorail.unassign");
-      
+    {      
       // Assert that the command sender has a location
       context.assertSenderHasLocation();
     
