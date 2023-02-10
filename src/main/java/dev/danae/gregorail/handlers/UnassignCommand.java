@@ -33,6 +33,8 @@ public class UnassignCommand extends AbstractMinecartCommand
     
       // Parse the arguments      
       var cart = this.findMinecart(context, 0);
+      if (cart == null)
+        throw new CommandException("No cart found");
       
       // Remove the code from the cart
       MinecartUtils.setCode(cart, null);

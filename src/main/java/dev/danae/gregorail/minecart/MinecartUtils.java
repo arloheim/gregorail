@@ -13,10 +13,10 @@ import org.bukkit.persistence.PersistentDataType;
 public class MinecartUtils
 {
   // Namespaced key for storing the code of a minecart
-  public static NamespacedKey codeKey = new NamespacedKey(RailPlugin.getInstance(), "minecart_code");
+  public static final NamespacedKey codeKey = new NamespacedKey(RailPlugin.getInstance(), "minecart_code");
   
   // Pattern to validate the code of a minecart
-  public static Pattern codePattern = Pattern.compile("[a-z0-9_]+", Pattern.CASE_INSENSITIVE);
+  public static final Pattern codePattern = Pattern.compile("[a-z0-9_]+", Pattern.CASE_INSENSITIVE);
   
   
   // Get the code of a minecart
@@ -34,7 +34,7 @@ public class MinecartUtils
     if (minecart == null)
       throw new NullPointerException("minecart must not be null");
     
-    if (code == null && minecart.getPersistentDataContainer().has(codeKey, PersistentDataType.STRING))
+    if (code == null)
       minecart.getPersistentDataContainer().remove(codeKey);
     else if (codePattern.matcher(code).matches())
       minecart.getPersistentDataContainer().set(codeKey, PersistentDataType.STRING, code);

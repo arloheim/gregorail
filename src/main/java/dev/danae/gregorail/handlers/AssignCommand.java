@@ -38,6 +38,8 @@ public class AssignCommand extends AbstractMinecartCommand
       var code = context.getArgument(0);
       
       var cart = this.findMinecart(context, 1);
+      if (cart == null)
+        throw new CommandException("No cart found");
       
       // Assign the code to the cart
       MinecartUtils.setCode(cart, code);

@@ -32,11 +32,7 @@ public abstract class AbstractMinecartCommand extends CommandHandler
       if (cartLocation == null)
         throw new CommandException("No location found");
       
-      var cart = MinecartUtils.findMinecart(cartLocation);
-      if (cart == null)
-        throw new CommandException("No cart found");
-        
-      return cart;
+      return MinecartUtils.findMinecart(cartLocation);
     }
     else if (context.getSender() instanceof Player player && player.getVehicle() instanceof RideableMinecart playerCart)
     {
