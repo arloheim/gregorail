@@ -2,6 +2,7 @@ package dev.danae.gregorail.minecart;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.location.LocationUtils;
+import dev.danae.gregorail.util.query.Query;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import org.bukkit.Location;
@@ -43,7 +44,7 @@ public class MinecartUtils
   }
   
   // Return if the code of a minecart matches the query
-  public static boolean matchCode(RideableMinecart minecart, String query)
+  public static boolean matchCode(RideableMinecart minecart, Query query)
   {
     if (minecart == null)
       throw new NullPointerException("minecart must not be null");
@@ -54,12 +55,7 @@ public class MinecartUtils
     if (code == null)
       return false;
     
-    if (query.endsWith("*"))
-      return code.startsWith(query.substring(0, query.length() - 1));
-    else if (query.startsWith("*"))
-      return code.endsWith(query.substring(1));
-    else
-      return code.equals(query);
+    return query.matches(code);
   }
   
   
@@ -82,7 +78,7 @@ public class MinecartUtils
   }
   
   // Return the nearest minecart whose code matches the query at the specified location
-  public static RideableMinecart findMinecartWithCodeMatch(Location loc, String query)
+  public static RideableMinecart findMinecartWithCodeMatch(Location loc, Query query)
   {
     return findMinecart(loc, minecart -> matchCode(minecart, query));
   }

@@ -9,6 +9,8 @@ import dev.danae.gregorail.handlers.CommandUtils;
 import dev.danae.gregorail.location.LocationException;
 import dev.danae.gregorail.location.LocationUtils;
 import dev.danae.gregorail.minecart.MinecartUtils;
+import dev.danae.gregorail.util.query.InvalidQueryException;
+import dev.danae.gregorail.util.query.QueryUtils;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
 
@@ -35,7 +37,7 @@ public class RailSwitchIfCommand extends CommandHandler
       if (!context.hasAtLeastArgumentsCount(3))
         throw new CommandUsageException();
       
-      var code = context.getArgument(0);
+      var query = QueryUtils.parseQuery(context.getArgument(0));
       
       var shape = CommandUtils.parseShape(context.getArgument(1));
       if (shape == null)
@@ -51,7 +53,7 @@ public class RailSwitchIfCommand extends CommandHandler
       
       // Check for a minecart with the code at the location of the rail block
       var cartLocation = LocationUtils.parseLocation(block.getLocation(), context.getJoinedArguments(2));
-      var cart = MinecartUtils.findMinecartWithCodeMatch(cartLocation, code);
+      var cart = MinecartUtils.findMinecartWithCodeMatch(cartLocation, query);
       if (cart != null)
       {
         // Set the shape of the block
@@ -59,15 +61,15 @@ public class RailSwitchIfCommand extends CommandHandler
         block.setBlockData(blockData);
         
         // Send information about the updated block
-        context.getSender().sendMessage(String.format("%s now has shape %s (code \"%s\")", LocationUtils.formatBlock(block), shape, code));
+        context.getSender().sendMessage(String.format("%s now has shape %s (code \"%s\")", LocationUtils.formatBlock(block), shape, MinecartUtils.getCode(cart)));
       }
       else
       {
         // Send information about the block
-        context.getSender().sendMessage(String.format("%s still has its original shape (code \"%s\")", LocationUtils.formatBlock(block), code));
+        context.getSender().sendMessage(String.format("%s still has its original shape (code \"%s\")", LocationUtils.formatBlock(block), MinecartUtils.getCode(cart)));
       }
     }
-    catch (LocationException ex)
+    catch (LocationException | InvalidQueryException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }
