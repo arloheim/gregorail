@@ -87,7 +87,6 @@ public class CommandContext
     return this.arguments.length <= length;
   }
   
-  
   // Return a single argument
   public String getArgument(int index)
   {
@@ -107,80 +106,44 @@ public class CommandContext
   }
   
   
-  // Check if the sender is a console command sender
-  public ConsoleCommandSender isConsoleSender()
+  
+  // Assert if the sender is a console sender
+  public ConsoleCommandSender assertSenderIsConsole() throws CommandException
   {
     if (this.sender instanceof ConsoleCommandSender console)
       return console;
-    return null;
-  }
-  
-  // Assert if the sender is a console sender
-  public ConsoleCommandSender assertIsConsoleSender() throws CommandException
-  {
-    var console = this.isConsoleSender();
-    if (console == null)
+    else
       throw new CommandException("This command must be executed by the console");
-    return console;
   }  
   
-  // Check if the sender is a player sender
-  public Player isPlayerSender()
+  // Assert if the sender is a player sender
+  public Player assertSenderIsPlayer() throws CommandException
   {
     if (this.sender instanceof Player player)
       return player;
-    return null;
-  }
-  
-  // Assert if the sender is a player sender
-  public Player assertIsPlayerSender() throws CommandException
-  {
-    var player = this.isPlayerSender();
-    if (player == null)
+    else
       throw new CommandException("This command must be executed by a player");
-    return player;
   }
   
-  
-  // Check if the sender has a location
-  public Location hasLocation()
+  // Assert if the sender has a location
+  public Location assertSenderHasLocation() throws CommandException
   {
     if (this.sender instanceof BlockCommandSender blockCommandSender)
       return blockCommandSender.getBlock().getLocation();
     if (this.sender instanceof Entity entity)
       return entity.getLocation();
     else
-      return null;
-  }
-  
-  // Assert if the sender has a location
-  public Location assertHasLocation() throws CommandException
-  {
-    var location = this.hasLocation();
-    if (location == null)
       throw new CommandException("This command must be executed by a block or entity");
-    return location;
-  }
-
-  
-  // Check if the sender has sufficient permissions
-  public boolean hasPermissions(List<String> permissions)
-  {
-    return permissions.stream().allMatch(p -> this.sender.hasPermission(p));
-  }
-  public boolean hasPermissions(String... permissions)
-  {
-    return this.hasPermissions(Arrays.asList(permissions));
   }
   
   // Assert if the sender has sufficient permissions
-  public void assertHasPermissions(List<String> permissions) throws CommandException
+  public void assertSenderHasPermissions(List<String> permissions) throws CommandException
   {
-    if (!this.hasPermissions(permissions))
+    if (!permissions.stream().allMatch(p -> this.sender.hasPermission(p)))
       throw new CommandException("You don't have sufficient permission to execute this command");
   }
-  public void assertHasPermissions(String... permissions) throws CommandException
+  public void assertSenderHasPermissions(String... permissions) throws CommandException
   {
-    this.assertHasPermissions(Arrays.asList(permissions));
+    this.assertSenderHasPermissions(Arrays.asList(permissions));
   }
 }

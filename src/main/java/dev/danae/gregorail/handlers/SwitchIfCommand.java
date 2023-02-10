@@ -30,11 +30,10 @@ public class SwitchIfCommand extends CommandHandler
     try
     {
       // Check for permissions
-      if (!context.hasPermissions("gregorail.switchif"))
-        throw new CommandException("You have insufficient permissions to execute the command");
+      context.assertSenderHasPermissions("gregorail.switchif");
       
       // Assert that the command sender has a location
-      var senderLocation = context.assertHasLocation();
+      var senderLocation = context.assertSenderHasLocation();
       
       // Parse the arguments
       if (!context.hasAtLeastArgumentsCount(3))
@@ -44,15 +43,15 @@ public class SwitchIfCommand extends CommandHandler
       
       var shape = ArgumentUtils.parseRailShape(context.getArgument(1));
       if (shape == null)
-        throw new CommandException(String.format("The shape \"%s\" is an invalid rail shape", context.getArgument(0)));
+        throw new CommandException(String.format("Shape \"%s\" is an invalid rail shape", context.getArgument(0)));
     
-      var block = LocationUtils.parseBlock(senderLocation, context.getJoinedArguments(2));
+      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(2));
       if (block.getType() != Material.RAIL)
-        throw new CommandException(String.format("The block at location [%d %d %d] is not a rail block", block.getLocation().getBlockX(), block.getLocation().getBlockY(), block.getLocation().getBlockZ()));
+        throw new CommandException(String.format("%s is not a rail block", LocationUtils.formatBlock(block)));
       
       var blockData = (Rail)block.getBlockData();
       if (!blockData.getShapes().contains(shape))
-        throw new CommandException(String.format("The block at location [%d %d %d] cannot be set to shape %s", block.getLocation().getBlockX(), block.getLocation().getBlockY(), block.getLocation().getBlockZ(), shape));
+        throw new CommandException(String.format("%s cannot be set to shape %s", LocationUtils.formatBlock(block), shape));
       
       // Check for a minecart with the code at the location of the rail block
       var cart = LocationUtils.getEntity(block.getLocation(), RideableMinecart.class);
@@ -63,12 +62,12 @@ public class SwitchIfCommand extends CommandHandler
         block.setBlockData(blockData);
         
         // Send information about the updated block
-        context.getSender().sendMessage(String.format("%s has now shape %s (code \"%s\")", LocationUtils.formatBlock(block), shape, code));
+        context.getSender().sendMessage(String.format("%s now has shape %s (code \"%s\")", LocationUtils.formatBlock(block), shape, code));
       }
       else
       {
         // Send information about the block
-        context.getSender().sendMessage(String.format("%s has an unchanged shape (code \"%s\")", LocationUtils.formatBlock(block), code));
+        context.getSender().sendMessage(String.format("%s still has its original shape (code \"%s\")", LocationUtils.formatBlock(block), code));
       }
     }
     catch (LocationException ex)

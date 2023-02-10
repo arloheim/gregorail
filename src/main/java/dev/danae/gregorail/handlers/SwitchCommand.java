@@ -28,11 +28,10 @@ public class SwitchCommand extends CommandHandler
     try
     {
       // Check for permissions
-      if (!context.hasPermissions("gregorail.switch"))
-        throw new CommandException("You have insufficient permissions to execute the command");
+      context.assertSenderHasPermissions("gregorail.switch");
       
       // Assert that the command sender has a location
-      var senderLocation = context.assertHasLocation();
+      var senderLocation = context.assertSenderHasLocation();
       
       // Parse the arguments
       if (!context.hasAtLeastArgumentsCount(2))
@@ -40,22 +39,22 @@ public class SwitchCommand extends CommandHandler
       
       var shape = ArgumentUtils.parseRailShape(context.getArgument(0));
       if (shape == null)
-        throw new CommandException(String.format("The shape \"%s\" is an invalid rail shape", context.getArgument(0)));
+        throw new CommandException(String.format("Shape \"%s\" is an invalid rail shape", context.getArgument(0)));
     
-      var block = LocationUtils.parseBlock(senderLocation, context.getJoinedArguments(1));
+      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(1));
       if (block.getType() != Material.RAIL)
-        throw new CommandException(String.format("The block at location [%d %d %d] is not a rail block", block.getLocation().getBlockX(), block.getLocation().getBlockY(), block.getLocation().getBlockZ()));
+        throw new CommandException(String.format("%s is not a rail block", LocationUtils.formatBlock(block)));
       
       var blockData = (Rail)block.getBlockData();
       if (!blockData.getShapes().contains(shape))
-        throw new CommandException(String.format("The block at location [%d %d %d] cannot be set to shape %s", block.getLocation().getBlockX(), block.getLocation().getBlockY(), block.getLocation().getBlockZ(), shape));
+        throw new CommandException(String.format("%s cannot be set to shape %s", LocationUtils.formatBlock(block), shape));
       
       // Set the shape of the block
       blockData.setShape(shape);
       block.setBlockData(blockData);
         
       // Send information about the updated block
-      context.getSender().sendMessage(String.format("%s has now shape %s", LocationUtils.formatBlock(block), shape));
+      context.getSender().sendMessage(String.format("%s now has shape %s", LocationUtils.formatBlock(block), shape));
     }
     catch (LocationException ex)
     {

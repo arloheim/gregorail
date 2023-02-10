@@ -11,7 +11,7 @@ import org.bukkit.entity.Entity;
 public class LocationUtils
 {  
   // Pattern for parsing locations
-  private static final Pattern PATTERN = Pattern.compile(
+  private static final Pattern pattern = Pattern.compile(
     // Current location: "~"
     "(?<cur>~)|" +
     // Numeric location: "x y z" or "~x ~y ~z
@@ -20,14 +20,14 @@ public class LocationUtils
     "(?<block>(?<mode>[@^])(?<name>[a-z_][a-z0-9_]*))");
   
   // Default radius for searching for blocks and entities
-  private static final int SEARCH_RADIUS = 10;
+  private static final int searchRadius = 10;
   
   
   // Parse a location from a string
   public static Location parseLocation(Location loc, String string) throws LocationException
   {
     // Match the string against the pattern
-    var m = PATTERN.matcher(string);
+    var m = pattern.matcher(string);
     if (!m.matches())
       throw new LocationException(string, String.format("The location string \"%s\" contains an invalid format", string));
     
@@ -57,7 +57,7 @@ public class LocationUtils
         throw new LocationException(string, String.format("The material \"%s\" is not a block material", materialName));
       
       // Find the block
-      var block = Cuboid.of(loc, SEARCH_RADIUS).findNearestBlockToCenter(material);
+      var block = Cuboid.of(loc, searchRadius).findNearestBlockToCenter(material);
       if (block == null)
         return null;
       
@@ -94,8 +94,8 @@ public class LocationUtils
     return getEntity(location, cls);
   }
   
-  // Return the block from a location string
-  public static Block parseBlock(Location loc, String string) throws LocationException
+  // Return the block from a string
+  public static Block parseBlockAtLocation(Location loc, String string) throws LocationException
   {
     var location = parseLocation(loc, string);
     if (location == null)
@@ -108,13 +108,13 @@ public class LocationUtils
   // Get the nearest entity matching the predicate at a location
   public static Entity getEntity(Location loc, Predicate<Entity> predicate)
   {
-    return Cuboid.of(loc, SEARCH_RADIUS).findNearestEntityToCenter(predicate);
+    return Cuboid.of(loc, searchRadius).findNearestEntityToCenter(cls);
   }
   
   // Get the nearest entity of the specified class at a location
   public static <T extends Entity> T getEntity(Location loc, Class<T> cls)
   {
-    return Cuboid.of(loc, SEARCH_RADIUS).findNearestEntityToCenter(cls);
+    return Cuboid.of(loc, searchRadius).findNearestEntityToCenter(cls, predicate);
   }
   
   
@@ -124,15 +124,15 @@ public class LocationUtils
     return String.format("[%d %d %d]", location.getBlockX(), location.getBlockY(), location.getBlockZ());
   }
   
-  // Format an entity to a string
-  public static String formatEntity(Entity entity)
-  {
-    return String.format("Entity %s \"%s\" at %s", entity.getType(), entity.getCustomName() != null ? entity.getCustomName() : entity.getName(), formatLocation(entity.getLocation()));
-  }
-  
   // Format a block to a string
   public static String formatBlock(Block block)
   {
     return String.format("Block %s at %s", block.getType(), formatLocation(block.getLocation()));
+  }
+  
+  // Format an entity to a string
+  public static String formatEntity(Entity entity)
+  {
+    return String.format("Entity %s \"%s\" at %s", entity.getType(), entity.getCustomName() != null ? entity.getCustomName() : entity.getName(), formatLocation(entity.getLocation()));
   }
 }

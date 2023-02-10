@@ -29,11 +29,10 @@ public class AssignCommand extends CommandHandler
     try
     {
       // Check for permissions
-      if (!context.hasPermissions("gregorail.assign"))
-        throw new CommandException("You have insufficient permissions to execute the command");
+      context.assertSenderHasPermissions("gregorail.assign");
       
       // Assert that the command sender has a location
-      var senderLocation = context.assertHasLocation();
+      var senderLocation = context.assertSenderHasLocation();
     
       // Parse the arguments
       if (!context.hasAtLeastArgumentsCount(1))
@@ -51,7 +50,7 @@ public class AssignCommand extends CommandHandler
       cart.setCustomName(code);
       
       // Send information about the updated cart
-      context.getSender().sendMessage(String.format("%s has now code \"%s\"", LocationUtils.formatEntity(cart), code));
+      context.getSender().sendMessage(String.format("%s now has code \"%s\"", LocationUtils.formatEntity(cart), code));
     }
     catch (LocationException ex)
     {
