@@ -1,4 +1,4 @@
-package dev.danae.gregorail.location;
+package dev.danae.gregorail.util.location;
 
 
 public class LocationException extends Exception

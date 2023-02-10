@@ -1,7 +1,7 @@
-package dev.danae.gregorail.minecart;
+package dev.danae.gregorail.util.minecart;
 
 import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.location.LocationUtils;
+import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.query.Query;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;

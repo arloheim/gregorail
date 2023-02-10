@@ -6,8 +6,8 @@ import dev.danae.gregorail.commands.CommandException;
 import dev.danae.gregorail.commands.CommandHandler;
 import dev.danae.gregorail.commands.CommandUsageException;
 import dev.danae.gregorail.handlers.CommandUtils;
-import dev.danae.gregorail.location.LocationException;
-import dev.danae.gregorail.location.LocationUtils;
+import dev.danae.gregorail.util.location.LocationException;
+import dev.danae.gregorail.util.location.LocationUtils;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
 

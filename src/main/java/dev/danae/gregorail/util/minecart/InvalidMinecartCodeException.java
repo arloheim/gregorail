@@ -1,4 +1,4 @@
-package dev.danae.gregorail.minecart;
+package dev.danae.gregorail.util.minecart;
 
 
 public class InvalidMinecartCodeException extends Exception

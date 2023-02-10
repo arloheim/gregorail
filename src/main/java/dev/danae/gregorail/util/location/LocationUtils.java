@@ -1,4 +1,4 @@
-package dev.danae.gregorail.location;
+package dev.danae.gregorail.util.location;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
