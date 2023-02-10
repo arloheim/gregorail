@@ -61,18 +61,38 @@ public final class Cuboid
   }
   
   
-  // Return an iterator over the locations in the cuboid
+  // Return a stream of the locations in the cuboid
+  public Stream<Location> locationsAsStream()
+  {    
+    var min = this.getMin();
+    var max = this.getMax();
+    
+    Stream.Builder<Location> builder = Stream.builder();
+    for (var y = min.getBlockY(); y <= max.getBlockY(); y ++)
+      for (var x = min.getBlockX(); x <= max.getBlockX(); x ++)
+        for (var z = min.getBlockZ(); z <= max.getBlockZ(); z ++)
+          builder.accept(new Location(this.world, x, y, z));
+    return builder.build();
+  }
+  
+  // Return a collection of the locations in the cuboid
   public Collection<Location> locations()
   {    
-    return this.locationsStream()
+    return this.locationsAsStream()
       .collect(Collectors.toCollection(ArrayList::new));
   }
   
-  // Return an iterator over the blocks in the cuboid
+  // Return a stream of the blocks in the cuboid
+  public Stream<Block> blocksAsStream()
+  {    
+    return this.locationsAsStream()
+      .map(l -> l.getBlock());
+  }
+  
+  // Return a collection of the blocks in the cuboid
   public Collection<Block> blocks()
   {    
-    return this.locationsStream()
-      .map(l -> l.getBlock())
+    return this.blocksAsStream()
       .collect(Collectors.toCollection(ArrayList::new));
   }
   
@@ -80,20 +100,42 @@ public final class Cuboid
   // Find all entities that match the specified predicate in the cuboid
   public Collection<Entity> findEntities(Predicate<Entity> predicate)
   {
+    if (predicate == null)
+      throw new NullPointerException("predicate must not be null");
+              
     return this.world.getNearbyEntities(this.bounds, predicate);
   }
   
   // Find all entities with the specified class in the cuboid
   public <T extends Entity> Collection<T> findEntities(Class<T> cls)
   {    
+    if (cls == null)
+      throw new NullPointerException("cls must not be null");
+    
     return this.findEntities(e -> cls.isAssignableFrom(e.getClass())).stream()
       .map(e -> (T)e)
       .collect(Collectors.toCollection(ArrayList::new));
   }
   
+  // Find all entities with the specified class and that match the specified predicate in the cuboid
+  public <T extends Entity> Collection<T> findEntities(Class<T> cls, Predicate<T> predicate)
+  {    
+    if (cls == null)
+      throw new NullPointerException("cls must not be null");
+    if (predicate == null)
+      throw new NullPointerException("predicate must not be null");
+    
+    return this.findEntities(cls).stream()
+      .filter(predicate)
+      .collect(Collectors.toCollection(ArrayList::new));
+  }
+  
   // Find an entity that matches the specified predicate in the cuboid that is nearest to the specified location
-  public Entity findNearestEntityTo(Predicate<Entity> predicate, Location loc)
+  public Entity findNearestEntity(Location loc, Predicate<Entity> predicate)
   {
+    if (loc == null)
+      throw new NullPointerException("loc must not be null");
+    
     return this.findEntities(predicate).stream()
       .sorted(compareEntityDistanceTo(loc))
       .findFirst()
@@ -101,9 +143,24 @@ public final class Cuboid
   }
   
   // Find an entity with the specified class in the cuboid that is nearest to the specified location
-  public <T extends Entity> T findNearestEntityTo(Class<T> cls, Location loc)
+  public <T extends Entity> T findNearestEntity(Location loc, Class<T> cls)
   {
+    if (loc == null)
+      throw new NullPointerException("loc must not be null");
+    
     return this.findEntities(cls).stream()
+      .sorted(compareEntityDistanceTo(loc))
+      .findFirst()
+      .orElse(null);
+  }
+  
+  // Find an entity with the specified class and that matches the specified predicate in the cuboid that is nearest to the specified location
+  public <T extends Entity> T findNearestEntity(Location loc, Class<T> cls, Predicate<T> predicate)
+  {
+    if (loc == null)
+      throw new NullPointerException("loc must not be null");
+    
+    return this.findEntities(cls, predicate).stream()
       .sorted(compareEntityDistanceTo(loc))
       .findFirst()
       .orElse(null);
@@ -112,19 +169,27 @@ public final class Cuboid
   // Find an entity that matches the specified predicate in the cuboid that is nearest to the center
   public Entity findNearestEntityToCenter(Predicate<Entity> predicate)
   {
-    return this.findNearestEntityTo(predicate, this.getCenter());
+    return this.findNearestEntity(this.getCenter(), predicate);
   }
   
   // Find an entity with the specified class in the cuboid that is nearest to the center
   public <T extends Entity> T findNearestEntityToCenter(Class<T> cls)
   {
-    return this.findNearestEntityTo(cls, this.getCenter());
+    return this.findNearestEntity(this.getCenter(), cls);
+  }
+  
+  // Find an entity with the specified class and that matches the specified predicate in the cuboid that is nearest to the center
+  public <T extends Entity> T findNearestEntityToCenter(Class<T> cls, Predicate<T> predicate)
+  {
+    return this.findNearestEntity(this.getCenter(), cls, predicate);
   }
   
   
   // Find all blocks with the specified material in the cuboid
   public Collection<Block> findBlocks(Material material)
   {
+    if (material == null)
+      throw new NullPointerException("material must not be null");
     if (!material.isBlock())
       throw new IllegalArgumentException("material must be a block material");
     
@@ -138,8 +203,11 @@ public final class Cuboid
   }
   
   // Find a block with the specified material in the cuboid that is nearest to the specified location
-  public Block findNearestBlockTo(Material material, Location loc)
+  public Block findNearestBlock(Material material, Location loc)
   {
+    if (loc == null)
+      throw new NullPointerException("loc must not be null");
+    
     return this.findBlocks(material).stream()
       .sorted(compareBlockDistanceTo(loc))
       .findFirst()
@@ -149,22 +217,7 @@ public final class Cuboid
   // Find a block with the specified material in the cuboid that is nearest to the center of the cuboid
   public Block findNearestBlockToCenter(Material material)
   {
-    return this.findNearestBlockTo(material, this.getCenter());
-  }
-  
-  
-  // Return a stream over the locations in the cuboid
-  private Stream<Location> locationsStream()
-  {    
-    var min = this.getMin();
-    var max = this.getMax();
-    
-    Stream.Builder<Location> builder = Stream.builder();
-    for (var y = min.getBlockY(); y <= max.getBlockY(); y ++)
-      for (var x = min.getBlockX(); x <= max.getBlockX(); x ++)
-        for (var z = min.getBlockZ(); z <= max.getBlockZ(); z ++)
-          builder.accept(new Location(this.world, x, y, z));
-    return builder.build();
+    return this.findNearestBlock(material, this.getCenter());
   }
   
   
@@ -179,7 +232,7 @@ public final class Cuboid
       throw new IllegalArgumentException("min and max must be located in the same world");
     
     var world = min.getWorld();
-    return new Cuboid(world, BoundingBox.of(world.getBlockAt(min), world.getBlockAt(max)));
+    return new Cuboid(world, BoundingBox.of(min.getBlock(), max.getBlock()));
   }
   
   // Create a cuboid with the specified center and radius
@@ -191,7 +244,7 @@ public final class Cuboid
       throw new IllegalArgumentException("radius must not be smaller than zero");
     
     var world = center.getWorld();
-    return new Cuboid(world, BoundingBox.of(world.getBlockAt(center)).expand(radius));
+    return new Cuboid(world, BoundingBox.of(center.getBlock()).expand(radius));
   }
   
   

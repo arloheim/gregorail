@@ -73,27 +73,6 @@ public class LocationUtils
     return null;
   }
   
-  
-  // Parse the nearest entity matching the predicate from a string
-  public static Entity parseEntity(Location loc, String string, Predicate<Entity> predicate) throws LocationException
-  {
-    var location = parseLocation(loc, string);
-    if (location == null)
-      return null;
-    
-    return getEntity(location, predicate);
-  }
-  
-  // Parse the nearest entity of the specified class from a string
-  public static <T extends Entity> T parseEntity(Location loc, String string, Class<T> cls) throws LocationException
-  {
-    var location = parseLocation(loc, string);
-    if (location == null)
-      return null;
-    
-    return getEntity(location, cls);
-  }
-  
   // Return the block from a string
   public static Block parseBlockAtLocation(Location loc, String string) throws LocationException
   {
@@ -105,14 +84,20 @@ public class LocationUtils
   }
   
   
-  // Get the nearest entity matching the predicate at a location
-  public static Entity getEntity(Location loc, Predicate<Entity> predicate)
+  // Get the nearest entity that matches the predicate at a location
+  public static Entity findNearestEntity(Location loc, Predicate<Entity> predicate)
+  {
+    return Cuboid.of(loc, searchRadius).findNearestEntityToCenter(predicate);
+  }
+  
+  // Get the nearest entity of the specified class at a location
+  public static <T extends Entity> T findNearestEntity(Location loc, Class<T> cls)
   {
     return Cuboid.of(loc, searchRadius).findNearestEntityToCenter(cls);
   }
   
-  // Get the nearest entity of the specified class at a location
-  public static <T extends Entity> T getEntity(Location loc, Class<T> cls)
+  // Get the nearest entity of the specified class and that matches the predicate at a location
+  public static <T extends Entity> T findNearestEntity(Location loc, Class<T> cls, Predicate<T> predicate)
   {
     return Cuboid.of(loc, searchRadius).findNearestEntityToCenter(cls, predicate);
   }

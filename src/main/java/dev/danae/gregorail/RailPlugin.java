@@ -6,20 +6,19 @@ import dev.danae.gregorail.handlers.LocateCartCommand;
 import dev.danae.gregorail.handlers.LocateCommand;
 import dev.danae.gregorail.handlers.SwitchCommand;
 import dev.danae.gregorail.handlers.SwitchIfCommand;
-import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
 public final class RailPlugin extends JavaPlugin
 {
-  // Namespaced key for storing the code of a minecart
-  private NamespacedKey minecartCodeKey;
+  // The static plugin instance
+  private static RailPlugin instance;
   
   
-  // Return the Namespaced key for storing the code of a minecart
-  public NamespacedKey getMinecartCodeKey()
+  // Return the static plugin instance
+  public static RailPlugin getInstance()
   {
-    return this.minecartCodeKey;
+    return instance;
   }
   
   
@@ -27,8 +26,8 @@ public final class RailPlugin extends JavaPlugin
   @Override
   public void onEnable()
   {
-    // Set the namespaced keys
-    this.minecartCodeKey = new NamespacedKey(this, "minecart_code");
+    // Set the static plugin instance
+    instance = this;
     
     // Register the command handlers
     this.getCommand("rail").setExecutor(new CommandGroupHandler(this)

@@ -7,10 +7,9 @@ import dev.danae.gregorail.commands.CommandHandler;
 import dev.danae.gregorail.commands.CommandUsageException;
 import dev.danae.gregorail.location.LocationException;
 import dev.danae.gregorail.location.LocationUtils;
+import dev.danae.gregorail.minecart.MinecartUtils;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
-import org.bukkit.entity.minecart.RideableMinecart;
-import org.bukkit.persistence.PersistentDataType;
 
 
 public class SwitchIfCommand extends CommandHandler
@@ -53,8 +52,9 @@ public class SwitchIfCommand extends CommandHandler
         throw new CommandException(String.format("%s cannot be set to shape %s", LocationUtils.formatBlock(block), shape));
       
       // Check for a minecart with the code at the location of the rail block
-      var cart = LocationUtils.getEntity(block.getLocation(), RideableMinecart.class);
-      if (cart != null && code.equals(cart.getPersistentDataContainer().get(this.plugin.getMinecartCodeKey(), PersistentDataType.STRING)))
+      var cartLocation = LocationUtils.parseLocation(block.getLocation(), context.getJoinedArguments(2));
+      var cart = MinecartUtils.findMinecartWithCodeMatch(cartLocation, code);
+      if (cart != null)
       {
         // Set the shape of the block
         blockData.setShape(shape);
