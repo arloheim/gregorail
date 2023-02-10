@@ -8,7 +8,7 @@ api-version: 1.19
 commands:
   rail:
     description: Executes various rail management commands.
-    usage: "Usage: /<command> assign <code> [location] | locate <location> | locatecart <location> | switch <shape> <location> | switchif <code> <shape> <location>"
+    usage: "Usage: /<command> assign <code> [location] | locate <location> | locatecart <location> | switch <shape> <location> | switchif <code> <shape> <location> | unassign [location]"
     
 permissions:
   gregorail.assign:
@@ -26,3 +26,6 @@ permissions:
   gregorail.switchif:
     description: Allows the player to use the /rail switchif command.
     default: op
+  gregorail.unassign:
+    description: Allows the player to use the /rail unassign command.
+    default: true

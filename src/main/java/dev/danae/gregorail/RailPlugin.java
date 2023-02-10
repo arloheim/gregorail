@@ -6,6 +6,7 @@ import dev.danae.gregorail.handlers.LocateCartCommand;
 import dev.danae.gregorail.handlers.LocateCommand;
 import dev.danae.gregorail.handlers.SwitchCommand;
 import dev.danae.gregorail.handlers.SwitchIfCommand;
+import dev.danae.gregorail.handlers.UnassignCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -35,7 +36,8 @@ public final class RailPlugin extends JavaPlugin
       .registerSubcommand("locatecart", new LocateCartCommand(this))
       .registerSubcommand("assign", new AssignCommand(this))
       .registerSubcommand("switch", new SwitchCommand(this))
-      .registerSubcommand("switchif", new SwitchIfCommand(this)));
+      .registerSubcommand("switchif", new SwitchIfCommand(this))
+      .registerSubcommand("unassign", new UnassignCommand(this)));
   }
   
   // Disable the plugin
