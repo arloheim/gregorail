@@ -1,18 +1,18 @@
-package dev.danae.gregorail.util;
+package dev.danae.gregorail.handlers;
 
 import org.bukkit.block.data.Rail;
 
 
-public class ArgumentUtils
-{
+public class CommandUtils
+{  
   // Parse a rail shape from a string
-  public static Rail.Shape parseRailShape(String string)
+  public static Rail.Shape parseShape(String string)
   {
     try
     {
       return Rail.Shape.valueOf(string.toUpperCase());
     }
-    catch (IllegalArgumentException ex)
+    catch (IllegalArgumentException | NullPointerException ex)
     {
       return null;
     }

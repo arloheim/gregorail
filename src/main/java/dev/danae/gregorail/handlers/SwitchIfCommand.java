@@ -7,7 +7,6 @@ import dev.danae.gregorail.commands.CommandHandler;
 import dev.danae.gregorail.commands.CommandUsageException;
 import dev.danae.gregorail.location.LocationException;
 import dev.danae.gregorail.location.LocationUtils;
-import dev.danae.gregorail.util.ArgumentUtils;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -41,7 +40,7 @@ public class SwitchIfCommand extends CommandHandler
       
       var code = context.getArgument(0);
       
-      var shape = ArgumentUtils.parseRailShape(context.getArgument(1));
+      var shape = CommandUtils.parseShape(context.getArgument(1));
       if (shape == null)
         throw new CommandException(String.format("Shape \"%s\" is an invalid rail shape", context.getArgument(0)));
     
