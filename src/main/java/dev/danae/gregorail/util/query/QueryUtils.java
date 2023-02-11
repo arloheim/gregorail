@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
 public class QueryUtils
 {
   // Pattern for parsing queries
-  private static final Pattern pattern = Pattern.compile("^(?<suffix>\\*)?(?<name>[a-z0-9_]+)(?<prefix>\\*)?$", Pattern.CASE_INSENSITIVE);
+  public static final Pattern pattern = Pattern.compile("^(?<suffix>\\*)?(?<name>[a-z0-9_]+)(?<prefix>\\*)?$", Pattern.CASE_INSENSITIVE);
+  public static final Pattern delimiterPattern = Pattern.compile("\\|");
   
   
   // Parse a query from a string
@@ -16,7 +17,7 @@ public class QueryUtils
     var queryList = new ArrayList<Query>();
     
     // Split the string into components
-    var stringComponents = string.split("|");
+    var stringComponents = delimiterPattern.split(string);
     for (var stringComponent : stringComponents)
     {
       // Match the component against the pattern
