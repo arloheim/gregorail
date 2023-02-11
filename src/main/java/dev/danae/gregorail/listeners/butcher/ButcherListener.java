@@ -3,18 +3,25 @@ package dev.danae.gregorail.listeners.butcher;
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.location.Cuboid;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
+import org.bukkit.persistence.PersistentDataType;
 
 
 public final class ButcherListener implements Listener
 {
+  // Namespaced key for storing if an entity has been butchered
+  public static final NamespacedKey butcheredKey = new NamespacedKey(RailPlugin.getInstance(), "entity_butchered");
+  
+  
   // Reference to the plugin
   private final RailPlugin plugin;
   
@@ -85,6 +92,17 @@ public final class ButcherListener implements Listener
     e.setCollisionCancelled(true);
   }
   
+  // Event listener for when an entity dies
+  @EventHandler
+  public void onEntityDeath(EntityDeathEvent e)
+  {
+    if (e.getEntity().getPersistentDataContainer().getOrDefault(butcheredKey, PersistentDataType.BYTE, (byte)0) == 0)
+      return;
+    
+    e.getDrops().clear();
+    e.setDroppedExp(0);
+  }
+  
   
   // Check if the specified living entity is eligible to be killed
   private boolean isEligibleToBeKilled(LivingEntity entity, Player source)
@@ -106,6 +124,9 @@ public final class ButcherListener implements Listener
     
     if (this.options.isLightningBoltEffect())
       entity.getWorld().strikeLightningEffect(entity.getLocation());
+    
+    if (this.options.isDisableItemDrops())
+      entity.getPersistentDataContainer().set(butcheredKey, PersistentDataType.BYTE, (byte)1);
     
     entity.damage(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), source);
   }

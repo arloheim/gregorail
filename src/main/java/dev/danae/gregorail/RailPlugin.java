@@ -97,6 +97,9 @@ public final class RailPlugin extends JavaPlugin
         
         this.butcherOptions.setLightningBoltEffect(butcherConfig.getBoolean("lightning-bolt-effect", true));
         this.getLogger().log(Level.INFO, String.format("butcher.lightning-bolt-effect = %s", this.butcherOptions.isLightningBoltEffect() ? "true" : "false"));
+        
+        this.butcherOptions.setDisableItemDrops(butcherConfig.getBoolean("disable-item-drops", true));
+        this.getLogger().log(Level.INFO, String.format("butcher.disable-item-drops = %s", this.butcherOptions.isDisableItemDrops()? "true" : "false"));
       }
       catch (IllegalArgumentException | NullPointerException ex)
       {
