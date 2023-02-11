@@ -110,18 +110,24 @@ public class LocationUtils
   // Format a location to a string
   public static String formatLocation(Location location)
   {
+    if (location == null)
+      return "null";
     return String.format("[%d %d %d]", location.getBlockX(), location.getBlockY(), location.getBlockZ());
   }
   
   // Format a block to a string
   public static String formatBlock(Block block)
   {
+    if (block == null)
+      return "null";
     return String.format("Block %s at %s", block.getType(), formatLocation(block.getLocation()));
   }
   
   // Format an entity to a string
   public static String formatEntity(Entity entity)
   {
+    if (entity == null)
+      return "null";
     return String.format("Entity %s \"%s\" at %s", entity.getType(), entity.getCustomName() != null ? entity.getCustomName() : entity.getName(), formatLocation(entity.getLocation()));
   }
 }

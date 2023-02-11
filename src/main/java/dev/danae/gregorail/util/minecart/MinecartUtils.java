@@ -82,16 +82,4 @@ public class MinecartUtils
   {
     return LocationUtils.findNearestEntity(loc, RideableMinecart.class, predicate);
   }
-  
-  // Return the nearest minecart with the code at the specified location
-  public static RideableMinecart findMinecartWithCode(Location loc, String code)
-  {
-    return findMinecart(loc, minecart -> getCode(minecart).equals(code));
-  }
-  
-  // Return the nearest minecart whose code matches the query at the specified location
-  public static RideableMinecart findMinecartWithCodeMatch(Location loc, Query query)
-  {
-    return findMinecart(loc, minecart -> matchCode(minecart, query));
-  }
 }

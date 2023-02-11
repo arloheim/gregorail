@@ -49,21 +49,21 @@ public class RailSwitchIfCommand extends CommandHandler
       if (!blockData.getShapes().contains(shape))
         throw new CommandException(String.format("%s cannot be set to shape %s", LocationUtils.formatBlock(block), shape));
       
-      // Check for a minecart with the code at the location of the rail block
-      var cart = MinecartUtils.findMinecartWithCodeMatch(block.getLocation(), query);
-      if (cart != null)
+      // Check for a minecart with the code at the sender location
+      var cart = MinecartUtils.findMinecart(senderLocation);
+      if (cart != null && MinecartUtils.matchCode(cart, query))
       {
         // Set the shape of the block
         blockData.setShape(shape);
         block.setBlockData(blockData);
         
         // Send information about the updated block
-        context.getSender().sendMessage(String.format("%s now has shape %s (code \"%s\")", LocationUtils.formatBlock(block), shape, MinecartUtils.getCode(cart)));
+        context.getSender().sendMessage(String.format("%s now has shape %s (%s with code \"%s\")", LocationUtils.formatBlock(block), shape, LocationUtils.formatEntity(cart), MinecartUtils.getCode(cart)));
       }
       else
       {
         // Send information about the block
-        context.getSender().sendMessage(String.format("%s still has its original shape", LocationUtils.formatBlock(block)));
+        context.getSender().sendMessage(String.format("%s still has its original shape (%s)", LocationUtils.formatBlock(block), LocationUtils.formatEntity(cart)));
       }
     }
     catch (LocationException | InvalidQueryException ex)
