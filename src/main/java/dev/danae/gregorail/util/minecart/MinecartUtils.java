@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -56,6 +57,17 @@ public class MinecartUtils
       return false;
     
     return query.matches(code);
+  }
+  
+  
+  // Return the player that is riding the minecart, if any
+  public static Player getRidingPlayer(RideableMinecart minecart)
+  {
+    return minecart.getPassengers().stream()
+      .filter(e -> e instanceof Player)
+      .map(e -> (Player)e)
+      .findFirst()
+      .orElse(null);
   }
   
   

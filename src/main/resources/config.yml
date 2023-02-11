@@ -1,5 +1,17 @@
 general:
-  # The distance to search for blocks while parsing a location
+  # The distance in blocks to search for blocks while parsing a location
   block-search-radius: 10
-  # The distance to search for entities while setting or querying codes
+  # The distance in blocks to search for entities while setting or querying codes
   entity-search-radius: 10
+  
+butcher:
+  # Should mobs within the specified radius of a player riding a minecart be killed?
+  enabled: true
+  # The radius in blocks in which mobs will be killed
+  radius: 5
+  # Should a lightning bolt effect be used when a mob is killed?
+  lightning-bolt-effect: true
+  # The entity types to ignore besides players
+  ignore-entities-of-type: [ALLAY]
+  # Should entities bearing a custom name be ignored?
+  ignore-named-entities: true

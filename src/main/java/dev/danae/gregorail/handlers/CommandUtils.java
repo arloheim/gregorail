@@ -1,6 +1,7 @@
 package dev.danae.gregorail.handlers;
 
 import dev.danae.gregorail.commands.CommandException;
+import dev.danae.gregorail.util.EnumUtils;
 import org.bukkit.block.data.Rail;
 
 
@@ -11,7 +12,7 @@ public class CommandUtils
   {
     try
     {
-      return Rail.Shape.valueOf(string.toUpperCase());
+      return EnumUtils.parseEnum(string, Rail.Shape.class);
     }
     catch (IllegalArgumentException | NullPointerException ex)
     {
