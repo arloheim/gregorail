@@ -21,6 +21,9 @@ public final class ButcherOptions
   // Should entities bearing a custom name be ignored?
   private boolean ignoreNamedEntities = true;
   
+  // Should item drops of killed entities be disabled?
+  private boolean disableItemDrops = true;
+  
   
   // Return if mobs within the specified radius of a player riding a minecart should be killed
   public boolean isEnabled()
@@ -80,5 +83,17 @@ public final class ButcherOptions
   public void setIgnoreNamedEntities(boolean ignoreNamedEntities)
   {
     this.ignoreNamedEntities = ignoreNamedEntities;
+  }
+  
+  // Return if item drops of killed entities should be disabled
+  public boolean isDisableItemDrops()
+  {
+    return this.disableItemDrops;
+  }
+  
+  // Set if item drops of killed entities should be disabled
+  public void setDisableItemDrops(boolean disableItemDrops)
+  {
+    this.disableItemDrops = disableItemDrops;
   }
 }

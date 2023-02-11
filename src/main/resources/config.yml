@@ -12,6 +12,8 @@ butcher:
   # Should a lightning bolt effect be used when a mob is killed?
   lightning-bolt-effect: true
   # The entity types to ignore besides players
-  ignore-entities-of-type: [ALLAY]
+  ignore-entities-of-type: [ALLAY, VILLAGER]
   # Should entities bearing a custom name be ignored?
   ignore-named-entities: true
+  # Should item drops of killed entities be disabled?
+  disable-item-drops: true
