@@ -34,7 +34,6 @@ permissions:
   gregorail.cart.unset:
     description: Allows the player to use the /gcart unset command.
     default: true
-    
   gregorail.rail:
     description: Allows the player to use the /grail command.
     default: true
@@ -47,7 +46,6 @@ permissions:
   gregorail.rail.switchif:
     description: Allows the player to use the /grail switchif command.
     default: true
-    
   gregorail.locate:
     description: Allows the player to use the /glocate command.
     default: true
@@ -60,7 +58,6 @@ permissions:
   gregorail.locate.cart:
     description: Allows the player to use the /glocate cart command.
     default: true
-    
   gregorail.admin:
     description: Allows the player to use the /gadmin command.
     default: op

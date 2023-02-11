@@ -10,17 +10,21 @@ import org.bukkit.entity.Entity;
 
 public class LocationUtils
 {  
+  // Radius for searching for blocks
+  public static int blockSearchRadius = 10;
+  
+  // Radius for searching for entities
+  public static int entitySearchRadius = 10;
+  
+  
   // Pattern for parsing locations
-  private static final Pattern pattern = Pattern.compile(
+  public static final Pattern pattern = Pattern.compile(
     // Current location: "~"
     "(?<cur>~)|" +
     // Numeric location: "x y z" or "~x ~y ~z
     "(?<xyz>(?:(?<x>0|-?[1-9][0-9]*)|(?<rx>~(?<dx>-?[1-9][0-9]*)?))\\s+(?:(?<y>0|-?[1-9][0-9]*)|(?<ry>~(?<dy>-?[1-9][0-9]*)?))\\s+(?:(?<z>0|-?[1-9][0-9]*)|(?<rz>~(?<dz>-?[1-9][0-9]*)?)))|" + 
     // Block location: "@block" or "^block"
     "(?<block>(?<mode>[@^])(?<name>[a-z_][a-z0-9_]*))");
-  
-  // Default radius for searching for blocks and entities
-  private static final int searchRadius = 10;
   
   
   // Parse a location from a string
@@ -57,7 +61,7 @@ public class LocationUtils
         throw new LocationException(string, String.format("The material \"%s\" is not a block material", materialName));
       
       // Find the block
-      var block = Cuboid.of(loc, searchRadius).findNearestBlockToCenter(material);
+      var block = Cuboid.of(loc, blockSearchRadius).findNearestBlockToCenter(material);
       if (block == null)
         return null;
       
@@ -87,19 +91,19 @@ public class LocationUtils
   // Get the nearest entity that matches the predicate at a location
   public static Entity findNearestEntity(Location loc, Predicate<Entity> predicate)
   {
-    return Cuboid.of(loc, searchRadius).findNearestEntityToCenter(predicate);
+    return Cuboid.of(loc, entitySearchRadius).findNearestEntityToCenter(predicate);
   }
   
   // Get the nearest entity of the specified class at a location
   public static <T extends Entity> T findNearestEntity(Location loc, Class<T> cls)
   {
-    return Cuboid.of(loc, searchRadius).findNearestEntityToCenter(cls);
+    return Cuboid.of(loc, entitySearchRadius).findNearestEntityToCenter(cls);
   }
   
   // Get the nearest entity of the specified class and that matches the predicate at a location
   public static <T extends Entity> T findNearestEntity(Location loc, Class<T> cls, Predicate<T> predicate)
   {
-    return Cuboid.of(loc, searchRadius).findNearestEntityToCenter(cls, predicate);
+    return Cuboid.of(loc, entitySearchRadius).findNearestEntityToCenter(cls, predicate);
   }
   
   

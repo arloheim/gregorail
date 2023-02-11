@@ -1,0 +1,5 @@
+general:
+  # The distance to search for blocks while parsing a location
+  block-search-radius: 10
+  # The distance to search for entities while setting or querying codes
+  entity-search-radius: 10
