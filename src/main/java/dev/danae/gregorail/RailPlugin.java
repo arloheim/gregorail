@@ -7,6 +7,8 @@ import dev.danae.gregorail.handlers.cart.CartSetCommand;
 import dev.danae.gregorail.handlers.cart.CartUnsetCommand;
 import dev.danae.gregorail.handlers.locate.LocateCartCommand;
 import dev.danae.gregorail.handlers.locate.LocateBlockCommand;
+import dev.danae.gregorail.handlers.rail.RailBlockCommand;
+import dev.danae.gregorail.handlers.rail.RailBlockIfCommand;
 import dev.danae.gregorail.handlers.rail.RailSwitchCommand;
 import dev.danae.gregorail.handlers.rail.RailSwitchIfCommand;
 import dev.danae.gregorail.listeners.butcher.ButcherListener;
@@ -122,6 +124,8 @@ public final class RailPlugin extends JavaPlugin
       .registerSubcommand("unset", new CartUnsetCommand(this)));
     
     this.getCommand("grail").setExecutor(new CommandGroupHandler(this)
+      .registerSubcommand("block", new RailBlockCommand(this))
+      .registerSubcommand("blockif", new RailBlockIfCommand(this))
       .registerSubcommand("switch", new RailSwitchCommand(this))
       .registerSubcommand("switchif", new RailSwitchIfCommand(this)));
     

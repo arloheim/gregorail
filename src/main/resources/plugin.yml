@@ -1,6 +1,6 @@
 name: GregoRail
 description: Powerful railroad management tools for Minecraft.
-version: 0.3.3
+version: 0.3.4
 author: danae
 website: https://github.com/danae/gregorail
 main: dev.danae.gregorail.RailPlugin
@@ -19,7 +19,7 @@ commands:
     
   grail:
     description: Changes the state of rails by querying properties of minecarts.
-    usage: "Usage: /<command> switch <shape> <location> | switchif <code> <shape> <location>"
+    usage: "Usage: /<command> block <material> <location> | blockif <material> <shape> <location> | switch <shape> <location> | switchif <code> <shape> <location>"
     
   glocate:
     description: Locate blocks or carts for debug purposes.
@@ -50,8 +50,18 @@ permissions:
     description: Allows the player to use the /grail command.
     default: true
     children:
+      gregorail.rail.block: true
+      gregorail.rail.blockif: true
       gregorail.rail.switch: true
       gregorail.rail.switchif: true
+      
+  gregorail.rail.block:
+    description: Allows the player to use the /grail block command.
+    default: true
+    
+  gregorail.rail.blockif:
+    description: Allows the player to use the /grail blockif command.
+    default: true
       
   gregorail.rail.switch:
     description: Allows the player to use the /grail switch command.
