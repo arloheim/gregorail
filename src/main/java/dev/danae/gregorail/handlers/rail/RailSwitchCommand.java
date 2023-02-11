@@ -35,8 +35,6 @@ public class RailSwitchCommand extends CommandHandler
         throw new CommandUsageException();
       
       var shape = CommandUtils.parseShape(context.getArgument(0));
-      if (shape == null)
-        throw new CommandException(String.format("Shape \"%s\" is an invalid rail shape", context.getArgument(0)));
     
       var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(1));
       if (block.getType() != Material.RAIL)

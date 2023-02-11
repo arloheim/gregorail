@@ -20,7 +20,7 @@ public class RailSwitchIfCommand extends CommandHandler
   // Constructor
   public RailSwitchIfCommand(RailPlugin plugin)
   {
-    super(plugin, "gregorail.rail.switch");
+    super(plugin, "gregorail.rail.switchif");
   }
     
   
@@ -40,8 +40,6 @@ public class RailSwitchIfCommand extends CommandHandler
       var query = QueryUtils.parseQuery(context.getArgument(0));
       
       var shape = CommandUtils.parseShape(context.getArgument(1));
-      if (shape == null)
-        throw new CommandException(String.format("Shape \"%s\" is an invalid rail shape", context.getArgument(0)));
     
       var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(2));
       if (block.getType() != Material.RAIL)
@@ -52,8 +50,7 @@ public class RailSwitchIfCommand extends CommandHandler
         throw new CommandException(String.format("%s cannot be set to shape %s", LocationUtils.formatBlock(block), shape));
       
       // Check for a minecart with the code at the location of the rail block
-      var cartLocation = LocationUtils.parseLocation(block.getLocation(), context.getJoinedArguments(2));
-      var cart = MinecartUtils.findMinecartWithCodeMatch(cartLocation, query);
+      var cart = MinecartUtils.findMinecartWithCodeMatch(block.getLocation(), query);
       if (cart != null)
       {
         // Set the shape of the block
