@@ -101,6 +101,9 @@ public final class ButcherListener implements Listener
   // Kill the specified living entity
   private void kill(LivingEntity entity, Player source)
   {
+    if (entity.isDead())
+      return;
+    
     if (this.options.isLightningBoltEffect())
       entity.getWorld().strikeLightningEffect(entity.getLocation());
     
