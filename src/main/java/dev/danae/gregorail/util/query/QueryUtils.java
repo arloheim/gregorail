@@ -16,7 +16,7 @@ public class QueryUtils
     var queryList = new ArrayList<Query>();
     
     // Split the string into components
-    var stringComponents = string.split(",");
+    var stringComponents = string.split("|");
     for (var stringComponent : stringComponents)
     {
       // Match the component against the pattern
