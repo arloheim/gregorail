@@ -1,10 +1,11 @@
 package dev.danae.gregorail;
 
 import dev.danae.gregorail.commands.CommandGroupHandler;
-import dev.danae.gregorail.handlers.admin.AdminLocateCartCommand;
-import dev.danae.gregorail.handlers.admin.AdminLocateCommand;
+import dev.danae.gregorail.handlers.admin.AdminVersionCommand;
 import dev.danae.gregorail.handlers.cart.CartSetCommand;
 import dev.danae.gregorail.handlers.cart.CartUnsetCommand;
+import dev.danae.gregorail.handlers.locate.LocateCartCommand;
+import dev.danae.gregorail.handlers.locate.LocateBlockCommand;
 import dev.danae.gregorail.handlers.rail.RailSwitchCommand;
 import dev.danae.gregorail.handlers.rail.RailSwitchIfCommand;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,9 +40,12 @@ public final class RailPlugin extends JavaPlugin
       .registerSubcommand("switch", new RailSwitchCommand(this))
       .registerSubcommand("switchif", new RailSwitchIfCommand(this)));
     
+    this.getCommand("glocate").setExecutor(new CommandGroupHandler(this)
+      .registerSubcommand("block", new LocateBlockCommand(this))
+      .registerSubcommand("cart", new LocateCartCommand(this)));
+    
     this.getCommand("gadmin").setExecutor(new CommandGroupHandler(this)
-      .registerSubcommand("locate", new AdminLocateCommand(this))
-      .registerSubcommand("locatecart", new AdminLocateCartCommand(this)));
+      .registerSubcommand("version", new AdminVersionCommand(this)));
   }
   
   // Disable the plugin

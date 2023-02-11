@@ -2,36 +2,65 @@ name: GregoRail
 description: Powerful railroad management tools for Minecraft.
 version: 0.2.2
 author: danae
+website: https://github.com/danae/gregorail
 main: dev.danae.gregorail.RailPlugin
 api-version: 1.19
 
 commands:
   gcart:
-    description: Executes various minecart management commands.
+    description: Manages properties of minecarts.
     usage: "Usage: /<command> set <code> [location] | unset [location]"
   grail:
-    description: Executes various rail management commands.
+    description: Changes the state of rails by querying properties of minecarts.
     usage: "Usage: /<command> switch <shape> <location> | switchif <code> <shape> <location>"
+  glocate:
+    description: Locate blocks or carts for debug purposes.
+    usage: "Usage: /<command> block <location> | cart <location>"
   gadmin:
     description: Executes various administration commands.
-    usage: "Usage: /<command> locate <location> | locatecart <location>"
+    permission: gregorail.admin
+    usage: "Usage: /<command> version"
     
 permissions:
+  gregorail.cart:
+    description: Allows the player to use the /gcart command.
+    default: true
+    children:
+      gregorail.cart.set: true
+      gregorail.cart.unset: true
   gregorail.cart.set:
     description: Allows the player to use the /gcart set command.
     default: true
   gregorail.cart.unset:
     description: Allows the player to use the /gcart unset command.
     default: true
+    
+  gregorail.rail:
+    description: Allows the player to use the /grail command.
+    default: true
+    children:
+      gregorail.rail.switch: true
+      gregorail.rail.switchif: true
   gregorail.rail.switch:
     description: Allows the player to use the /grail switch command.
     default: true
   gregorail.rail.switchif:
     description: Allows the player to use the /grail switchif command.
     default: true
-  gregorail.admin.locate:
-    description: Allows the player to use the /gadmin locate command.
-    default: op
-  gregorail.admin.locatecart:
-    description: Allows the player to use the /gadmin locatecart command.
+    
+  gregorail.locate:
+    description: Allows the player to use the /glocate command.
+    default: true
+    children:
+      gregorail.locate.block: true
+      gregorail.locate.cart: true  
+  gregorail.locate.block:
+    description: Allows the player to use the /glocate block command.
+    default: true
+  gregorail.locate.cart:
+    description: Allows the player to use the /glocate cart command.
+    default: true
+    
+  gregorail.admin:
+    description: Allows the player to use the /gadmin command.
     default: op

@@ -1,4 +1,4 @@
-package dev.danae.gregorail.handlers.admin;
+package dev.danae.gregorail.handlers.locate;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.commands.CommandContext;
@@ -7,14 +7,15 @@ import dev.danae.gregorail.commands.CommandHandler;
 import dev.danae.gregorail.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.LocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
+import dev.danae.gregorail.util.minecart.MinecartUtils;
 
 
-public class AdminLocateCommand extends CommandHandler
+public class LocateCartCommand extends CommandHandler
 {
   // Constructor
-  public AdminLocateCommand(RailPlugin plugin)
+  public LocateCartCommand(RailPlugin plugin)
   {
-    super(plugin, "gregorail.admin.locate");
+    super(plugin, "gregorail.locate.cart");
   }
     
   
@@ -31,12 +32,16 @@ public class AdminLocateCommand extends CommandHandler
       if (!context.hasAtLeastArgumentsCount(1))
         throw new CommandUsageException();
       
-      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments());
-      if (block == null)
+      var cartLocation = LocationUtils.parseLocation(senderLocation, context.getJoinedArguments());
+      if (cartLocation == null)
         throw new CommandException("No location found");
       
-      // Send information about the block
-      context.getSender().sendMessage(LocationUtils.formatBlock(block));
+      var cart = MinecartUtils.findMinecart(cartLocation);
+      if (cart == null)
+        throw new CommandException("No cart found");
+      
+      // Send information about the cart
+      context.getSender().sendMessage(LocationUtils.formatEntity(cart));
     }
     catch (LocationException ex)
     {
