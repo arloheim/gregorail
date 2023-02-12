@@ -27,6 +27,17 @@ public class CommandGroupHandler extends CommandHandler
   }
   
   
+  // Register the command handler as a listener
+  @Override
+  public void registerListener()
+  {
+    super.registerListener();
+    
+    for (var handler : this.subcommands.values())
+      handler.registerListener();
+  }
+  
+  
   // Register a subcommand
   public CommandGroupHandler registerSubcommand(String name, CommandHandler handler)
   {

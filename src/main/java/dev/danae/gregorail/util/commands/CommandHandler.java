@@ -1,8 +1,10 @@
 package dev.danae.gregorail.util.commands;
 
+import dev.danae.gregorail.RailPlugin;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,6 +31,13 @@ public abstract class CommandHandler implements CommandExecutor, TabCompleter, L
   public CommandHandler()
   {
     this(Collections.emptyList());
+  }
+  
+  
+  // Register the command handler as a listener
+  public void registerListener()
+  {
+    Bukkit.getPluginManager().registerEvents(this, RailPlugin.getInstance());
   }
   
 
