@@ -146,5 +146,6 @@ public final class RailPlugin extends JavaPlugin
   private void setCommandHandler(String name, CommandHandler handler)
   {
     this.getCommand(name).setExecutor(handler);
+    this.getCommand(name).setTabCompleter(handler);
   }
 }

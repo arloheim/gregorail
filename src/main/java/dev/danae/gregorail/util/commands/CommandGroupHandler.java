@@ -69,4 +69,24 @@ public class CommandGroupHandler extends CommandHandler
     // Handle the subcommand
     handler.handle(context.withArguments(Arrays.copyOfRange(context.getArguments(), 1, context.getArguments().length)));
   }
+  
+  // Handle tab completion of a command
+  @Override
+  public List<String> handleTabCompletion(CommandContext context)
+  {
+    // Check if the arguments provide a subcommand
+    if (!context.hasAtLeastArgumentsCount(1))
+      return null;
+    
+    // If there only is one argument, then tab complete the subcommand
+    if (context.hasArgumentsCount(1))
+      return this.subcommands.keySet().stream().sorted().toList();
+      
+    // Otherwise, check if there is a subcommand that matches and delegate to that
+    var handler = this.getSubcommand(context.getArgument(0));
+    if (handler == null)
+      return null;
+    
+    return handler.handleTabCompletion(context.withArguments(Arrays.copyOfRange(context.getArguments(), 1, context.getArguments().length)));
+  }
 }

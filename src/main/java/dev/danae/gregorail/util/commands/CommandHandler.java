@@ -7,9 +7,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
 
-public abstract class CommandHandler implements CommandExecutor
+public abstract class CommandHandler implements CommandExecutor, TabCompleter
 {  
   // The required permissions to execute this command
   protected final List<String> permissions;
@@ -53,6 +54,21 @@ public abstract class CommandHandler implements CommandExecutor
     }
   }
   
+  // Handle tab completion of a command
+  @Override
+  public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args)
+  {
+    var context = new CommandContext(command, args, sender);
+    return this.handleTabCompletion(context);
+  }
+  
+  
   // Actual function to handle a command
   public abstract void handle(CommandContext context) throws CommandException, CommandUsageException;
+  
+  // Actual function to handle tab completion of a command
+  public List<String> handleTabCompletion(CommandContext context)
+  {
+    return null;
+  }
 }

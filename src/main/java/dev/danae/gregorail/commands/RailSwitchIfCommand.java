@@ -9,6 +9,7 @@ import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.query.InvalidQueryException;
 import dev.danae.gregorail.util.query.QueryUtils;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -71,5 +72,17 @@ public class RailSwitchIfCommand extends CommandHandler
     {
       throw new CommandException(ex.getMessage(), ex);
     }
+  }
+  
+  // Handle tab completion of the command
+  @Override
+  public List<String> handleTabCompletion(CommandContext context)
+  {
+    if (context.hasAtLeastArgumentsCount(3))
+      return CommandUtils.handleLocationTabCompletion(context, 2);
+    else if (context.hasArgumentsCount(2))
+      return CommandUtils.handleShapeTabCompletion(context.getArgument(1));
+    else
+      return null;
   }
 }

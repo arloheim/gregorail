@@ -6,6 +6,7 @@ import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
+import java.util.List;
 
 
 public class RailBlockCommand extends CommandHandler
@@ -46,5 +47,17 @@ public class RailBlockCommand extends CommandHandler
     {
       throw new CommandException(ex.getMessage(), ex);
     }
+  }
+  
+  // Handle tab completion of the command
+  @Override
+  public List<String> handleTabCompletion(CommandContext context)
+  {
+    if (context.hasAtLeastArgumentsCount(2))
+      return CommandUtils.handleLocationTabCompletion(context, 1);
+    else if (context.hasArgumentsCount(1))
+      return CommandUtils.handleMaterialTabCompletion(context.getArgument(0), true);
+    else
+      return null;
   }
 }

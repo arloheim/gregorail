@@ -6,6 +6,7 @@ import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
+import java.util.List;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
@@ -46,5 +47,15 @@ public class LocateCartCommand extends CommandHandler
     {
       throw new CommandException(ex.getMessage(), ex);
     }
+  }
+  
+  // Handle tab completion of the command
+  @Override
+  public List<String> handleTabCompletion(CommandContext context)
+  {
+    if (context.hasAtLeastArgumentsCount(1))
+      return CommandUtils.handleLocationTabCompletion(context, 0);
+    else
+      return null;
   }
 }
