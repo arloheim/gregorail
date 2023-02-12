@@ -8,17 +8,16 @@ import org.bukkit.block.data.Rail;
 
 public class CommandUtils
 {  
-  // Parse a material from a string
-  public static Material parseMaterial(String string) throws CommandException
+  // Parse a block material from a string
+  public static Material parseMaterial(String string, boolean requireBlock) throws CommandException
   {
-    try
-    {
-      return EnumUtils.parseEnum(string, Material.class);
-    }
-    catch (IllegalArgumentException | NullPointerException ex)
-    {
-      throw new CommandException(String.format("Material \"%s\" is an invalid material", string.toLowerCase()), ex);
-    }
+    var material = Material.matchMaterial(string);
+    if (material == null)
+      throw new CommandException(String.format("Material \"%s\" could not be found", string.toLowerCase()));
+    if (requireBlock && !material.isBlock())
+      throw new CommandException(String.format("Material \"%s\" is not a block material", string.toLowerCase()));
+      
+    return material;
   }
   
   // Parse a rail shape from a string
@@ -30,7 +29,7 @@ public class CommandUtils
     }
     catch (IllegalArgumentException | NullPointerException ex)
     {
-      throw new CommandException(String.format("Shape \"%s\" is an invalid rail shape", string.toLowerCase()), ex);
+      throw new CommandException(String.format("Shape \"%s\" could not be found", string.toLowerCase()), ex);
     }
   }
 }

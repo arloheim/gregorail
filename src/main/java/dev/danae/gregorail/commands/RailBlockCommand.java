@@ -30,7 +30,7 @@ public class RailBlockCommand extends CommandHandler
       if (!context.hasAtLeastArgumentsCount(2))
         throw new CommandUsageException();
       
-      var material = CommandUtils.parseMaterial(context.getArgument(0));
+      var material = CommandUtils.parseMaterial(context.getArgument(0), true);
     
       var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(1));
       if (block == null)

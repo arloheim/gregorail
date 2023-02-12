@@ -36,13 +36,8 @@ public abstract class CommandHandler implements CommandExecutor
   {
     try
     {
-      // Create the command context
       var context = new CommandContext(command, args, sender);
-      
-      // Assert the permissions of the sender
-      context.assertSenderHasPermissions(args);
-      
-      // Handle the command
+      context.assertSenderHasPermissions(this.permissions);
       this.handle(context);
       
       return true;

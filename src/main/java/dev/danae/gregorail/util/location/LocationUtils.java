@@ -56,9 +56,9 @@ public class LocationUtils
       var materialName = m.group("name");
       var material = Material.matchMaterial(materialName);
       if (material == null)
-        throw new InvalidLocationException(String.format("The material \"%s\" could not be found", materialName));
+        throw new InvalidLocationException(String.format("Material \"%s\" could not be found", materialName.toLowerCase()));
       if (!material.isBlock())
-        throw new InvalidLocationException(String.format("The material \"%s\" is not a block material", materialName));
+        throw new InvalidLocationException(String.format("Material \"%s\" is not a block material", materialName.toLowerCase()));
       
       // Find the block
       var block = Cuboid.of(loc, blockSearchRadius).findNearestBlockToCenter(material);

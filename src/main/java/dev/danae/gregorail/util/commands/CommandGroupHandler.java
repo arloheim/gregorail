@@ -42,20 +42,29 @@ public class CommandGroupHandler extends CommandHandler
   }
   
   
+  // Return a subcommand handler for the specified name
+  public CommandHandler getSubcommand(String name)
+  {
+    return this.subcommands.entrySet().stream()
+      .filter(e -> e.getKey().equalsIgnoreCase(name))
+      .map(e -> e.getValue())
+      .findFirst()
+      .orElse(null);
+  }
+  
+  
   // Handle a command
   @Override
   public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
     // Check if the arguments provide a subcommand
-    if (context.getArguments().length < 1)
+    if (!context.hasAtLeastArgumentsCount(1))
       throw new CommandException("You must provide a subcommand");
     
     // Check if there is a subcommand that matches
-    var handler = this.subcommands.entrySet().stream()
-      .filter(e -> e.getKey().equalsIgnoreCase(context.getArgument(0)))
-      .map(e -> e.getValue())
-      .findFirst()
-      .orElseThrow(() -> new CommandException("You must provide a valid subcommand"));
+    var handler = this.getSubcommand(context.getArgument(0));
+    if (handler == null)
+      throw new CommandException("You must provide a valid subcommand");
     
     // Handle the subcommand
     handler.handle(context.withArguments(Arrays.copyOfRange(context.getArguments(), 1, context.getArguments().length)));

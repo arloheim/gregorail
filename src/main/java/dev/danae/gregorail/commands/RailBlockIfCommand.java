@@ -36,7 +36,7 @@ public class RailBlockIfCommand extends CommandHandler
       
       var query = QueryUtils.parseQuery(context.getArgument(0));
       
-      var material = CommandUtils.parseMaterial(context.getArgument(1));
+      var material = CommandUtils.parseMaterial(context.getArgument(1), true);
     
       var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(2));
       if (block == null)
