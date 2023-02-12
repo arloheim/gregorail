@@ -2,6 +2,8 @@ package dev.danae.gregorail.util.minecart;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.query.Query;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -16,6 +18,9 @@ public class MinecartUtils
   
   // Pattern to validate the code of a minecart
   private static final Pattern codePattern = Pattern.compile("[a-z0-9_]+", Pattern.CASE_INSENSITIVE);
+  
+  // Pattern to split multiple codes of a minecart
+  private static final Pattern codeDelimiterPattern = Pattern.compile("\\|");
   
   
   // Check if a code is valid
@@ -78,6 +83,13 @@ public class MinecartUtils
       return false;
     
     return query.matches(code);
+  }
+  
+  
+  // Split a string containing possible multiple codes into a list
+  public static List<String> splitCodes(String code)
+  {
+    return Arrays.asList(codeDelimiterPattern.split(code));
   }
   
   

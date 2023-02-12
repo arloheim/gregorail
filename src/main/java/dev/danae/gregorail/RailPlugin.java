@@ -3,6 +3,7 @@ package dev.danae.gregorail;
 import dev.danae.gregorail.commands.AdminReloadCommand;
 import dev.danae.gregorail.commands.AdminVersionCommand;
 import dev.danae.gregorail.commands.CartClearCommand;
+import dev.danae.gregorail.commands.CartPromptSetCommand;
 import dev.danae.gregorail.commands.CartSetCommand;
 import dev.danae.gregorail.commands.LocateBlockCommand;
 import dev.danae.gregorail.commands.LocateCartCommand;
@@ -18,6 +19,7 @@ import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.location.LocationUtils;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -81,6 +83,16 @@ public final class RailPlugin extends JavaPlugin
       this.getLogger().log(Level.INFO, String.format("general.entity-search-radius = %d", LocationUtils.entitySearchRadius));
     }
     
+    var cartPromptConfig = this.getConfig().getConfigurationSection("cart-prompt");
+    if (cartPromptConfig != null)
+    {
+      CartPromptSetCommand.title = cartPromptConfig.getString("title", "Select a code");
+      this.getLogger().log(Level.INFO, String.format("cart-prompt.title = %s", CartPromptSetCommand.title));
+      
+      CartPromptSetCommand.itemMaterial = Material.matchMaterial(cartPromptConfig.getString("item-material", Material.MINECART.name()));
+      this.getLogger().log(Level.INFO, String.format("cart-prompt.item-material = %s", CartPromptSetCommand.itemMaterial));
+    }
+    
     var butcherConfig = this.getConfig().getConfigurationSection("butcher");
     if (butcherConfig != null)
     {
@@ -122,6 +134,7 @@ public final class RailPlugin extends JavaPlugin
     
     this.setCommandHandler("gcart", new CommandGroupHandler()
       .registerSubcommand("clear", new CartClearCommand())
+      .registerSubcommand("promptset", new CartPromptSetCommand())
       .registerSubcommand("set", new CartSetCommand()));
     
     this.setCommandHandler("grail", new CommandGroupHandler()

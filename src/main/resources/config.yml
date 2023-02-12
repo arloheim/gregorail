@@ -4,6 +4,12 @@ general:
   # The distance in blocks to search for entities while setting or querying codes
   entity-search-radius: 10
   
+cart-prompt:
+  # The title to use in the /gcart prompt command
+  title: "Select a code"
+  # The material to use for items in the /gcart prompt command
+  item-material: MINECART
+  
 butcher:
   # Should mobs within the specified radius of a player riding a minecart be killed?
   enabled: true

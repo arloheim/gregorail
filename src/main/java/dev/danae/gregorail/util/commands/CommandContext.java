@@ -1,5 +1,6 @@
 package dev.danae.gregorail.util.commands;
 
+import dev.danae.gregorail.util.location.LocationUtils;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
@@ -145,5 +146,22 @@ public class CommandContext
   public void assertSenderHasPermissions(String... permissions) throws CommandException
   {
     this.assertSenderHasPermissions(Arrays.asList(permissions));
+  }
+  
+  
+  // Return the nearest player to the sender
+  public Player nearestPlayer() throws CommandException
+  {
+    var senderLocation = this.assertSenderHasLocation();
+    return LocationUtils.findNearestEntity(senderLocation, Player.class);
+  }
+  
+  // Return the nearest player to the sender, or the sender itself if it is a player
+  public Player nearestPlayerOrSender() throws CommandException
+  {
+    if (this.sender instanceof Player player)
+      return player;
+    else
+      return this.nearestPlayer();
   }
 }
