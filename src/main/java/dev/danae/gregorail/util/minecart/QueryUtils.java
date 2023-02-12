@@ -33,7 +33,7 @@ public class QueryUtils
       else if (m.group("suffix") != null)
         queryList.add(code -> code != null && code.getId().endsWith(m.group("name")));
       else
-        queryList.add(code -> code != null && code.equals(m.group("name")));
+        queryList.add(code -> code != null && code.getId().equals(m.group("name")));
     }
     
     // Return the query
