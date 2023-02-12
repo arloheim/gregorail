@@ -34,11 +34,23 @@ public class MinecartUtils
       throw new NullPointerException("minecart must not be null");
     
     if (code == null)
+    {
       minecart.getPersistentDataContainer().remove(codeKey);
+      
+      minecart.setCustomNameVisible(false);
+      minecart.setCustomName(null);
+    }
     else if (codePattern.matcher(code).matches())
+    {
       minecart.getPersistentDataContainer().set(codeKey, PersistentDataType.STRING, code);
+
+      minecart.setCustomNameVisible(true);
+      minecart.setCustomName(code);
+    }
     else
+    {
       throw new InvalidMinecartCodeException(String.format("Code \"%s\" is an invalid minecart code; codes may only contain alphanumeric characters and underscores", code));
+    }
   }
   
   // Return if the code of a minecart matches the query

@@ -40,9 +40,6 @@ public class CartSetCommand extends AbstractCartCommand
       // Assign the code to the cart
       MinecartUtils.setCode(cart, code);
       
-      cart.setCustomNameVisible(true);
-      cart.setCustomName(code);
-      
       // Send information about the updated cart
       context.getSender().sendMessage(String.format("%s now has code \"%s\"", LocationUtils.formatEntity(cart), code));
     }

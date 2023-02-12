@@ -35,9 +35,6 @@ public class CartClearCommand extends AbstractCartCommand
       // Remove the code from the cart
       MinecartUtils.setCode(cart, null);
       
-      cart.setCustomNameVisible(false);
-      cart.setCustomName(null);
-      
       // Send information about the updated cart
       context.getSender().sendMessage(String.format("%s now has no code", LocationUtils.formatEntity(cart)));
     }
