@@ -7,7 +7,7 @@ import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.minecart.CodeUtils;
 import dev.danae.gregorail.util.minecart.InvalidCodeException;
-import dev.danae.gregorail.util.minecart.MinecartUtils;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -85,6 +85,17 @@ public class CartPromptSetCommand extends AbstractCartCommand
       throw new CommandException(ex.getMessage(), ex);
     }
   }
+  
+  // Handle tab completion of the command
+  @Override
+  public List<String> handleTabCompletion(CommandContext context)
+  {
+    if (context.hasAtLeastArgumentsCount(2))
+      return CommandUtils.handleLocationTabCompletion(context, 1);
+    else
+      return null;
+  }
+  
   
   // Event listener for when an inventory item is clicked
   @EventHandler

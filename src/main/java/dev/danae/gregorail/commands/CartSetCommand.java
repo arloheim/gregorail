@@ -8,6 +8,7 @@ import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.CodeUtils;
 import dev.danae.gregorail.util.minecart.InvalidCodeException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
+import java.util.List;
 
 
 public class CartSetCommand extends AbstractCartCommand
@@ -48,5 +49,15 @@ public class CartSetCommand extends AbstractCartCommand
     {
       throw new CommandException(ex.getMessage(), ex);
     }
+  }
+  
+  // Handle tab completion of the command
+  @Override
+  public List<String> handleTabCompletion(CommandContext context)
+  {
+    if (context.hasAtLeastArgumentsCount(2))
+      return CommandUtils.handleLocationTabCompletion(context, 1);
+    else
+      return null;
   }
 }
