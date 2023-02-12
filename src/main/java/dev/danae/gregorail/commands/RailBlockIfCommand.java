@@ -1,26 +1,23 @@
-package dev.danae.gregorail.handlers.rail;
+package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.commands.CommandContext;
-import dev.danae.gregorail.commands.CommandException;
-import dev.danae.gregorail.commands.CommandHandler;
-import dev.danae.gregorail.commands.CommandUsageException;
-import dev.danae.gregorail.handlers.CommandUtils;
-import dev.danae.gregorail.util.location.LocationException;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandHandler;
+import dev.danae.gregorail.util.commands.CommandUsageException;
+import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.query.InvalidQueryException;
 import dev.danae.gregorail.util.query.QueryUtils;
-import org.bukkit.Material;
-import org.bukkit.block.data.Rail;
+import org.bukkit.entity.minecart.RideableMinecart;
 
 
 public class RailBlockIfCommand extends CommandHandler
 {
   // Constructor
-  public RailBlockIfCommand(RailPlugin plugin)
+  public RailBlockIfCommand()
   {
-    super(plugin, "gregorail.rail.blockif");
+    super("gregorail.rail.blockif");
   }
     
   
@@ -46,7 +43,7 @@ public class RailBlockIfCommand extends CommandHandler
         throw new CommandException("No block found");
       
       // Check for a minecart with the code at the sender location
-      var cart = MinecartUtils.findMinecart(senderLocation);
+      var cart = LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class);
       if (cart != null && MinecartUtils.matchCode(cart, query))
       {
         // Set the material of the block
@@ -61,7 +58,7 @@ public class RailBlockIfCommand extends CommandHandler
         context.getSender().sendMessage(String.format("%s still has its original material (%s)", LocationUtils.formatBlock(block), LocationUtils.formatEntity(cart)));
       }
     }
-    catch (LocationException | InvalidQueryException ex)
+    catch (InvalidLocationException | InvalidQueryException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

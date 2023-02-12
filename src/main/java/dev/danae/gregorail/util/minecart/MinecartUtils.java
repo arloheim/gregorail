@@ -1,11 +1,8 @@
 package dev.danae.gregorail.util.minecart;
 
 import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.query.Query;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -15,10 +12,10 @@ import org.bukkit.persistence.PersistentDataType;
 public class MinecartUtils
 {
   // Namespaced key for storing the code of a minecart
-  public static final NamespacedKey codeKey = new NamespacedKey(RailPlugin.getInstance(), "minecart_code");
+  private static final NamespacedKey codeKey = new NamespacedKey(RailPlugin.getInstance(), "minecart_code");
   
   // Pattern to validate the code of a minecart
-  public static final Pattern codePattern = Pattern.compile("[a-z0-9_]+", Pattern.CASE_INSENSITIVE);
+  private static final Pattern codePattern = Pattern.compile("[a-z0-9_]+", Pattern.CASE_INSENSITIVE);
   
   
   // Get the code of a minecart
@@ -68,18 +65,5 @@ public class MinecartUtils
       .map(e -> (Player)e)
       .findFirst()
       .orElse(null);
-  }
-  
-  
-  // Return the nearest minecart at the specified location
-  public static RideableMinecart findMinecart(Location loc)
-  {
-    return LocationUtils.findNearestEntity(loc, RideableMinecart.class);
-  }
-  
-  // Return the nearest minecart that matches the predicate at the specified location
-  public static RideableMinecart findMinecart(Location loc, Predicate<RideableMinecart> predicate)
-  {
-    return LocationUtils.findNearestEntity(loc, RideableMinecart.class, predicate);
   }
 }

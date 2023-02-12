@@ -18,7 +18,7 @@ public class LocationUtils
   
   
   // Pattern for parsing locations
-  public static final Pattern pattern = Pattern.compile(
+  private static final Pattern pattern = Pattern.compile(
     // Current location: "~"
     "(?<cur>~)|" +
     // Numeric location: "x y z" or "~x ~y ~z
@@ -28,12 +28,12 @@ public class LocationUtils
   
   
   // Parse a location from a string
-  public static Location parseLocation(Location loc, String string) throws LocationException
+  public static Location parseLocation(Location loc, String string) throws InvalidLocationException
   {
     // Match the string against the pattern
     var m = pattern.matcher(string);
     if (!m.matches())
-      throw new LocationException(string, String.format("The location string \"%s\" contains an invalid format", string));
+      throw new InvalidLocationException(String.format("The location string \"%s\" contains an invalid format", string));
     
     // Check for a current location
     if (m.group("cur") != null)
@@ -56,9 +56,9 @@ public class LocationUtils
       var materialName = m.group("name");
       var material = Material.matchMaterial(materialName);
       if (material == null)
-        throw new LocationException(string, String.format("The material \"%s\" could not be found", materialName));
+        throw new InvalidLocationException(String.format("The material \"%s\" could not be found", materialName));
       if (!material.isBlock())
-        throw new LocationException(string, String.format("The material \"%s\" is not a block material", materialName));
+        throw new InvalidLocationException(String.format("The material \"%s\" is not a block material", materialName));
       
       // Find the block
       var block = Cuboid.of(loc, blockSearchRadius).findNearestBlockToCenter(material);
@@ -78,7 +78,7 @@ public class LocationUtils
   }
   
   // Return the block from a string
-  public static Block parseBlockAtLocation(Location loc, String string) throws LocationException
+  public static Block parseBlockAtLocation(Location loc, String string) throws InvalidLocationException
   {
     var location = parseLocation(loc, string);
     if (location == null)

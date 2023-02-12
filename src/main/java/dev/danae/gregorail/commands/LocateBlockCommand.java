@@ -1,20 +1,19 @@
-package dev.danae.gregorail.handlers.locate;
+package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.commands.CommandContext;
-import dev.danae.gregorail.commands.CommandException;
-import dev.danae.gregorail.commands.CommandHandler;
-import dev.danae.gregorail.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.LocationException;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandHandler;
+import dev.danae.gregorail.util.commands.CommandUsageException;
+import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 
 
 public class LocateBlockCommand extends CommandHandler
 {
   // Constructor
-  public LocateBlockCommand(RailPlugin plugin)
+  public LocateBlockCommand()
   {
-    super(plugin, "gregorail.locate.block");
+    super("gregorail.locate.block");
   }
     
   
@@ -38,7 +37,7 @@ public class LocateBlockCommand extends CommandHandler
       // Send information about the block
       context.getSender().sendMessage(LocationUtils.formatBlock(block));
     }
-    catch (LocationException ex)
+    catch (InvalidLocationException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

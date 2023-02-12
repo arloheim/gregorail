@@ -1,4 +1,4 @@
-package dev.danae.gregorail.listeners.butcher;
+package dev.danae.gregorail.listeners;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.location.Cuboid;
@@ -22,17 +22,13 @@ public final class ButcherListener implements Listener
   public static final NamespacedKey butcheredKey = new NamespacedKey(RailPlugin.getInstance(), "entity_butchered");
   
   
-  // Reference to the plugin
-  private final RailPlugin plugin;
-  
   // The options for the butcher listener
   private final ButcherOptions options;
   
   
   // Constructor
-  public ButcherListener(RailPlugin plugin, ButcherOptions options)
-  {    
-    this.plugin = plugin;
+  public ButcherListener(ButcherOptions options)
+  {
     this.options = options;
   }
   

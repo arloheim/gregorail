@@ -1,4 +1,4 @@
-package dev.danae.gregorail.commands;
+package dev.danae.gregorail.util.commands;
 
 
 public class CommandUsageException extends Exception

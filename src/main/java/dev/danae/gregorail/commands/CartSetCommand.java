@@ -1,10 +1,9 @@
-package dev.danae.gregorail.handlers.cart;
+package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.commands.CommandContext;
-import dev.danae.gregorail.commands.CommandException;
-import dev.danae.gregorail.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.LocationException;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandUsageException;
+import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.InvalidMinecartCodeException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
@@ -13,9 +12,9 @@ import dev.danae.gregorail.util.minecart.MinecartUtils;
 public class CartSetCommand extends CartCommand
 {
   // Constructor
-  public CartSetCommand(RailPlugin plugin)
+  public CartSetCommand()
   {
-    super(plugin, "gregorail.cart.set");
+    super("gregorail.cart.set");
   }
     
   
@@ -47,7 +46,7 @@ public class CartSetCommand extends CartCommand
       // Send information about the updated cart
       context.getSender().sendMessage(String.format("%s now has code \"%s\"", LocationUtils.formatEntity(cart), code));
     }
-    catch (LocationException | InvalidMinecartCodeException ex)
+    catch (InvalidLocationException | InvalidMinecartCodeException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

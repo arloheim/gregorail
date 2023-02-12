@@ -1,19 +1,19 @@
 package dev.danae.gregorail;
 
-import dev.danae.gregorail.commands.CommandGroupHandler;
-import dev.danae.gregorail.handlers.admin.AdminReloadCommand;
-import dev.danae.gregorail.handlers.admin.AdminVersionCommand;
-import dev.danae.gregorail.handlers.cart.CartSetCommand;
-import dev.danae.gregorail.handlers.cart.CartUnsetCommand;
-import dev.danae.gregorail.handlers.locate.LocateCartCommand;
-import dev.danae.gregorail.handlers.locate.LocateBlockCommand;
-import dev.danae.gregorail.handlers.rail.RailBlockCommand;
-import dev.danae.gregorail.handlers.rail.RailBlockIfCommand;
-import dev.danae.gregorail.handlers.rail.RailSwitchCommand;
-import dev.danae.gregorail.handlers.rail.RailSwitchIfCommand;
-import dev.danae.gregorail.listeners.butcher.ButcherListener;
-import dev.danae.gregorail.listeners.butcher.ButcherOptions;
+import dev.danae.gregorail.commands.AdminReloadCommand;
+import dev.danae.gregorail.commands.AdminVersionCommand;
+import dev.danae.gregorail.commands.CartSetCommand;
+import dev.danae.gregorail.commands.CartUnsetCommand;
+import dev.danae.gregorail.commands.LocateBlockCommand;
+import dev.danae.gregorail.commands.LocateCartCommand;
+import dev.danae.gregorail.commands.RailBlockCommand;
+import dev.danae.gregorail.commands.RailBlockIfCommand;
+import dev.danae.gregorail.commands.RailSwitchCommand;
+import dev.danae.gregorail.commands.RailSwitchIfCommand;
+import dev.danae.gregorail.listeners.ButcherListener;
+import dev.danae.gregorail.listeners.ButcherOptions;
 import dev.danae.gregorail.util.EnumUtils;
+import dev.danae.gregorail.util.commands.CommandGroupHandler;
 import dev.danae.gregorail.util.location.LocationUtils;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -115,28 +115,28 @@ public final class RailPlugin extends JavaPlugin
   // Load the command handlers
   private void loadCommandHandlers()
   {
-    this.getCommand("gregorail").setExecutor(new CommandGroupHandler(this)
-      .registerSubcommand("reload", new AdminReloadCommand(this))
-      .registerSubcommand("version", new AdminVersionCommand(this)));
+    this.getCommand("gregorail").setExecutor(new CommandGroupHandler()
+      .registerSubcommand("reload", new AdminReloadCommand())
+      .registerSubcommand("version", new AdminVersionCommand()));
     
-    this.getCommand("gcart").setExecutor(new CommandGroupHandler(this)
-      .registerSubcommand("set", new CartSetCommand(this))
-      .registerSubcommand("unset", new CartUnsetCommand(this)));
+    this.getCommand("gcart").setExecutor(new CommandGroupHandler()
+      .registerSubcommand("set", new CartSetCommand())
+      .registerSubcommand("unset", new CartUnsetCommand()));
     
-    this.getCommand("grail").setExecutor(new CommandGroupHandler(this)
-      .registerSubcommand("block", new RailBlockCommand(this))
-      .registerSubcommand("blockif", new RailBlockIfCommand(this))
-      .registerSubcommand("switch", new RailSwitchCommand(this))
-      .registerSubcommand("switchif", new RailSwitchIfCommand(this)));
+    this.getCommand("grail").setExecutor(new CommandGroupHandler()
+      .registerSubcommand("block", new RailBlockCommand())
+      .registerSubcommand("blockif", new RailBlockIfCommand())
+      .registerSubcommand("switch", new RailSwitchCommand())
+      .registerSubcommand("switchif", new RailSwitchIfCommand()));
     
-    this.getCommand("glocate").setExecutor(new CommandGroupHandler(this)
-      .registerSubcommand("block", new LocateBlockCommand(this))
-      .registerSubcommand("cart", new LocateCartCommand(this)));
+    this.getCommand("glocate").setExecutor(new CommandGroupHandler()
+      .registerSubcommand("block", new LocateBlockCommand())
+      .registerSubcommand("cart", new LocateCartCommand()));
   }
   
   // Load the listeners
   private void loadListeners()
   {
-    this.getServer().getPluginManager().registerEvents(new ButcherListener(this, this.butcherOptions), this);
+    this.getServer().getPluginManager().registerEvents(new ButcherListener(this.butcherOptions), this);
   }
 }

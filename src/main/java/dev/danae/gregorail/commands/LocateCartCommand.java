@@ -1,21 +1,20 @@
-package dev.danae.gregorail.handlers.locate;
+package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.commands.CommandContext;
-import dev.danae.gregorail.commands.CommandException;
-import dev.danae.gregorail.commands.CommandHandler;
-import dev.danae.gregorail.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.LocationException;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandHandler;
+import dev.danae.gregorail.util.commands.CommandUsageException;
+import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
-import dev.danae.gregorail.util.minecart.MinecartUtils;
+import org.bukkit.entity.minecart.RideableMinecart;
 
 
 public class LocateCartCommand extends CommandHandler
 {
   // Constructor
-  public LocateCartCommand(RailPlugin plugin)
+  public LocateCartCommand()
   {
-    super(plugin, "gregorail.locate.cart");
+    super("gregorail.locate.cart");
   }
     
   
@@ -36,14 +35,14 @@ public class LocateCartCommand extends CommandHandler
       if (cartLocation == null)
         throw new CommandException("No location found");
       
-      var cart = MinecartUtils.findMinecart(cartLocation);
+      var cart = LocationUtils.findNearestEntity(cartLocation, RideableMinecart.class);
       if (cart == null)
         throw new CommandException("No cart found");
       
       // Send information about the cart
       context.getSender().sendMessage(LocationUtils.formatEntity(cart));
     }
-    catch (LocationException ex)
+    catch (InvalidLocationException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

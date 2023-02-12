@@ -1,23 +1,19 @@
-package dev.danae.gregorail.handlers.rail;
+package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.commands.CommandContext;
-import dev.danae.gregorail.commands.CommandException;
-import dev.danae.gregorail.commands.CommandHandler;
-import dev.danae.gregorail.commands.CommandUsageException;
-import dev.danae.gregorail.handlers.CommandUtils;
-import dev.danae.gregorail.util.location.LocationException;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandHandler;
+import dev.danae.gregorail.util.commands.CommandUsageException;
+import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
-import org.bukkit.Material;
-import org.bukkit.block.data.Rail;
 
 
 public class RailBlockCommand extends CommandHandler
 {
   // Constructor
-  public RailBlockCommand(RailPlugin plugin)
+  public RailBlockCommand()
   {
-    super(plugin, "gregorail.rail.block");
+    super("gregorail.rail.block");
   }
     
   
@@ -46,7 +42,7 @@ public class RailBlockCommand extends CommandHandler
       // Send information about the updated block
       context.getSender().sendMessage(String.format("%s now has material %s", LocationUtils.formatBlock(block), material));
     }
-    catch (LocationException ex)
+    catch (InvalidLocationException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

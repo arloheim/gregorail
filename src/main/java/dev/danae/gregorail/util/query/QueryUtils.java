@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 public class QueryUtils
 {
   // Pattern for parsing queries
-  public static final Pattern pattern = Pattern.compile("^(?<suffix>\\*)?(?<name>[a-z0-9_]+)(?<prefix>\\*)?$", Pattern.CASE_INSENSITIVE);
-  public static final Pattern delimiterPattern = Pattern.compile("\\|");
+  private static final Pattern pattern = Pattern.compile("^(?<suffix>\\*)?(?<name>[a-z0-9_]+)(?<prefix>\\*)?$", Pattern.CASE_INSENSITIVE);
+  private static final Pattern delimiterPattern = Pattern.compile("\\|");
   
   
   // Parse a query from a string

@@ -1,12 +1,10 @@
-package dev.danae.gregorail.handlers.rail;
+package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.commands.CommandContext;
-import dev.danae.gregorail.commands.CommandException;
-import dev.danae.gregorail.commands.CommandHandler;
-import dev.danae.gregorail.commands.CommandUsageException;
-import dev.danae.gregorail.handlers.CommandUtils;
-import dev.danae.gregorail.util.location.LocationException;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandHandler;
+import dev.danae.gregorail.util.commands.CommandUsageException;
+import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
@@ -15,9 +13,9 @@ import org.bukkit.block.data.Rail;
 public class RailSwitchCommand extends CommandHandler
 {
   // Constructor
-  public RailSwitchCommand(RailPlugin plugin)
+  public RailSwitchCommand()
   {
-    super(plugin, "gregorail.rail.switch");
+    super("gregorail.rail.switch");
   }
     
   
@@ -37,6 +35,8 @@ public class RailSwitchCommand extends CommandHandler
       var shape = CommandUtils.parseShape(context.getArgument(0));
     
       var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(1));
+      if (block == null)
+        throw new CommandException("No block found");
       if (block.getType() != Material.RAIL)
         throw new CommandException(String.format("%s is not a rail block", LocationUtils.formatBlock(block)));
       
@@ -51,7 +51,7 @@ public class RailSwitchCommand extends CommandHandler
       // Send information about the updated block
       context.getSender().sendMessage(String.format("%s now has shape %s", LocationUtils.formatBlock(block), shape));
     }
-    catch (LocationException ex)
+    catch (InvalidLocationException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

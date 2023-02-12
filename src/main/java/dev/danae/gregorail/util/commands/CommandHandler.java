@@ -1,43 +1,32 @@
-package dev.danae.gregorail.commands;
+package dev.danae.gregorail.util.commands;
 
-import dev.danae.gregorail.RailPlugin;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 
 public abstract class CommandHandler implements CommandExecutor
-{
-  // Reference to the plugin
-  protected final RailPlugin plugin;
-  
+{  
   // The required permissions to execute this command
   protected final List<String> permissions;
   
   
   // Constructor
-  public CommandHandler(RailPlugin plugin, List<String> permissions)
+  public CommandHandler(List<String> permissions)
   {
-    this.plugin = plugin;
     this.permissions = permissions;
   }
-  public CommandHandler(RailPlugin plugin, String... permissions)
+  public CommandHandler(String... permissions)
   {
-    this(plugin, Arrays.asList(permissions));
+    this(Arrays.asList(permissions));
   }
-  public CommandHandler(RailPlugin plugin)
+  public CommandHandler()
   {
-    this(plugin, Collections.emptyList());
-  }
-  
-  // Return the plugin
-  public RailPlugin getPlugin()
-  {
-    return this.plugin;
+    this(Collections.emptyList());
   }
   
 

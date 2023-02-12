@@ -1,6 +1,5 @@
-package dev.danae.gregorail.commands;
+package dev.danae.gregorail.util.commands;
 
-import dev.danae.gregorail.RailPlugin;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,17 +13,17 @@ public class CommandGroupHandler extends CommandHandler
   
   
   // Constructor
-  public CommandGroupHandler(RailPlugin plugin, List<String> permissions)
+  public CommandGroupHandler(List<String> permissions)
   {
-    super(plugin, permissions);
+    super(permissions);
   }
-  public CommandGroupHandler(RailPlugin plugin, String... permissions)
+  public CommandGroupHandler(String... permissions)
   {
-    super(plugin, permissions);
+    super(permissions);
   }
-  public CommandGroupHandler(RailPlugin plugin)
+  public CommandGroupHandler()
   {
-    super(plugin);
+    super();
   }
   
   

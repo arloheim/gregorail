@@ -1,12 +1,11 @@
-package dev.danae.gregorail.handlers.cart;
+package dev.danae.gregorail.commands;
 
 import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.commands.CommandContext;
-import dev.danae.gregorail.commands.CommandException;
-import dev.danae.gregorail.commands.CommandHandler;
-import dev.danae.gregorail.util.location.LocationException;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandHandler;
+import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
-import dev.danae.gregorail.util.minecart.MinecartUtils;
 import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -15,22 +14,22 @@ import org.bukkit.entity.minecart.RideableMinecart;
 public abstract class CartCommand extends CommandHandler
 {
   // Constructor
-  public CartCommand(RailPlugin plugin, List<String> permissions)
+  public CartCommand(List<String> permissions)
   {
-    super(plugin, permissions);
+    super(permissions);
   }
-  public CartCommand(RailPlugin plugin, String... permissions)
+  public CartCommand(String... permissions)
   {
-    super(plugin, permissions);
+    super(permissions);
   }
-  public CartCommand(RailPlugin plugin)
+  public CartCommand()
   {
-    super(plugin);
+    super();
   }
   
   
   // Find the minecart from the command
-  public RideableMinecart findMinecart(CommandContext context, int argumentIndex) throws CommandException, LocationException
+  public RideableMinecart findMinecart(CommandContext context, int argumentIndex) throws CommandException, InvalidLocationException
   {
     var senderLocation = context.assertSenderHasLocation();
     
@@ -41,7 +40,7 @@ public abstract class CartCommand extends CommandHandler
       if (cartLocation == null)
         throw new CommandException("No location found");
       
-      return MinecartUtils.findMinecart(cartLocation);
+      return LocationUtils.findNearestEntity(cartLocation, RideableMinecart.class);
     }
     else if (context.getSender() instanceof Player player && player.getVehicle() instanceof RideableMinecart playerCart)
     {
@@ -51,7 +50,7 @@ public abstract class CartCommand extends CommandHandler
     else
     {
       // Return the nearest minecart at the sender location
-      return MinecartUtils.findMinecart(senderLocation);
+      return LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class);
     }
   }
 }

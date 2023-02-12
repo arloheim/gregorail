@@ -1,26 +1,25 @@
-package dev.danae.gregorail.handlers.rail;
+package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.commands.CommandContext;
-import dev.danae.gregorail.commands.CommandException;
-import dev.danae.gregorail.commands.CommandHandler;
-import dev.danae.gregorail.commands.CommandUsageException;
-import dev.danae.gregorail.handlers.CommandUtils;
-import dev.danae.gregorail.util.location.LocationException;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandHandler;
+import dev.danae.gregorail.util.commands.CommandUsageException;
+import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.query.InvalidQueryException;
 import dev.danae.gregorail.util.query.QueryUtils;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
+import org.bukkit.entity.minecart.RideableMinecart;
 
 
 public class RailSwitchIfCommand extends CommandHandler
 {
   // Constructor
-  public RailSwitchIfCommand(RailPlugin plugin)
+  public RailSwitchIfCommand()
   {
-    super(plugin, "gregorail.rail.switchif");
+    super("gregorail.rail.switchif");
   }
     
   
@@ -42,6 +41,8 @@ public class RailSwitchIfCommand extends CommandHandler
       var shape = CommandUtils.parseShape(context.getArgument(1));
     
       var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(2));
+      if (block == null)
+        throw new CommandException("No block found");
       if (block.getType() != Material.RAIL)
         throw new CommandException(String.format("%s is not a rail block", LocationUtils.formatBlock(block)));
       
@@ -50,7 +51,7 @@ public class RailSwitchIfCommand extends CommandHandler
         throw new CommandException(String.format("%s cannot be set to shape %s", LocationUtils.formatBlock(block), shape));
       
       // Check for a minecart with the code at the sender location
-      var cart = MinecartUtils.findMinecart(senderLocation);
+      var cart = LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class);
       if (cart != null && MinecartUtils.matchCode(cart, query))
       {
         // Set the shape of the block
@@ -66,7 +67,7 @@ public class RailSwitchIfCommand extends CommandHandler
         context.getSender().sendMessage(String.format("%s still has its original shape (%s)", LocationUtils.formatBlock(block), LocationUtils.formatEntity(cart)));
       }
     }
-    catch (LocationException | InvalidQueryException ex)
+    catch (InvalidLocationException | InvalidQueryException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

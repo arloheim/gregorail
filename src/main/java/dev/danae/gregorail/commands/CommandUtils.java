@@ -1,7 +1,7 @@
-package dev.danae.gregorail.handlers;
+package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.commands.CommandException;
 import dev.danae.gregorail.util.EnumUtils;
+import dev.danae.gregorail.util.commands.CommandException;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
 
