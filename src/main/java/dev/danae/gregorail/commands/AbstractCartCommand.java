@@ -11,18 +11,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
-public abstract class CartCommand extends CommandHandler
+public abstract class AbstractCartCommand extends CommandHandler
 {
   // Constructor
-  public CartCommand(List<String> permissions)
+  public AbstractCartCommand(List<String> permissions)
   {
     super(permissions);
   }
-  public CartCommand(String... permissions)
+  public AbstractCartCommand(String... permissions)
   {
     super(permissions);
   }
-  public CartCommand()
+  public AbstractCartCommand()
   {
     super();
   }

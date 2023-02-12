@@ -9,7 +9,7 @@ import dev.danae.gregorail.util.minecart.InvalidMinecartCodeException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 
 
-public class CartSetCommand extends CartCommand
+public class CartSetCommand extends AbstractCartCommand
 {
   // Constructor
   public CartSetCommand()

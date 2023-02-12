@@ -15,7 +15,7 @@ commands:
     
   gcart:
     description: Manages properties of minecarts.
-    usage: "Usage: /<command> set <code> [location] | unset [location]"
+    usage: "Usage: /<command> clear [location] | set <code> [location]"
     
   grail:
     description: Changes the state of rails by querying properties of minecarts.

@@ -2,8 +2,8 @@ package dev.danae.gregorail;
 
 import dev.danae.gregorail.commands.AdminReloadCommand;
 import dev.danae.gregorail.commands.AdminVersionCommand;
+import dev.danae.gregorail.commands.CartClearCommand;
 import dev.danae.gregorail.commands.CartSetCommand;
-import dev.danae.gregorail.commands.CartUnsetCommand;
 import dev.danae.gregorail.commands.LocateBlockCommand;
 import dev.danae.gregorail.commands.LocateCartCommand;
 import dev.danae.gregorail.commands.RailBlockCommand;
@@ -120,8 +120,8 @@ public final class RailPlugin extends JavaPlugin
       .registerSubcommand("version", new AdminVersionCommand()));
     
     this.getCommand("gcart").setExecutor(new CommandGroupHandler()
-      .registerSubcommand("set", new CartSetCommand())
-      .registerSubcommand("unset", new CartUnsetCommand()));
+      .registerSubcommand("clear", new CartClearCommand())
+      .registerSubcommand("set", new CartSetCommand()));
     
     this.getCommand("grail").setExecutor(new CommandGroupHandler()
       .registerSubcommand("block", new RailBlockCommand())

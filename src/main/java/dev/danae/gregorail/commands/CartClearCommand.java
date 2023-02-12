@@ -9,12 +9,12 @@ import dev.danae.gregorail.util.minecart.InvalidMinecartCodeException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 
 
-public class CartUnsetCommand extends CartCommand
+public class CartClearCommand extends AbstractCartCommand
 {
   // Constructor
-  public CartUnsetCommand()
+  public CartClearCommand()
   {
-    super("gregorail.cart.unset");
+    super("gregorail.cart.clear");
   }
     
   
