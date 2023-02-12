@@ -14,6 +14,7 @@ import dev.danae.gregorail.listeners.ButcherListener;
 import dev.danae.gregorail.listeners.ButcherOptions;
 import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandGroupHandler;
+import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.location.LocationUtils;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -115,21 +116,21 @@ public final class RailPlugin extends JavaPlugin
   // Load the command handlers
   private void loadCommandHandlers()
   {
-    this.getCommand("gregorail").setExecutor(new CommandGroupHandler()
+    this.setCommandHandler("gregorail", new CommandGroupHandler()
       .registerSubcommand("reload", new AdminReloadCommand())
       .registerSubcommand("version", new AdminVersionCommand()));
     
-    this.getCommand("gcart").setExecutor(new CommandGroupHandler()
+    this.setCommandHandler("gcart", new CommandGroupHandler()
       .registerSubcommand("clear", new CartClearCommand())
       .registerSubcommand("set", new CartSetCommand()));
     
-    this.getCommand("grail").setExecutor(new CommandGroupHandler()
+    this.setCommandHandler("grail", new CommandGroupHandler()
       .registerSubcommand("block", new RailBlockCommand())
       .registerSubcommand("blockif", new RailBlockIfCommand())
       .registerSubcommand("switch", new RailSwitchCommand())
       .registerSubcommand("switchif", new RailSwitchIfCommand()));
     
-    this.getCommand("glocate").setExecutor(new CommandGroupHandler()
+    this.setCommandHandler("glocate", new CommandGroupHandler()
       .registerSubcommand("block", new LocateBlockCommand())
       .registerSubcommand("cart", new LocateCartCommand()));
   }
@@ -138,5 +139,12 @@ public final class RailPlugin extends JavaPlugin
   private void loadListeners()
   {
     this.getServer().getPluginManager().registerEvents(new ButcherListener(this.butcherOptions), this);
+  }
+  
+  
+  // Set the handler of a command to the specified command handler
+  private void setCommandHandler(String name, CommandHandler handler)
+  {
+    this.getCommand(name).setExecutor(handler);
   }
 }
