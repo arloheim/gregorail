@@ -35,15 +35,15 @@ permissions:
     description: Allows the player to use the /gcart command.
     default: true
     children:
+      gregorail.cart.clear: true
       gregorail.cart.set: true
-      gregorail.cart.unset: true
+    
+  gregorail.cart.clear:
+    description: Allows the player to use the /gcart clear command.
+    default: true
       
   gregorail.cart.set:
     description: Allows the player to use the /gcart set command.
-    default: true
-    
-  gregorail.cart.unset:
-    description: Allows the player to use the /gcart unset command.
     default: true
     
   gregorail.rail:
