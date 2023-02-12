@@ -1,10 +1,6 @@
 package dev.danae.gregorail.util.minecart;
 
 import dev.danae.gregorail.RailPlugin;
-import dev.danae.gregorail.util.query.Query;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -16,38 +12,19 @@ public class MinecartUtils
   // Namespaced key for storing the code of a minecart
   private static final NamespacedKey codeKey = new NamespacedKey(RailPlugin.getInstance(), "minecart_code");
   
-  // Pattern to validate the code of a minecart
-  private static final Pattern codePattern = Pattern.compile("[a-z0-9_]+", Pattern.CASE_INSENSITIVE);
-  
-  // Pattern to split multiple codes of a minecart
-  private static final Pattern codeDelimiterPattern = Pattern.compile("\\|");
-  
-  
-  // Check if a code is valid
-  public static boolean isValidCode(String code)
-  {
-    return codePattern.matcher(code).matches();
-  }
-  
-  // Assert that a code is valid
-  public static void assertIsValidCode(String code) throws InvalidMinecartCodeException
-  {
-    if (!isValidCode(code))
-      throw new InvalidMinecartCodeException(String.format("Code \"%s\" is an invalid minecart code; codes may only contain alphanumeric characters and underscores", code));
-  }
-  
   
   // Get the code of a minecart
-  public static String getCode(RideableMinecart minecart)
+  public static Code getCode(RideableMinecart minecart)
   {
     if (minecart == null)
       throw new NullPointerException("minecart must not be null");
     
-    return minecart.getPersistentDataContainer().get(codeKey, PersistentDataType.STRING);
+    var id = minecart.getPersistentDataContainer().get(codeKey, PersistentDataType.STRING);
+    return id != null ? new Code(id) : null;
   }
   
   // Set the code of a minecart
-  public static void setCode(RideableMinecart minecart, String code) throws InvalidMinecartCodeException
+  public static void setCode(RideableMinecart minecart, Code code)
   {
     if (minecart == null)
       throw new NullPointerException("minecart must not be null");
@@ -60,13 +37,11 @@ public class MinecartUtils
       minecart.setCustomName(null);
     }
     else
-    {
-      assertIsValidCode(code);
-      
-      minecart.getPersistentDataContainer().set(codeKey, PersistentDataType.STRING, code);
+    {      
+      minecart.getPersistentDataContainer().set(codeKey, PersistentDataType.STRING, code.getId());
 
       minecart.setCustomNameVisible(true);
-      minecart.setCustomName(code);
+      minecart.setCustomName(code.getId());
     }
   }
   
@@ -83,13 +58,6 @@ public class MinecartUtils
       return false;
     
     return query.matches(code);
-  }
-  
-  
-  // Split a string containing possible multiple codes into a list
-  public static List<String> splitCodes(String code)
-  {
-    return Arrays.asList(codeDelimiterPattern.split(code));
   }
   
   

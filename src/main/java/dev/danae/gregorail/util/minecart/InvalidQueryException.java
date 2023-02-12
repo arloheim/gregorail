@@ -1,4 +1,4 @@
-package dev.danae.gregorail.util.query;
+package dev.danae.gregorail.util.minecart;
 
 
 public class InvalidQueryException extends Exception

@@ -5,7 +5,8 @@ import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
-import dev.danae.gregorail.util.minecart.InvalidMinecartCodeException;
+import dev.danae.gregorail.util.minecart.CodeUtils;
+import dev.danae.gregorail.util.minecart.InvalidCodeException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 
 
@@ -31,7 +32,7 @@ public class CartSetCommand extends AbstractCartCommand
       if (!context.hasAtLeastArgumentsCount(1))
         throw new CommandUsageException();
       
-      var code = context.getArgument(0);
+      var code = CodeUtils.createCode(context.getArgument(0));
       
       var cart = this.findMinecart(context, 1);
       if (cart == null)
@@ -43,7 +44,7 @@ public class CartSetCommand extends AbstractCartCommand
       // Send information about the updated cart
       context.getSender().sendMessage(String.format("%s now has code \"%s\"", LocationUtils.formatEntity(cart), code));
     }
-    catch (InvalidLocationException | InvalidMinecartCodeException ex)
+    catch (InvalidLocationException | InvalidCodeException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

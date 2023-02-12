@@ -5,9 +5,9 @@ import dev.danae.gregorail.util.InventoryUtils;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.LocationUtils;
+import dev.danae.gregorail.util.minecart.CodeUtils;
+import dev.danae.gregorail.util.minecart.InvalidCodeException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
-import java.util.Arrays;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -45,38 +45,45 @@ public class CartPromptSetCommand extends AbstractCartCommand
   @Override
   public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
-    // Assert that the command sender has a location
-    context.assertSenderHasLocation();
-    
-    // Assert the the command sender is a player, or get the nearest player to the sender
-    var player = context.nearestPlayerOrSender();
-    if (player == null)
-      throw new CommandException("No player found");
-    
-    // Parse the arguments
-    if (!context.hasAtLeastArgumentsCount(1))
-      throw new CommandUsageException();
+    try
+    {
+      // Assert that the command sender has a location
+      context.assertSenderHasLocation();
       
-    var codes = MinecartUtils.splitCodes(context.getArgument(0));
-    
-    var locationString = context.getJoinedArguments(1);
+      // Assert the the command sender is a player, or get the nearest player to the sender
+      var player = context.nearestPlayerOrSender();
+      if (player == null)
+        throw new CommandException("No player found");
       
-    // Create the inventory
-    var inventory = InventoryUtils.createInventory(player, codes, code -> {
-      var itemStack = new ItemStack(itemMaterial);
-      var itemMeta = itemStack.getItemMeta();
+      // Parse the arguments
+      if (!context.hasAtLeastArgumentsCount(1))
+        throw new CommandUsageException();
       
-      itemMeta.getPersistentDataContainer().set(codeKey, PersistentDataType.STRING, code);
-      itemMeta.setDisplayName(code);
+      var codes = CodeUtils.createCodes(context.getArgument(0));
       
-      itemMeta.getPersistentDataContainer().set(locationKey, PersistentDataType.STRING, locationString);
+      var locationString = context.getJoinedArguments(1);
       
-      itemStack.setItemMeta(itemMeta);
-      return itemStack;
-    }, title);
+      // Create the inventory
+      var inventory = InventoryUtils.createInventory(player, codes, code -> {
+        var itemStack = new ItemStack(itemMaterial);
+        var itemMeta = itemStack.getItemMeta();
       
-    // Open the inventory
-    player.openInventory(inventory);
+        itemMeta.getPersistentDataContainer().set(codeKey, PersistentDataType.STRING, code.getId());
+        itemMeta.setDisplayName(code.getId());
+        
+        itemMeta.getPersistentDataContainer().set(locationKey, PersistentDataType.STRING, locationString);
+        
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+      }, title);
+      
+      // Open the inventory
+      player.openInventory(inventory);
+    }
+    catch (InvalidCodeException ex)
+    {
+      throw new CommandException(ex.getMessage(), ex);
+    }
   }
   
   // Event listener for when an inventory item is clicked

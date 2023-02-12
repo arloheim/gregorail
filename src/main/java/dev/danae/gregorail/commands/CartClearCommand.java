@@ -5,7 +5,7 @@ import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
-import dev.danae.gregorail.util.minecart.InvalidMinecartCodeException;
+import dev.danae.gregorail.util.minecart.InvalidCodeException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 
 
@@ -38,7 +38,7 @@ public class CartClearCommand extends AbstractCartCommand
       // Send information about the updated cart
       context.getSender().sendMessage(String.format("%s now has no code", LocationUtils.formatEntity(cart)));
     }
-    catch (InvalidLocationException | InvalidMinecartCodeException ex)
+    catch (InvalidLocationException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

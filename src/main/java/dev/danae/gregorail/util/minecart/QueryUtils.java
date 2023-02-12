@@ -1,4 +1,4 @@
-package dev.danae.gregorail.util.query;
+package dev.danae.gregorail.util.minecart;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -27,13 +27,13 @@ public class QueryUtils
       
       // Parse the pattern
       if (m.group("prefix") != null && m.group("suffix") != null)
-        queryList.add(input -> input != null && input.contains(m.group("name")));
+        queryList.add(code -> code != null && code.getId().contains(m.group("name")));
       else if (m.group("prefix") != null)
-        queryList.add(input -> input != null && input.startsWith(m.group("name")));
+        queryList.add(code -> code != null && code.getId().startsWith(m.group("name")));
       else if (m.group("suffix") != null)
-        queryList.add(input -> input != null && input.endsWith(m.group("name")));
+        queryList.add(code -> code != null && code.getId().endsWith(m.group("name")));
       else
-        queryList.add(input -> input != null && input.equals(m.group("name")));
+        queryList.add(code -> code != null && code.equals(m.group("name")));
     }
     
     // Return the query
