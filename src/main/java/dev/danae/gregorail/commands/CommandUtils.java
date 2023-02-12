@@ -3,6 +3,7 @@ package dev.danae.gregorail.commands;
 import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.minecart.CodeUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,29 @@ public class CommandUtils
   }
   
   
+  // Handle tab completion of a code argument
+  public static List<String> handleCodeTabCompletion(String arg)
+  {
+    if (!arg.isEmpty())
+      return codesWithDisplayNameNamesAsStream().filter(s -> s.startsWith(arg)).toList();
+    else
+      return codesWithDisplayNameNamesAsStream().toList();
+  }
+  
+  // Handle tab completion of a code list argument
+  public static List<String> handleCodesTabCompletion(String arg)
+  {
+    var delimiterPos = arg.lastIndexOf("|");
+    
+    var prefix = delimiterPos > -1 ? arg.substring(0, delimiterPos + 1) : "";
+    var current = delimiterPos > -1 ? arg.substring(delimiterPos + 1) : arg;
+    
+    if (!current.isEmpty())
+      return codesWithDisplayNameNamesAsStream(prefix).filter(s -> s.startsWith(current, delimiterPos + 1)).toList();
+    else
+      return codesWithDisplayNameNamesAsStream(prefix).toList();
+  }
+  
   // Handle tab completion of a location argument
   public static List<String> handleLocationTabCompletion(CommandContext context, int argumentIndex)
   {
@@ -71,8 +95,8 @@ public class CommandUtils
     // Return all location options
     var list = new ArrayList<String>();
     list.add("~");
-    list.addAll(materialNamesStream(true, "@").toList());
-    list.addAll(materialNamesStream(true, "^").toList());
+    list.addAll(materialNamesAsStream(true, "@").toList());
+    list.addAll(materialNamesAsStream(true, "^").toList());
     return list;
   }
   
@@ -80,23 +104,36 @@ public class CommandUtils
   public static List<String> handleMaterialTabCompletion(String arg, boolean requireBlock)
   {
     if (!arg.isEmpty())
-      return materialNamesStream(requireBlock).filter(s -> s.startsWith(arg)).toList();
+      return materialNamesAsStream(requireBlock).filter(s -> s.startsWith(arg)).toList();
     else
-      return materialNamesStream(requireBlock).toList();
+      return materialNamesAsStream(requireBlock).toList();
   }
   
   // Handle tab completion of a shape argument
   public static List<String> handleShapeTabCompletion(String arg)
   {
     if (!arg.isEmpty())
-      return shapeNamesStream().filter(s -> s.startsWith(arg)).toList();
+      return shapeNamesAsStream().filter(s -> s.startsWith(arg)).toList();
     else
-      return shapeNamesStream().toList();
+      return shapeNamesAsStream().toList();
   }
   
   
+  // Return a stream containing the codes for which a display names has been defined prefixed with the specified string
+  public static Stream<String> codesWithDisplayNameNamesAsStream(String prefix)
+  {
+    return CodeUtils.codesWithDisplayNameAsStream()
+      .map(code -> (prefix != null ? prefix : "") + code.getId());
+  }
+  
+  // Return a stream containing the codes for which a display names has been defined
+  public static Stream<String> codesWithDisplayNameNamesAsStream()
+  {
+    return codesWithDisplayNameNamesAsStream(null);
+  }
+  
   // Return a stream of all block material names prefixed with the specified string
-  public static Stream<String> materialNamesStream(boolean requireBlock, String prefix)
+  public static Stream<String> materialNamesAsStream(boolean requireBlock, String prefix)
   {
     return Arrays.stream(Material.values())
       .filter(material -> !requireBlock || material.isBlock())
@@ -105,13 +142,13 @@ public class CommandUtils
   }
   
   // Return a stream of all block material names
-  public static Stream<String> materialNamesStream(boolean requireBlock)
+  public static Stream<String> materialNamesAsStream(boolean requireBlock)
   {
-    return materialNamesStream(requireBlock, null);
+    return CommandUtils.materialNamesAsStream(requireBlock, null);
   }
   
   // Return a stream of all shape names
-  public static Stream<String> shapeNamesStream()
+  public static Stream<String> shapeNamesAsStream()
   {
     return Arrays.stream(Rail.Shape.values())
       .map(shape -> shape.name().toLowerCase())

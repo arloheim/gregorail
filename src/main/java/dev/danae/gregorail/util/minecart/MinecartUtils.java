@@ -40,8 +40,9 @@ public class MinecartUtils
     {      
       minecart.getPersistentDataContainer().set(codeKey, PersistentDataType.STRING, code.getId());
 
+      var displayName = CodeUtils.getDisplayName(code);
       minecart.setCustomNameVisible(true);
-      minecart.setCustomName(code.getId());
+      minecart.setCustomName(displayName != null ? displayName : code.getId());
     }
   }
   

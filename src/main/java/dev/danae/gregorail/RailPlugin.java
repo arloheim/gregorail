@@ -1,5 +1,8 @@
 package dev.danae.gregorail;
 
+import dev.danae.gregorail.commands.AdminCodeListCommand;
+import dev.danae.gregorail.commands.AdminCodeRemoveCommand;
+import dev.danae.gregorail.commands.AdminCodeSetCommand;
 import dev.danae.gregorail.commands.AdminReloadCommand;
 import dev.danae.gregorail.commands.AdminVersionCommand;
 import dev.danae.gregorail.commands.CartClearCommand;
@@ -129,6 +132,10 @@ public final class RailPlugin extends JavaPlugin
   private void loadCommandHandlers()
   {
     this.setCommandHandler("gregorail", new CommandGroupHandler()
+      .registerSubcommand("code", new CommandGroupHandler()
+        .registerSubcommand("list", new AdminCodeListCommand())
+        .registerSubcommand("remove", new AdminCodeRemoveCommand())
+        .registerSubcommand("set", new AdminCodeSetCommand()))
       .registerSubcommand("reload", new AdminReloadCommand())
       .registerSubcommand("version", new AdminVersionCommand()));
     

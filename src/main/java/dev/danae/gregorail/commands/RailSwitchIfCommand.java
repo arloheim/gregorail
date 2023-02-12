@@ -82,6 +82,8 @@ public class RailSwitchIfCommand extends CommandHandler
       return CommandUtils.handleLocationTabCompletion(context, 2);
     else if (context.hasArgumentsCount(2))
       return CommandUtils.handleShapeTabCompletion(context.getArgument(1));
+    else if (context.hasArgumentsCount(1))
+      return CommandUtils.handleCodesTabCompletion(context.getArgument(0));
     else
       return null;
   }

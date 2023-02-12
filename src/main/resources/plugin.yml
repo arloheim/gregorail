@@ -11,7 +11,7 @@ commands:
   gregorail:
     description: Executes various administration commands.
     permission: gregorail.admin
-    usage: "Usage: /<command> reload | version"
+    usage: "Usage: /<command> code (list | remove <code> | set <code> <name>) | reload | version"
     
   gcart:
     description: Manages properties of minecarts.

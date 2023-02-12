@@ -57,6 +57,8 @@ public class CartSetCommand extends AbstractCartCommand
   {
     if (context.hasAtLeastArgumentsCount(2))
       return CommandUtils.handleLocationTabCompletion(context, 1);
+    else if (context.hasArgumentsCount(1))
+      return CommandUtils.handleCodeTabCompletion(context.getArgument(0));
     else
       return null;
   }

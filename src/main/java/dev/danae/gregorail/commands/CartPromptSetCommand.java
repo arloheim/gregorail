@@ -68,8 +68,9 @@ public class CartPromptSetCommand extends AbstractCartCommand
         var itemStack = new ItemStack(itemMaterial);
         var itemMeta = itemStack.getItemMeta();
       
+        var displayName = CodeUtils.getDisplayName(code);
         itemMeta.getPersistentDataContainer().set(codeKey, PersistentDataType.STRING, code.getId());
-        itemMeta.setDisplayName(code.getId());
+        itemMeta.setDisplayName(displayName != null ? displayName : code.getId());
         
         itemMeta.getPersistentDataContainer().set(locationKey, PersistentDataType.STRING, locationString);
         
@@ -92,6 +93,8 @@ public class CartPromptSetCommand extends AbstractCartCommand
   {
     if (context.hasAtLeastArgumentsCount(2))
       return CommandUtils.handleLocationTabCompletion(context, 1);
+    else if (context.hasArgumentsCount(1))
+      return CommandUtils.handleCodesTabCompletion(context.getArgument(0));
     else
       return null;
   }
