@@ -1,6 +1,5 @@
 package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;

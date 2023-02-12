@@ -18,6 +18,20 @@ public class MinecartUtils
   private static final Pattern codePattern = Pattern.compile("[a-z0-9_]+", Pattern.CASE_INSENSITIVE);
   
   
+  // Check if a code is valid
+  public static boolean isValidCode(String code)
+  {
+    return codePattern.matcher(code).matches();
+  }
+  
+  // Assert that a code is valid
+  public static void assertIsValidCode(String code) throws InvalidMinecartCodeException
+  {
+    if (!isValidCode(code))
+      throw new InvalidMinecartCodeException(String.format("Code \"%s\" is an invalid minecart code; codes may only contain alphanumeric characters and underscores", code));
+  }
+  
+  
   // Get the code of a minecart
   public static String getCode(RideableMinecart minecart)
   {
@@ -40,16 +54,14 @@ public class MinecartUtils
       minecart.setCustomNameVisible(false);
       minecart.setCustomName(null);
     }
-    else if (codePattern.matcher(code).matches())
+    else
     {
+      assertIsValidCode(code);
+      
       minecart.getPersistentDataContainer().set(codeKey, PersistentDataType.STRING, code);
 
       minecart.setCustomNameVisible(true);
       minecart.setCustomName(code);
-    }
-    else
-    {
-      throw new InvalidMinecartCodeException(String.format("Code \"%s\" is an invalid minecart code; codes may only contain alphanumeric characters and underscores", code));
     }
   }
   
