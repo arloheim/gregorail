@@ -8,9 +8,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.event.Listener;
 
 
-public abstract class CommandHandler implements CommandExecutor, TabCompleter
+public abstract class CommandHandler implements CommandExecutor, TabCompleter, Listener
 {  
   // The required permissions to execute this command
   protected final List<String> permissions;
