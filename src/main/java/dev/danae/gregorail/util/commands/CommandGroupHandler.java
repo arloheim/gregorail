@@ -89,9 +89,17 @@ public class CommandGroupHandler extends CommandHandler
     if (!context.hasAtLeastArgumentsCount(1))
       return null;
     
-    // If there only is one argument, then tab complete the subcommand
+    // If there only is one argument, then tab complete the name of the subcommand
     if (context.hasArgumentsCount(1))
-      return this.subcommands.keySet().stream().sorted().toList();
+    {
+      var arg = context.getArgument(0);
+      
+      var list = this.subcommands.keySet().stream().sorted().toList();
+      if (!arg.isEmpty())
+        return list.stream().filter(s -> s.startsWith(arg)).toList();
+      else
+        return list;
+    }
       
     // Otherwise, check if there is a subcommand that matches and delegate to that
     var handler = this.getSubcommand(context.getArgument(0));
