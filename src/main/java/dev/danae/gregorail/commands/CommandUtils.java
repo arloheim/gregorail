@@ -19,7 +19,7 @@ public class CommandUtils
   {
     var material = Material.matchMaterial(string);
     if (material == null)
-      throw new CommandException(String.format("Material \"%s\" could not be found", string.toLowerCase()));
+      throw new CommandException(String.format("Material \"%s\" is an invalid material", string.toLowerCase()));
     if (requireBlock && !material.isBlock())
       throw new CommandException(String.format("Material \"%s\" is not a block material", string.toLowerCase()));
       
@@ -35,7 +35,7 @@ public class CommandUtils
     }
     catch (IllegalArgumentException | NullPointerException ex)
     {
-      throw new CommandException(String.format("Shape \"%s\" could not be found", string.toLowerCase()), ex);
+      throw new CommandException(String.format("Shape \"%s\" is an invalid shape", string.toLowerCase()), ex);
     }
   }
   

@@ -56,7 +56,7 @@ public class LocationUtils
       var materialName = m.group("name");
       var material = Material.matchMaterial(materialName);
       if (material == null)
-        throw new InvalidLocationException(String.format("Material \"%s\" could not be found", materialName.toLowerCase()));
+        throw new InvalidLocationException(String.format("Material \"%s\" is an invalid material", materialName.toLowerCase()));
       if (!material.isBlock())
         throw new InvalidLocationException(String.format("Material \"%s\" is not a block material", materialName.toLowerCase()));
       
