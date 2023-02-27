@@ -9,6 +9,10 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class MinecartUtils
 {
+  // The default speed of a minecart in meters per tick
+  public static final double defaultSpeed = 0.4;
+  
+  
   // Namespaced key for storing the code of a minecart
   private static final NamespacedKey codeKey = new NamespacedKey(RailPlugin.getInstance(), "minecart_code");
   
@@ -59,6 +63,19 @@ public class MinecartUtils
       return false;
     
     return query.matches(code);
+  }
+  
+  
+  // Get the speed multiplier of a minecart
+  public static double getSpeedMultiplier(RideableMinecart minecart)
+  {
+    return minecart.getMaxSpeed() / defaultSpeed;
+  }
+  
+  // Set the speed multiplier of a minecart
+  public static void setSpeedMultiplier(RideableMinecart minecart, double speedMultiplier)
+  {
+    minecart.setMaxSpeed(speedMultiplier * defaultSpeed);
   }
   
   

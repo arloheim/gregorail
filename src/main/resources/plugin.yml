@@ -15,7 +15,7 @@ commands:
     
   gcart:
     description: Manages properties of minecarts.
-    usage: "Usage: /<command> clear [location] | promptset <codes> [location] | set <code> [location]"
+    usage: "Usage: /<command> clear [location] | promptset <codes> [location] | set <code> [location] | speed <speed> [location] | speedif <code> <speed> [location]"
     
   grail:
     description: Changes the state of rails and blocks by querying properties of minecarts.
@@ -38,6 +38,8 @@ permissions:
       gregorail.cart.clear: true
       gregorail.cart.promptset: true
       gregorail.cart.set: true
+      gregorail.cart.speed: true
+      gregorail.cart.speedif: true
     
   gregorail.cart.clear:
     description: Allows the player to use the /gcart clear command.
@@ -49,6 +51,14 @@ permissions:
       
   gregorail.cart.set:
     description: Allows the player to use the /gcart set command.
+    default: true
+    
+  gregorail.cart.speed:
+    description: Allows the player to use the /gcart speed command.
+    default: true
+    
+  gregorail.cart.speedif:
+    description: Allows the player to use the /gcart speedif command.
     default: true
     
   gregorail.rail:

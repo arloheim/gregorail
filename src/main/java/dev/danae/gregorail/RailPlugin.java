@@ -8,6 +8,8 @@ import dev.danae.gregorail.commands.AdminVersionCommand;
 import dev.danae.gregorail.commands.CartClearCommand;
 import dev.danae.gregorail.commands.CartPromptSetCommand;
 import dev.danae.gregorail.commands.CartSetCommand;
+import dev.danae.gregorail.commands.CartSpeedCommand;
+import dev.danae.gregorail.commands.CartSpeedIfCommand;
 import dev.danae.gregorail.commands.LocateBlockCommand;
 import dev.danae.gregorail.commands.LocateCartCommand;
 import dev.danae.gregorail.commands.RailBlockCommand;
@@ -142,7 +144,9 @@ public final class RailPlugin extends JavaPlugin
     this.setCommandHandler("gcart", new CommandGroupHandler()
       .registerSubcommand("clear", new CartClearCommand())
       .registerSubcommand("promptset", new CartPromptSetCommand())
-      .registerSubcommand("set", new CartSetCommand()));
+      .registerSubcommand("set", new CartSetCommand())
+      .registerSubcommand("speed", new CartSpeedCommand())
+      .registerSubcommand("speedif", new CartSpeedIfCommand()));
     
     this.setCommandHandler("grail", new CommandGroupHandler()
       .registerSubcommand("block", new RailBlockCommand())

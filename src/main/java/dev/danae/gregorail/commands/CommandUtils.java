@@ -4,16 +4,22 @@ import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.minecart.CodeUtils;
+import dev.danae.gregorail.util.minecart.MinecartUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
 
 
 public class CommandUtils
-{  
+{    
   // Parse a block material from a string
   public static Material parseMaterial(String string, boolean requireBlock) throws CommandException
   {
@@ -36,6 +42,23 @@ public class CommandUtils
     catch (IllegalArgumentException | NullPointerException ex)
     {
       throw new CommandException(String.format("Shape \"%s\" is an invalid shape", string.toLowerCase()), ex);
+    }
+  }
+  
+  // Parse a speed multiplier from a string
+  public static double parseSpeedMultiplier(String string) throws CommandException
+  {
+    try
+    {
+      var speedMultiplier = Double.parseDouble(string);
+      if (speedMultiplier < 0 || speedMultiplier > 4)
+        throw new CommandException("Speed multiplier must be between 0 and 4");
+      
+      return speedMultiplier;
+    }
+    catch (NumberFormatException ex)
+    {
+      throw new CommandException(String.format("Speed multiplier \"%s\" is an invalid speed multiplier", string), ex);
     }
   }
   
@@ -118,6 +141,12 @@ public class CommandUtils
       return shapeNamesAsStream().toList();
   }
   
+  // Handle tab completion of a speed multiplier argument
+  public static List<String> handleSpeedMultiplierTabCompletion(String arg)
+  {
+    return List.of("0.0", "1.0", "2.0", "3.0", "4.0");
+  }
+  
   
   // Return a stream containing the codes for which a display names has been defined prefixed with the specified string
   public static Stream<String> codesWithDisplayNameNamesAsStream(String prefix)
@@ -153,5 +182,15 @@ public class CommandUtils
     return Arrays.stream(Rail.Shape.values())
       .map(shape -> shape.name().toLowerCase())
       .sorted();
+  }
+  
+  
+  // Convert a speed multiplier to a text component
+  public static BaseComponent[] formatSpeedMultiplier(double speedMultiplier)
+  {
+    return new ComponentBuilder()
+      .append(String.format(Locale.ENGLISH, "%.2f", speedMultiplier))
+        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format(Locale.ENGLISH, "%.2f m/s, %.2f km/h", speedMultiplier * MinecartUtils.defaultSpeed * 20, speedMultiplier * MinecartUtils.defaultSpeed * 20 * 3.6))))
+      .create();
   }
 }
