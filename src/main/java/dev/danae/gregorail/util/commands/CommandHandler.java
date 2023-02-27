@@ -4,8 +4,9 @@ import dev.danae.gregorail.RailPlugin;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -59,7 +60,7 @@ public abstract class CommandHandler implements CommandExecutor, TabCompleter, L
     }
     catch (CommandException ex)
     {
-      sender.sendMessage(ChatColor.RED + ex.getMessage() + ChatColor.RESET);
+      sender.spigot().sendMessage(new ComponentBuilder(ex.getMessage()).color(ChatColor.RED).create());
       return true;
     }
   }

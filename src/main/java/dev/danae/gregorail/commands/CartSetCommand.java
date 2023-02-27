@@ -9,6 +9,8 @@ import dev.danae.gregorail.util.minecart.CodeUtils;
 import dev.danae.gregorail.util.minecart.InvalidCodeException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import java.util.List;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 
 
 public class CartSetCommand extends AbstractCartCommand
@@ -43,7 +45,11 @@ public class CartSetCommand extends AbstractCartCommand
       MinecartUtils.setCode(cart, code);
       
       // Send information about the updated cart
-      context.getSender().sendMessage(String.format("%s now has code \"%s\"", LocationUtils.formatEntity(cart), code));
+      context.sendMessage(new ComponentBuilder()
+        .append(LocationUtils.formatEntity(cart), ComponentBuilder.FormatRetention.NONE)
+        .append(" now has code ", ComponentBuilder.FormatRetention.NONE)
+        .append(code.toString(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
+        .create());
     }
     catch (InvalidLocationException | InvalidCodeException ex)
     {

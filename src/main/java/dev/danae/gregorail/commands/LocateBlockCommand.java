@@ -36,7 +36,7 @@ public class LocateBlockCommand extends CommandHandler
         throw new CommandException("No location found");
       
       // Send information about the block
-      context.getSender().sendMessage(LocationUtils.formatBlock(block));
+      context.sendMessage(LocationUtils.formatBlock(block));
     }
     catch (InvalidLocationException ex)
     {

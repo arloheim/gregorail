@@ -10,6 +10,8 @@ import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.minecart.QueryUtils;
 import java.util.List;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
@@ -43,6 +45,8 @@ public class RailBlockIfCommand extends CommandHandler
       if (block == null)
         throw new CommandException("No block found");
       
+      var blockState = block.getState();
+      
       // Check for a minecart with the code at the sender location
       var cart = LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class);
       if (cart != null && MinecartUtils.matchCode(cart, query))
@@ -51,12 +55,24 @@ public class RailBlockIfCommand extends CommandHandler
         block.setType(material);
         
         // Send information about the updated block
-        context.getSender().sendMessage(String.format("%s now has material %s (%s with code \"%s\")", LocationUtils.formatBlock(block), material, LocationUtils.formatEntity(cart), MinecartUtils.getCode(cart)));
+        context.sendMessage(new ComponentBuilder()
+          .append(LocationUtils.formatBlockState(blockState), ComponentBuilder.FormatRetention.NONE)
+          .append(" now has material ", ComponentBuilder.FormatRetention.NONE)
+          .append(material.getKey().getKey(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
+          .append(", detected ", ComponentBuilder.FormatRetention.NONE)
+          .append(LocationUtils.formatEntity(cart), ComponentBuilder.FormatRetention.NONE)
+          .create());
       }
       else
       {
         // Send information about the block
-        context.getSender().sendMessage(String.format("%s still has its original material (%s)", LocationUtils.formatBlock(block), LocationUtils.formatEntity(cart)));
+        context.sendMessage(new ComponentBuilder()
+          .append(LocationUtils.formatBlockState(blockState), ComponentBuilder.FormatRetention.NONE)
+          .append(" still has original material ", ComponentBuilder.FormatRetention.NONE)
+          .append(material.getKey().getKey(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
+          .append(", detected ", ComponentBuilder.FormatRetention.NONE)
+          .append(LocationUtils.formatEntity(cart), ComponentBuilder.FormatRetention.NONE)
+          .create());
       }
     }
     catch (InvalidLocationException | InvalidQueryException ex)

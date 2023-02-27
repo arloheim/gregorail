@@ -7,6 +7,7 @@ import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import java.util.List;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 
 
 public class CartClearCommand extends AbstractCartCommand
@@ -36,7 +37,10 @@ public class CartClearCommand extends AbstractCartCommand
       MinecartUtils.setCode(cart, null);
       
       // Send information about the updated cart
-      context.getSender().sendMessage(String.format("%s now has no code", LocationUtils.formatEntity(cart)));
+      context.sendMessage(new ComponentBuilder()
+        .append(LocationUtils.formatEntity(cart), ComponentBuilder.FormatRetention.NONE)
+        .append(" now has no code", ComponentBuilder.FormatRetention.NONE)
+        .create());
     }
     catch (InvalidLocationException ex)
     {

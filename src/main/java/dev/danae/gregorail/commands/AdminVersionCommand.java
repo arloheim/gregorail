@@ -22,6 +22,6 @@ public class AdminVersionCommand extends CommandHandler
   {     
     // Send information about the version
     var desc = RailPlugin.getInstance().getDescription();
-    context.getSender().sendMessage(String.format("%s %s (API version %s)", desc.getName(), desc.getVersion(), desc.getAPIVersion()));
+    context.sendMessage(String.format("%s %s (API version %s)", desc.getName(), desc.getVersion(), desc.getAPIVersion()));
   }
 }

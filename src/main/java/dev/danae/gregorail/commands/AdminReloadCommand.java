@@ -24,6 +24,6 @@ public class AdminReloadCommand extends CommandHandler
     RailPlugin.getInstance().reload();
     
     // Send information about the reload
-    context.getSender().sendMessage(String.format("Reloaded %s", RailPlugin.getInstance().getDescription().getName()));
+    context.sendMessage(String.format("Reloaded %s", RailPlugin.getInstance().getDescription().getName()));
   }
 }

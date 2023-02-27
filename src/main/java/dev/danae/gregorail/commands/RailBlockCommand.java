@@ -7,6 +7,8 @@ import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 import java.util.List;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 
 
 public class RailBlockCommand extends CommandHandler
@@ -37,11 +39,17 @@ public class RailBlockCommand extends CommandHandler
       if (block == null)
         throw new CommandException("No block found");
       
+      var blockState = block.getState();
+      
       // Set the material of the block
       block.setType(material);
         
       // Send information about the updated block
-      context.getSender().sendMessage(String.format("%s now has material %s", LocationUtils.formatBlock(block), material));
+      context.sendMessage(new ComponentBuilder()
+        .append(LocationUtils.formatBlockState(blockState), ComponentBuilder.FormatRetention.NONE)
+        .append(" now has material ", ComponentBuilder.FormatRetention.NONE)
+        .append(material.getKey().getKey(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
+        .create());
     }
     catch (InvalidLocationException ex)
     {

@@ -7,7 +7,9 @@ import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.minecart.CodeUtils;
 import dev.danae.gregorail.util.minecart.InvalidCodeException;
 import java.util.List;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 
 
 public class AdminCodeSetCommand extends CommandHandler
@@ -40,7 +42,13 @@ public class AdminCodeSetCommand extends CommandHandler
       CodeUtils.setDisplayName(code, displayName);
       
       // Send information about the updated code
-      context.getSender().sendMessage(String.format("The display name for code \"%s\" is now \"%s\"", code, displayName));
+      context.sendMessage(new ComponentBuilder()
+        .append("The display name for code ", ComponentBuilder.FormatRetention.NONE)
+        .append(code.toString()).color(ChatColor.GREEN)
+        .append(" is now \"", ComponentBuilder.FormatRetention.NONE)
+        .append(TextComponent.fromLegacyText(displayName), ComponentBuilder.FormatRetention.NONE)
+        .append("\"", ComponentBuilder.FormatRetention.NONE)
+        .create());
     }
     catch (InvalidCodeException ex)
     {

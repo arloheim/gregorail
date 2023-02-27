@@ -3,6 +3,7 @@ package dev.danae.gregorail.util.commands;
 import dev.danae.gregorail.util.location.LocationUtils;
 import java.util.Arrays;
 import java.util.List;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -163,5 +164,26 @@ public class CommandContext
       return player;
     else
       return this.nearestPlayer();
+  }
+  
+  
+  // Send a message to the sender of the command
+  public void sendMessage(String message)
+  {
+    this.sender.sendMessage(message);
+  }
+  public void sendMessage(String... messages)
+  {
+    this.sender.sendMessage(messages);
+  }
+  
+  // Send a message using text components to the sender of the command
+  public void sendMessage(BaseComponent component)
+  {
+    this.sender.spigot().sendMessage(component);
+  }
+  public void sendMessage(BaseComponent... components)
+  {
+    this.sender.spigot().sendMessage(components);
   }
 }

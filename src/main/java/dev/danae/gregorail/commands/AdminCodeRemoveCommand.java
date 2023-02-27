@@ -7,6 +7,8 @@ import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.minecart.CodeUtils;
 import dev.danae.gregorail.util.minecart.InvalidCodeException;
 import java.util.List;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 
 
 public class AdminCodeRemoveCommand extends CommandHandler
@@ -34,7 +36,11 @@ public class AdminCodeRemoveCommand extends CommandHandler
       CodeUtils.removeDisplayName(code);
       
       // Send information about the updated code
-      context.getSender().sendMessage(String.format("The display name for code \"%s\" has been removed", code));
+      context.sendMessage(new ComponentBuilder()
+        .append("The display name for code ", ComponentBuilder.FormatRetention.NONE)
+        .append(code.toString(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
+        .append(" has been removed", ComponentBuilder.FormatRetention.NONE)
+        .create());
     }
     catch (InvalidCodeException ex)
     {

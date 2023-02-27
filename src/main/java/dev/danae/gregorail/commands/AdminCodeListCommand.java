@@ -28,8 +28,8 @@ public class AdminCodeListCommand extends CommandHandler
     var codeEntries = CodeUtils.codeEntriesWithDisplayName();
       
     // Send information about the codes
-    context.getSender().sendMessage(String.format("%d display names are defined", codeEntries.size()));
+    context.sendMessage(String.format("%d display names are defined", codeEntries.size()));
     for (var e : codeEntries)
-      context.getSender().sendMessage(String.format("- %s : %s", e.getKey(), e.getValue()));
+      context.sendMessage(String.format("- %s : %s", e.getKey(), e.getValue()));
   }
 }

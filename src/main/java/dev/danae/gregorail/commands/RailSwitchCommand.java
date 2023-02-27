@@ -8,6 +8,9 @@ import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 import java.util.EnumSet;
 import java.util.List;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
 
@@ -40,18 +43,22 @@ public class RailSwitchCommand extends CommandHandler
       if (block == null)
         throw new CommandException("No block found");
       if (!EnumSet.of(Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL).contains(block.getType()))
-        throw new CommandException(String.format("%s is not a rail block", LocationUtils.formatBlock(block)));
+        throw new CommandException(String.format("%s is not a rail block", BaseComponent.toPlainText(LocationUtils.formatBlock(block))));
       
       var blockData = (Rail)block.getBlockData();
       if (!blockData.getShapes().contains(shape))
-        throw new CommandException(String.format("%s cannot be set to shape %s", LocationUtils.formatBlock(block), shape));
+        throw new CommandException(String.format("%s cannot be set to shape %s", BaseComponent.toPlainText(LocationUtils.formatBlock(block)), shape.toString().toLowerCase()));
       
       // Set the shape of the block
       blockData.setShape(shape);
       block.setBlockData(blockData);
         
       // Send information about the updated block
-      context.getSender().sendMessage(String.format("%s now has shape %s", LocationUtils.formatBlock(block), shape));
+      context.sendMessage(new ComponentBuilder()
+          .append(LocationUtils.formatBlock(block), ComponentBuilder.FormatRetention.NONE)
+          .append(" now has shape ", ComponentBuilder.FormatRetention.NONE)
+          .append(shape.toString().toLowerCase(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
+          .create());
     }
     catch (InvalidLocationException ex)
     {

@@ -41,7 +41,7 @@ public class LocateCartCommand extends CommandHandler
         throw new CommandException("No cart found");
       
       // Send information about the cart
-      context.getSender().sendMessage(LocationUtils.formatEntity(cart));
+      context.sendMessage(LocationUtils.formatEntity(cart));
     }
     catch (InvalidLocationException ex)
     {
