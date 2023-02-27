@@ -15,11 +15,11 @@ commands:
     
   gcart:
     description: Manages properties of minecarts.
-    usage: "Usage: /<command> clear [location] | promptset set <codes> [location] | set <code> [location]"
+    usage: "Usage: /<command> clear [location] | promptset <codes> [location] | set <code> [location]"
     
   grail:
     description: Changes the state of rails by querying properties of minecarts.
-    usage: "Usage: /<command> block <material> <location> | blockif <material> <shape> <location> | switch <shape> <location> | switchif <code> <shape> <location>"
+    usage: "Usage: /<command> block <material> <location> | blockif <query> <material> <location> | switch <shape> <location> | switchif <query> <shape> <location>"
     
   glocate:
     description: Locate blocks or carts for debug purposes.
