@@ -9,6 +9,7 @@ import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.minecart.QueryUtils;
+import java.util.EnumSet;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
@@ -44,7 +45,7 @@ public class RailSwitchIfCommand extends CommandHandler
       var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(2));
       if (block == null)
         throw new CommandException("No block found");
-      if (block.getType() != Material.RAIL)
+      if (!EnumSet.of(Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL).contains(block.getType()))
         throw new CommandException(String.format("%s is not a rail block", LocationUtils.formatBlock(block)));
       
       var blockData = (Rail)block.getBlockData();

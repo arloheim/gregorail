@@ -6,6 +6,7 @@ import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
+import java.util.EnumSet;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
@@ -38,7 +39,7 @@ public class RailSwitchCommand extends CommandHandler
       var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(1));
       if (block == null)
         throw new CommandException("No block found");
-      if (block.getType() != Material.RAIL)
+      if (!EnumSet.of(Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL).contains(block.getType()))
         throw new CommandException(String.format("%s is not a rail block", LocationUtils.formatBlock(block)));
       
       var blockData = (Rail)block.getBlockData();
