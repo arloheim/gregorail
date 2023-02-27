@@ -18,7 +18,7 @@ commands:
     usage: "Usage: /<command> clear [location] | promptset <codes> [location] | set <code> [location]"
     
   grail:
-    description: Changes the state of rails by querying properties of minecarts.
+    description: Changes the state of rails and blocks by querying properties of minecarts.
     usage: "Usage: /<command> block <material> <location> | blockif <query> <material> <location> | switch <shape> <location> | switchif <query> <shape> <location>"
     
   glocate:
