@@ -18,6 +18,7 @@ import dev.danae.gregorail.commands.RailSwitchCommand;
 import dev.danae.gregorail.commands.RailSwitchIfCommand;
 import dev.danae.gregorail.listeners.ButcherListener;
 import dev.danae.gregorail.listeners.ButcherOptions;
+import dev.danae.gregorail.listeners.GeneralListener;
 import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandGroupHandler;
 import dev.danae.gregorail.util.commands.CommandHandler;
@@ -162,6 +163,7 @@ public final class RailPlugin extends JavaPlugin
   // Load the listeners
   private void loadListeners()
   {
+    this.getServer().getPluginManager().registerEvents(new GeneralListener(), this);
     this.getServer().getPluginManager().registerEvents(new ButcherListener(this.butcherOptions), this);
   }
   
