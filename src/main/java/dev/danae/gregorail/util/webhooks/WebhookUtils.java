@@ -114,6 +114,7 @@ public class WebhookUtils
     var code = MinecartUtils.getCode(minecart);
     
     var obj = new JsonObject();
+    obj.add("id", new JsonPrimitive(minecart.getEntityId()));
     obj.add("code", code != null ? new JsonPrimitive(code.getId()) : JsonNull.INSTANCE);
     obj.add("displayName", code != null ? new JsonPrimitive(ChatColor.stripColor(CodeUtils.getDisplayName(code))) : JsonNull.INSTANCE);
     obj.add("speed", new JsonPrimitive(MinecartUtils.getSpeedMultiplier(minecart)));   
