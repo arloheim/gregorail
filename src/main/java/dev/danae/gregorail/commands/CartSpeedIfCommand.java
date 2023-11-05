@@ -8,7 +8,6 @@ import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.minecart.QueryUtils;
-import java.text.ParseException;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
