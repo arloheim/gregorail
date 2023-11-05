@@ -1,11 +1,14 @@
 package dev.danae.gregorail.commands;
 
+import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
+import dev.danae.gregorail.util.webhooks.WebhookType;
+import dev.danae.gregorail.util.webhooks.WebhookUtils;
 import java.util.List;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
@@ -35,6 +38,9 @@ public class CartClearCommand extends AbstractCartCommand
       
       // Remove the code from the cart
       MinecartUtils.setCode(cart, null);
+
+      // Execute the appropriate webhooks
+      RailPlugin.getInstance().executeWebhook(WebhookType.CART_CODE_CLEARED, WebhookUtils.createCartCodeClearedPayload(cart));
       
       // Send information about the updated cart
       context.sendMessage(new ComponentBuilder()

@@ -1,11 +1,14 @@
 package dev.danae.gregorail.commands;
 
+import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
+import dev.danae.gregorail.util.webhooks.WebhookType;
+import dev.danae.gregorail.util.webhooks.WebhookUtils;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -41,6 +44,10 @@ public class CartSpeedCommand extends AbstractCartCommand
       
       // Set the speed multiplier to the cart
       MinecartUtils.setSpeedMultiplier(cart, speedMultiplier);
+      
+      // Execute the appropriate webhooks if the cart has a code
+      if (MinecartUtils.getCode(cart) != null)
+        RailPlugin.getInstance().executeWebhook(WebhookType.CART_SPEED_CHANGED, WebhookUtils.createCartSpeedChangedPayload(cart));
       
       // Send information about the updated cart
       context.sendMessage(new ComponentBuilder()

@@ -1,5 +1,6 @@
 package dev.danae.gregorail.commands;
 
+import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
@@ -9,6 +10,8 @@ import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.minecart.QueryUtils;
+import dev.danae.gregorail.util.webhooks.WebhookType;
+import dev.danae.gregorail.util.webhooks.WebhookUtils;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -53,6 +56,9 @@ public class RailBlockIfCommand extends CommandHandler
       {
         // Set the material of the block
         block.setType(material);
+      
+        // Execute the appropriate webhooks
+        RailPlugin.getInstance().executeWebhook(WebhookType.BLOCK_CHANGED, WebhookUtils.createBlockChangedPayload(blockState, material, cart));
         
         // Send information about the updated block
         context.sendMessage(new ComponentBuilder()

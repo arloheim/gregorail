@@ -1,5 +1,6 @@
 package dev.danae.gregorail.commands;
 
+import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
@@ -9,6 +10,8 @@ import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.minecart.QueryUtils;
+import dev.danae.gregorail.util.webhooks.WebhookType;
+import dev.danae.gregorail.util.webhooks.WebhookUtils;
 import java.util.EnumSet;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
@@ -51,6 +54,8 @@ public class RailSwitchIfCommand extends CommandHandler
       if (!EnumSet.of(Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL).contains(block.getType()))
         throw new CommandException(String.format("%s is not a rail block", BaseComponent.toPlainText(LocationUtils.formatBlock(block))));
       
+      var blockState = block.getState();
+      
       var blockData = (Rail)block.getBlockData();
       if (!blockData.getShapes().contains(shape))
         throw new CommandException(String.format("%s cannot be set to shape %s", BaseComponent.toPlainText(LocationUtils.formatBlock(block)), shape.toString().toLowerCase()));
@@ -62,6 +67,9 @@ public class RailSwitchIfCommand extends CommandHandler
         // Set the shape of the block
         blockData.setShape(shape);
         block.setBlockData(blockData);
+      
+        // Execute the appropriate webhooks
+        RailPlugin.getInstance().executeWebhook(WebhookType.SWITCH_CHANGED, WebhookUtils.createSwitchChangedPayload(blockState, shape, cart));
         
         // Send information about the updated block
         context.sendMessage(new ComponentBuilder()

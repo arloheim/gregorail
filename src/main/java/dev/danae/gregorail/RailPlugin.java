@@ -1,5 +1,6 @@
 package dev.danae.gregorail;
 
+import com.google.gson.JsonObject;
 import dev.danae.gregorail.commands.AdminCodeListCommand;
 import dev.danae.gregorail.commands.AdminCodeRemoveCommand;
 import dev.danae.gregorail.commands.AdminCodeSetCommand;
@@ -23,6 +24,13 @@ import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandGroupHandler;
 import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.location.LocationUtils;
+import dev.danae.gregorail.util.webhooks.Webhook;
+import dev.danae.gregorail.util.webhooks.WebhookExecutor;
+import dev.danae.gregorail.util.webhooks.WebhookType;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import org.bukkit.Material;
@@ -30,7 +38,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public final class RailPlugin extends JavaPlugin
+public final class RailPlugin extends JavaPlugin implements WebhookExecutor
 {
   // The static plugin instance
   private static RailPlugin instance;
@@ -38,6 +46,9 @@ public final class RailPlugin extends JavaPlugin
   
   // The options for the butcher listener
   private final ButcherOptions butcherOptions = new ButcherOptions();
+  
+  // The registered webhooks
+  private final List<Webhook> webhooks = new LinkedList<>();
   
   
   // Return the static plugin instance
@@ -120,13 +131,36 @@ public final class RailPlugin extends JavaPlugin
         this.getLogger().log(Level.INFO, String.format("butcher.lightning-bolt-effect = %s", this.butcherOptions.isLightningBoltEffect() ? "true" : "false"));
         
         this.butcherOptions.setDisableItemDrops(butcherConfig.getBoolean("disable-item-drops", true));
-        this.getLogger().log(Level.INFO, String.format("butcher.disable-item-drops = %s", this.butcherOptions.isDisableItemDrops()? "true" : "false"));
+        this.getLogger().log(Level.INFO, String.format("butcher.disable-item-drops = %s", this.butcherOptions.isDisableItemDrops() ? "true" : "false"));
       }
       catch (IllegalArgumentException | NullPointerException ex)
       {
-        this.getLogger().log(Level.WARNING, ex, () -> "Could not load the configuration for the butcher listener, so it will remain disabled");
-        
+        this.getLogger().log(Level.WARNING, "Could not load the configuration for the butcher listener, so it will remain disabled", ex);
         this.butcherOptions.setEnabled(false);
+      }
+    }
+    
+    var webhooksConfig = this.getConfig().getConfigurationSection("webhooks");
+    if (webhooksConfig != null)
+    {
+      for (var webhookName : webhooksConfig.getKeys(false))
+      {
+        try
+        {
+          var webhookConfig = webhooksConfig.getConfigurationSection(webhookName);
+        
+          var webhookTypes = EnumUtils.parseEnumSet(webhookConfig.getStringList("type"), WebhookType.class);
+          this.getLogger().log(Level.INFO, String.format("webhooks.%s.type = %s", webhookName, webhookTypes.stream().map(e -> e.toString()).collect(Collectors.joining(", ", "[", "]"))));
+          
+          var webhookUrl = new URL(webhookConfig.getString("url"));
+          this.getLogger().log(Level.INFO, String.format("webhooks.%s.url = %s", webhookName, webhookUrl.toString()));
+          
+          this.webhooks.add(new Webhook(webhookName, webhookTypes, webhookUrl));
+        }
+        catch (IllegalArgumentException | NullPointerException | MalformedURLException ex)
+        {
+          this.getLogger().log(Level.WARNING, String.format("Could not load the configuration for webhook %s, so it will remain disabled", webhookName), ex);
+        }
       }
     }
   }
@@ -175,5 +209,17 @@ public final class RailPlugin extends JavaPlugin
     this.getCommand(name).setTabCompleter(handler);
     
     handler.registerListener();
+  }
+
+  
+  // Execute a webhook with the specified type and payload
+  @Override
+  public void executeWebhook(WebhookType type, JsonObject payload)
+  {
+    for (var webhook : this.webhooks)
+    {
+      if (webhook.getType().contains(type))
+        webhook.execute(payload);
+    }
   }
 }

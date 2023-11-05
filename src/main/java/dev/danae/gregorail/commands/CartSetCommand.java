@@ -1,5 +1,6 @@
 package dev.danae.gregorail.commands;
 
+import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
@@ -8,6 +9,8 @@ import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.CodeUtils;
 import dev.danae.gregorail.util.minecart.InvalidCodeException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
+import dev.danae.gregorail.util.webhooks.WebhookType;
+import dev.danae.gregorail.util.webhooks.WebhookUtils;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -43,6 +46,9 @@ public class CartSetCommand extends AbstractCartCommand
       
       // Assign the code to the cart
       MinecartUtils.setCode(cart, code);
+      
+      // Execute the appropriate webhooks
+      RailPlugin.getInstance().executeWebhook(WebhookType.CART_CODE_SET, WebhookUtils.createCartCodeSetPayload(cart));
       
       // Send information about the updated cart
       context.sendMessage(new ComponentBuilder()

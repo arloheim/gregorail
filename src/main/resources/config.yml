@@ -23,3 +23,14 @@ butcher:
   ignore-named-entities: true
   # Should item drops of killed entities be disabled?
   disable-item-drops: true
+  
+webhooks:
+  # Definition of a webhook that is called when a cart moved
+  cart-moved:
+    type: [CART_MOVED]
+    url: "https://www.example.com/webhook"
+    
+  # Definition of a webhook that is called when a player enters or exits cart
+  player-entered-cart:
+    type: [PLAYER_ENTERED_CART, PLAYER_EXITED_CART]
+    url: "https://www.example.com/webhook"
