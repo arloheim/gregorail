@@ -13,6 +13,7 @@ The features of the plugin include:
 * Change the material of blocks, again either unconditionally or dependent of the code of a minecart, which is useful for powering rails on demand or custom rail signals.
 * Change the speed of minecarts using commands, also optionally dependent on the code of a minecart.
 * Automatically kill living entities in a specified range around a player when they are riding a minecart, of which the behaviour can be customized.
+* Execute webhooks based on what's happening to carts with a code and changed blocks and rails.
 
 ## Installation
 
