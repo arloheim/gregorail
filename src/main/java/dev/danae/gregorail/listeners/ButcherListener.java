@@ -5,7 +5,7 @@ import dev.danae.gregorail.util.location.Cuboid;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
 import org.bukkit.event.EventHandler;
@@ -54,8 +54,8 @@ public final class ButcherListener implements Listener
     if (e.getFrom().getBlockX() == e.getTo().getBlockX() && e.getFrom().getBlockY() == e.getTo().getBlockY() && e.getFrom().getBlockZ() == e.getTo().getBlockZ())
       return;
     
-    // Get all living entities around the minecart and kill them if they are eligible
-    for (var entity : Cuboid.of(cart.getLocation(), this.options.getRadius()).findEntities(LivingEntity.class, l -> this.isEligibleToBeKilled(l, player)))
+    // Get all mobs around the minecart and kill them if they are eligible
+    for (var entity : Cuboid.of(cart.getLocation(), this.options.getRadius()).findEntities(Mob.class, mob -> this.isEligibleToBeKilled(mob, player)))
       this.kill(entity, player);
   }
   
@@ -76,13 +76,13 @@ public final class ButcherListener implements Listener
     if (player == null)
       return;
     
-    // Check if the collided entity is a living entity and not a player
-    if (!(e.getEntity() instanceof LivingEntity entity))
+    // Check if the collided entity is a mob and not a player
+    if (!(e.getEntity() instanceof Mob mob))
       return;
     
-    // Kill the living entity if it is eligible
-    if (this.isEligibleToBeKilled(entity, player))
-      this.kill(entity, player);
+    // Kill the mob if it is eligible
+    if (this.isEligibleToBeKilled(mob, player))
+      this.kill(mob, player);
     
     // Cancel the collision
     e.setCollisionCancelled(true);
@@ -100,20 +100,20 @@ public final class ButcherListener implements Listener
   }
   
   
-  // Check if the specified living entity is eligible to be killed
-  private boolean isEligibleToBeKilled(LivingEntity entity, Player source)
+  // Check if the specified mob is eligible to be killed
+  private boolean isEligibleToBeKilled(Mob mob, Player source)
   {
-    if (entity instanceof Player)
+    if (mob instanceof Player)
       return false;
-    if (this.options.getIgnoreEntitiesOfType().contains(entity.getType()))
+    if (this.options.getIgnoreEntitiesOfType().contains(mob.getType()))
       return false;
-    if (this.options.isIgnoreNamedEntities() && entity.getCustomName() != null)
+    if (this.options.isIgnoreNamedEntities() && mob.getCustomName() != null)
       return false;
     return true;
   }
   
-  // Kill the specified living entity
-  private void kill(LivingEntity entity, Player source)
+  // Kill the specified mob
+  private void kill(Mob entity, Player source)
   {
     if (entity.isDead())
       return;
