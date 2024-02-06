@@ -113,17 +113,17 @@ public final class ButcherListener implements Listener
   }
   
   // Kill the specified mob
-  private void kill(Mob entity, Player source)
+  private void kill(Mob mob, Player source)
   {
-    if (entity.isDead())
+    if (mob.isDead())
       return;
     
     if (this.options.isLightningBoltEffect())
-      entity.getWorld().strikeLightningEffect(entity.getLocation());
+      mob.getWorld().strikeLightningEffect(mob.getLocation());
     
     if (this.options.isDisableItemDrops())
-      entity.getPersistentDataContainer().set(butcheredKey, PersistentDataType.BYTE, (byte)1);
+      mob.getPersistentDataContainer().set(butcheredKey, PersistentDataType.BYTE, (byte)1);
     
-    entity.damage(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), source);
+    mob.damage(mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), source);
   }
 }
