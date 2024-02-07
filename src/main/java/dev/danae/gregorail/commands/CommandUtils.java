@@ -15,11 +15,31 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.data.Rail;
 
 
 public class CommandUtils
 {    
+  // Clamp an integer value
+  public static int clamp(int value, int min, int max) 
+  {
+    return Math.max(min, Math.min(max, value));
+  }
+  
+  // Clamp a float value
+  public static float clamp(float value, float min, float max) 
+  {
+    return Math.max(min, Math.min(max, value));
+  }
+  
+  // Clamp a double value
+  public static double clamp(double value, double min, double max) 
+  {
+    return Math.max(min, Math.min(max, value));
+  }
+  
+  
   // Parse a block material from a string
   public static Material parseMaterial(String string, boolean requireBlock) throws CommandException
   {
@@ -155,10 +175,19 @@ public class CommandUtils
       return shapeNamesAsStream().toList();
   }
   
+  // Handle tab completion of a sound argument
+  public static List<String> handleSoundTabCompletion(String arg)
+  {
+    if (!arg.isEmpty())
+      return soundNamesAsStream().filter(s -> s.startsWith(arg)).toList();
+    else
+      return soundNamesAsStream().toList();
+  }
+  
   // Handle tab completion of a speed multiplier argument
   public static List<String> handleSpeedMultiplierTabCompletion(String arg)
   {
-    return List.of("0.0", "1.0", "2.0", "3.0", "4.0");
+    return List.of("0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0");
   }
   
   
@@ -195,6 +224,14 @@ public class CommandUtils
   {
     return Arrays.stream(Rail.Shape.values())
       .map(shape -> shape.name().toLowerCase())
+      .sorted();
+  }
+  
+  // Return a stream of all sound names
+  public static Stream<String> soundNamesAsStream()
+  {
+    return Arrays.stream(Sound.values())
+      .map(sound -> sound.getKey().toString())
       .sorted();
   }
   

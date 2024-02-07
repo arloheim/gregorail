@@ -19,7 +19,7 @@ commands:
     
   grail:
     description: Changes the state of rails and blocks by querying properties of minecarts.
-    usage: "Usage: /<command> block <material> <location> | blockif <query> <material> <location> | switch <shape> <location> | switchif <query> <shape> <location>"
+    usage: "Usage: /<command> block <material> <location> | blockif <query> <material> <location> | sound <sound> <location> | soundif <query> <sound> <location> | switch <shape> <location> | switchif <query> <shape> <location>"
     
   glocate:
     description: Locate blocks or carts for debug purposes.
@@ -61,10 +61,15 @@ permissions:
     default: true
     children:
       gregorail.rail.block: true
+      gregorail.rail.sound: true
       gregorail.rail.switch: true
       
   gregorail.rail.block:
     description: Allows the player to use the /grail block and blockif commands.
+    default: true
+    
+  gregorail.rail.sound:
+    description: Allows the player to use the /grail sound and soundif commands.
     default: true
       
   gregorail.rail.switch:

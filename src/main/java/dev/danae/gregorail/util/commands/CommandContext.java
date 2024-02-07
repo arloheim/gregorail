@@ -178,6 +178,13 @@ public class CommandContext
     return value != null ? Integer.parseUnsignedInt(value) : defaultValue;
   }
   
+  // Return a single float property with a default value if it doesn't exist
+  public float getPropertyAsFloat(String key, float defaultValue)
+  {
+    var value = this.getProperty(key, null);
+    return value != null ? Float.parseFloat(key) : defaultValue;
+  }
+  
   // Return a single double property with a default value if it doesn't exist
   public double getPropertyAsDouble(String key, double defaultValue)
   {

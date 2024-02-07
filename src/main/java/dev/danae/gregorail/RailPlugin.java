@@ -17,6 +17,7 @@ import dev.danae.gregorail.commands.cart.CartSpeedCommand;
 import dev.danae.gregorail.commands.locate.LocateBlockCommand;
 import dev.danae.gregorail.commands.locate.LocateCartCommand;
 import dev.danae.gregorail.commands.rail.RailBlockCommand;
+import dev.danae.gregorail.commands.rail.RailSoundCommand;
 import dev.danae.gregorail.commands.rail.RailSwitchCommand;
 import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandGroupHandler;
@@ -185,6 +186,8 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
     var railCommandHandler = new CommandGroupHandler()
       .registerSubcommand("block", new RailBlockCommand(CommandExecutionType.ALWAYS))
       .registerSubcommand("blockif", new RailBlockCommand(CommandExecutionType.CONDITIONAL))
+      .registerSubcommand("sound", new RailSoundCommand(CommandExecutionType.ALWAYS))
+      .registerSubcommand("soundif", new RailSoundCommand(CommandExecutionType.CONDITIONAL))
       .registerSubcommand("switch", new RailSwitchCommand(CommandExecutionType.ALWAYS))
       .registerSubcommand("switchif", new RailSwitchCommand(CommandExecutionType.CONDITIONAL));
     
