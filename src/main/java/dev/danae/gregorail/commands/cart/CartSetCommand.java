@@ -102,9 +102,9 @@ public class CartSetCommand extends CartCommand
         
       case CONDITIONAL:
         if (context.hasAtLeastArgumentsCount(3))
-          return CommandUtils.handleLocationTabCompletion(context, 1);
+          return CommandUtils.handleLocationTabCompletion(context, 2);
         else if (context.hasArgumentsCount(2))
-          return CommandUtils.handleCodeTabCompletion(context.getArgument(0));
+          return CommandUtils.handleCodeTabCompletion(context.getArgument(1));
         else if (context.hasArgumentsCount(1))
           return CommandUtils.handleCodesTabCompletion(context.getArgument(0));
         else
