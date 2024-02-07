@@ -1,22 +1,21 @@
 package dev.danae.gregorail;
 
 import com.google.gson.JsonObject;
-import dev.danae.gregorail.commands.AdminCodeListCommand;
-import dev.danae.gregorail.commands.AdminCodeRemoveCommand;
-import dev.danae.gregorail.commands.AdminCodeSetCommand;
-import dev.danae.gregorail.commands.AdminReloadCommand;
-import dev.danae.gregorail.commands.AdminVersionCommand;
-import dev.danae.gregorail.commands.CartClearCommand;
-import dev.danae.gregorail.commands.CartPromptSetCommand;
-import dev.danae.gregorail.commands.CartSetCommand;
-import dev.danae.gregorail.commands.CartSpeedCommand;
-import dev.danae.gregorail.commands.CartSpeedIfCommand;
-import dev.danae.gregorail.commands.LocateBlockCommand;
-import dev.danae.gregorail.commands.LocateCartCommand;
-import dev.danae.gregorail.commands.RailBlockCommand;
-import dev.danae.gregorail.commands.RailBlockIfCommand;
-import dev.danae.gregorail.commands.RailSwitchCommand;
-import dev.danae.gregorail.commands.RailSwitchIfCommand;
+import dev.danae.gregorail.commands.CommandExecutionType;
+import dev.danae.gregorail.commands.admin.AdminCodeListCommand;
+import dev.danae.gregorail.commands.admin.AdminCodeRemoveCommand;
+import dev.danae.gregorail.commands.admin.AdminCodeSetCommand;
+import dev.danae.gregorail.commands.admin.AdminReloadCommand;
+import dev.danae.gregorail.commands.admin.AdminVersionCommand;
+import dev.danae.gregorail.commands.cart.CartClearCommand;
+import dev.danae.gregorail.commands.cart.CartPromptOptions;
+import dev.danae.gregorail.commands.cart.CartPromptSetCommand;
+import dev.danae.gregorail.commands.cart.CartSetCommand;
+import dev.danae.gregorail.commands.cart.CartSpeedCommand;
+import dev.danae.gregorail.commands.locate.LocateBlockCommand;
+import dev.danae.gregorail.commands.locate.LocateCartCommand;
+import dev.danae.gregorail.commands.rail.RailBlockCommand;
+import dev.danae.gregorail.commands.rail.RailSwitchCommand;
 import dev.danae.gregorail.listeners.ButcherListener;
 import dev.danae.gregorail.listeners.ButcherOptions;
 import dev.danae.gregorail.listeners.GeneralListener;
@@ -42,6 +41,9 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
   // The static plugin instance
   private static RailPlugin instance;
   
+  
+  // The options for the prompt
+  private final CartPromptOptions cartPromptOptions = new CartPromptOptions();
   
   // The options for the butcher listener
   private final ButcherOptions butcherOptions = new ButcherOptions();
@@ -99,8 +101,8 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
     var cartPromptConfig = this.getConfig().getConfigurationSection("cart-prompt");
     if (cartPromptConfig != null)
     {
-      CartPromptSetCommand.title = cartPromptConfig.getString("title", "Select a code");
-      CartPromptSetCommand.itemMaterial = Material.matchMaterial(cartPromptConfig.getString("item-material", Material.MINECART.name()));
+      this.cartPromptOptions.setTitle(cartPromptConfig.getString("title", "Select a code"));
+      this.cartPromptOptions.setItemMaterial(Material.matchMaterial(cartPromptConfig.getString("item-material", Material.MINECART.name())));
    }
     
     var butcherConfig = this.getConfig().getConfigurationSection("butcher");
@@ -155,17 +157,19 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
       .registerSubcommand("version", new AdminVersionCommand()));
     
     this.setCommandHandler("gcart", new CommandGroupHandler()
-      .registerSubcommand("clear", new CartClearCommand())
-      .registerSubcommand("promptset", new CartPromptSetCommand())
-      .registerSubcommand("set", new CartSetCommand())
-      .registerSubcommand("speed", new CartSpeedCommand())
-      .registerSubcommand("speedif", new CartSpeedIfCommand()));
+      .registerSubcommand("clear", new CartClearCommand(CommandExecutionType.ALWAYS))
+      .registerSubcommand("clearif", new CartClearCommand(CommandExecutionType.CONDITIONAL))
+      .registerSubcommand("promptset", new CartPromptSetCommand(this.cartPromptOptions))
+      .registerSubcommand("set", new CartSetCommand(CommandExecutionType.ALWAYS))
+      .registerSubcommand("setif", new CartSetCommand(CommandExecutionType.CONDITIONAL))
+      .registerSubcommand("speed", new CartSpeedCommand(CommandExecutionType.ALWAYS))
+      .registerSubcommand("speedif", new CartSpeedCommand(CommandExecutionType.CONDITIONAL)));
     
     this.setCommandHandler("grail", new CommandGroupHandler()
-      .registerSubcommand("block", new RailBlockCommand())
-      .registerSubcommand("blockif", new RailBlockIfCommand())
-      .registerSubcommand("switch", new RailSwitchCommand())
-      .registerSubcommand("switchif", new RailSwitchIfCommand()));
+      .registerSubcommand("block", new RailBlockCommand(CommandExecutionType.ALWAYS))
+      .registerSubcommand("blockif", new RailBlockCommand(CommandExecutionType.CONDITIONAL))
+      .registerSubcommand("switch", new RailSwitchCommand(CommandExecutionType.ALWAYS))
+      .registerSubcommand("switchif", new RailSwitchCommand(CommandExecutionType.CONDITIONAL)));
     
     this.setCommandHandler("glocate", new CommandGroupHandler()
       .registerSubcommand("block", new LocateBlockCommand())

@@ -1,4 +1,4 @@
-package dev.danae.gregorail.commands;
+package dev.danae.gregorail.commands.admin;
 
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;

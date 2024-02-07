@@ -1,6 +1,9 @@
-package dev.danae.gregorail.commands;
+package dev.danae.gregorail.commands.rail;
 
 import dev.danae.gregorail.RailPlugin;
+import dev.danae.gregorail.commands.CommandExecutionType;
+import dev.danae.gregorail.commands.CommandMessages;
+import dev.danae.gregorail.commands.CommandUtils;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
@@ -14,20 +17,24 @@ import dev.danae.gregorail.util.webhooks.WebhookType;
 import dev.danae.gregorail.util.webhooks.WebhookUtils;
 import java.util.EnumSet;
 import java.util.List;
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
-public class RailSwitchIfCommand extends CommandHandler
+public class RailSwitchCommand extends CommandHandler
 {
+  // The execution type of the command
+  private final CommandExecutionType executionType;
+  
+  
   // Constructor
-  public RailSwitchIfCommand()
+  public RailSwitchCommand(CommandExecutionType executionType)
   {
-    super("gregorail.rail.switchif");
+    super("gregorail.rail.switch");
+    
+    this.executionType = executionType;
   }
     
   
@@ -41,14 +48,16 @@ public class RailSwitchIfCommand extends CommandHandler
       var senderLocation = context.assertSenderHasLocation();
       
       // Parse the arguments
-      if (!context.hasAtLeastArgumentsCount(3))
+      if (!context.hasAtLeastArgumentsCount(this.executionType == CommandExecutionType.CONDITIONAL ? 3 : 2))
         throw new CommandUsageException();
       
-      var query = QueryUtils.parseQuery(context.getArgument(0));
+      var argumentIndex = 0;
       
-      var shape = CommandUtils.parseShape(context.getArgument(1));
+      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryUtils.parseQuery(context.getArgument(argumentIndex++)) : null;
+      
+      var shape = CommandUtils.parseShape(context.getArgument(argumentIndex++));
     
-      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(2));
+      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(argumentIndex++));
       if (block == null)
         throw new CommandException("No block found");
       if (!EnumSet.of(Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL).contains(block.getType()))
@@ -60,36 +69,24 @@ public class RailSwitchIfCommand extends CommandHandler
       if (!blockData.getShapes().contains(shape))
         throw new CommandException(String.format("%s cannot be set to shape %s", BaseComponent.toPlainText(LocationUtils.formatBlock(block)), shape.toString().toLowerCase()));
       
-      // Check for a minecart with the code at the sender location
+      // Check if the minecart matches the query
       var cart = LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class);
-      if (cart != null && MinecartUtils.matchCode(cart, query))
+      if (query == null || (cart != null && MinecartUtils.matchCode(cart, query)))
       {
         // Set the shape of the block
         blockData.setShape(shape);
         block.setBlockData(blockData);
       
         // Execute the appropriate webhooks
-        RailPlugin.getInstance().executeWebhook(WebhookType.SWITCH_CHANGED, WebhookUtils.createSwitchChangedPayload(blockState, shape, cart));
+        RailPlugin.getInstance().executeWebhook(WebhookType.SWITCH_CHANGED, WebhookUtils.createSwitchChangedPayload(blockState, shape, null));
         
-        // Send information about the updated block
-        context.sendMessage(new ComponentBuilder()
-          .append(LocationUtils.formatBlock(block), ComponentBuilder.FormatRetention.NONE)
-          .append(" now has shape ", ComponentBuilder.FormatRetention.NONE)
-          .append(shape.toString().toLowerCase(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
-          .append(", detected ", ComponentBuilder.FormatRetention.NONE)
-          .append(LocationUtils.formatEntity(cart), ComponentBuilder.FormatRetention.NONE)
-          .create());
+        // Send a message about the updated block
+        CommandMessages.sendSwitchChangedMessage(context, block, shape, cart);
       }
       else
       {
-        // Send information about the block
-        context.sendMessage(new ComponentBuilder()
-          .append(LocationUtils.formatBlock(block), ComponentBuilder.FormatRetention.NONE)
-          .append(" still has original shape ", ComponentBuilder.FormatRetention.NONE)
-          .append(shape.toString().toLowerCase(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
-          .append(", detected ", ComponentBuilder.FormatRetention.NONE)
-          .append(LocationUtils.formatEntity(cart), ComponentBuilder.FormatRetention.NONE)
-          .create());
+        // Send information about the unchanged block
+        CommandMessages.sendSwitchUnchangedMessage(context, block, shape, cart);
       }
     }
     catch (InvalidLocationException | InvalidQueryException ex)
@@ -102,13 +99,28 @@ public class RailSwitchIfCommand extends CommandHandler
   @Override
   public List<String> handleTabCompletion(CommandContext context)
   {
-    if (context.hasAtLeastArgumentsCount(3))
-      return CommandUtils.handleLocationTabCompletion(context, 2);
-    else if (context.hasArgumentsCount(2))
-      return CommandUtils.handleShapeTabCompletion(context.getArgument(1));
-    else if (context.hasArgumentsCount(1))
-      return CommandUtils.handleCodesTabCompletion(context.getArgument(0));
-    else
-      return null;
+    switch (this.executionType)
+    {
+      case ALWAYS:
+        if (context.hasAtLeastArgumentsCount(2))
+          return CommandUtils.handleLocationTabCompletion(context, 1);
+        else if (context.hasArgumentsCount(1))
+          return CommandUtils.handleShapeTabCompletion(context.getArgument(0));
+        else
+          return null;
+        
+      case CONDITIONAL:
+        if (context.hasAtLeastArgumentsCount(3))
+          return CommandUtils.handleLocationTabCompletion(context, 2);
+        else if (context.hasArgumentsCount(2))
+          return CommandUtils.handleShapeTabCompletion(context.getArgument(1));
+        else if (context.hasArgumentsCount(1))
+          return CommandUtils.handleCodesTabCompletion(context.getArgument(0));
+        else
+          return null;
+        
+      default:
+        return null;
+    }
   }
 }

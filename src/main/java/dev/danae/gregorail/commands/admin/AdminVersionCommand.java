@@ -1,4 +1,4 @@
-package dev.danae.gregorail.commands;
+package dev.danae.gregorail.commands.admin;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.commands.CommandContext;
@@ -7,10 +7,10 @@ import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 
 
-public class AdminReloadCommand extends CommandHandler
+public class AdminVersionCommand extends CommandHandler
 {
   // Constructor
-  public AdminReloadCommand()
+  public AdminVersionCommand()
   {
     super("gregorail.admin");
   }
@@ -20,10 +20,8 @@ public class AdminReloadCommand extends CommandHandler
   @Override
   public void handle(CommandContext context) throws CommandException, CommandUsageException
   {     
-    // Reload the plugin
-    RailPlugin.getInstance().reload();
-    
-    // Send information about the reload
-    context.sendMessage(String.format("Reloaded %s", RailPlugin.getInstance().getDescription().getName()));
+    // Send information about the version
+    var desc = RailPlugin.getInstance().getDescription();
+    context.sendMessage(String.format("%s %s (API version %s)", desc.getName(), desc.getVersion(), desc.getAPIVersion()));
   }
 }

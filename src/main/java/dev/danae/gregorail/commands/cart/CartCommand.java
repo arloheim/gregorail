@@ -1,4 +1,4 @@
-package dev.danae.gregorail.commands;
+package dev.danae.gregorail.commands.cart;
 
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
@@ -10,18 +10,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
-public abstract class AbstractCartCommand extends CommandHandler
+public abstract class CartCommand extends CommandHandler
 {
   // Constructor
-  public AbstractCartCommand(List<String> permissions)
+  public CartCommand(List<String> permissions)
   {
     super(permissions);
   }
-  public AbstractCartCommand(String... permissions)
+  public CartCommand(String... permissions)
   {
     super(permissions);
   }
-  public AbstractCartCommand()
+  public CartCommand()
   {
     super();
   }

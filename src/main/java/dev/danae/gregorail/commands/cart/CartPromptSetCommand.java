@@ -1,6 +1,7 @@
-package dev.danae.gregorail.commands;
+package dev.danae.gregorail.commands.cart;
 
 import dev.danae.gregorail.RailPlugin;
+import dev.danae.gregorail.commands.CommandUtils;
 import dev.danae.gregorail.util.InventoryUtils;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
@@ -9,7 +10,6 @@ import dev.danae.gregorail.util.minecart.CodeUtils;
 import dev.danae.gregorail.util.minecart.InvalidCodeException;
 import java.util.List;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,26 +18,25 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 
-public class CartPromptSetCommand extends AbstractCartCommand
+public class CartPromptSetCommand extends CartCommand
 {  
-  // The title to use in the cart prompt command
-  public static String title = "Select a code";
-  
-  // The material to use for items in the cart prompt command
-  public static Material itemMaterial = Material.MINECART;
-  
-  
   // Namespaced key for storing the code of a minecart on an item stack
   private static final NamespacedKey codeKey = new NamespacedKey(RailPlugin.getInstance(), "cart_promptset_code");
   
   // Namespaced key for storing the location of a minecart on an item stack
   private static final NamespacedKey locationKey = new NamespacedKey(RailPlugin.getInstance(), "cart_promptset_location");
- 
+  
+  
+  // The options for the cart prompt
+  private final CartPromptOptions options;
+  
   
   // Constructor
-  public CartPromptSetCommand()
+  public CartPromptSetCommand(CartPromptOptions options)
   {
     super("gregorail.cart.promptset");
+    
+    this.options = options;
   }
     
   
@@ -65,7 +64,7 @@ public class CartPromptSetCommand extends AbstractCartCommand
       
       // Create the inventory
       var inventory = InventoryUtils.createInventory(player, codes, code -> {
-        var itemStack = new ItemStack(itemMaterial);
+        var itemStack = new ItemStack(this.options.getItemMaterial());
         var itemMeta = itemStack.getItemMeta();
       
         var displayName = CodeUtils.getDisplayName(code);
@@ -76,7 +75,7 @@ public class CartPromptSetCommand extends AbstractCartCommand
         
         itemStack.setItemMeta(itemMeta);
         return itemStack;
-      }, title);
+      }, this.options.getTitle());
       
       // Open the inventory
       player.openInventory(inventory);
@@ -113,7 +112,7 @@ public class CartPromptSetCommand extends AbstractCartCommand
       return;
       
     // Check if there is a current item of the item material
-    if (e.getCurrentItem() == null || e.getCurrentItem().getType() != itemMaterial)
+    if (e.getCurrentItem() == null || e.getCurrentItem().getType() != options.getItemMaterial())
       return;
       
     // Validate the item
