@@ -15,7 +15,7 @@ commands:
     
   gcart:
     description: Manages properties of minecarts.
-    usage: "Usage: /<command> clear [location] | promptset <codes> [location] | set <code> [location] | speed <speed> [location] | speedif <code> <speed> [location]"
+    usage: "Usage: /<command> clear [location] | clearif <query> [location] | promptset <codes> [location] | set <code> [location] | setif <query> <code> [location] | speed <speed> [location] | speedif <code> <speed> [location]"
     
   grail:
     description: Changes the state of rails and blocks by querying properties of minecarts.
@@ -28,7 +28,7 @@ commands:
     
 permissions:
   gregorail.admin:
-    description: Allows the player to use the /gadmin command.
+    description: Allows the player to use the /gregorail command.
     default: op
     
   gregorail.cart:
@@ -39,26 +39,21 @@ permissions:
       gregorail.cart.promptset: true
       gregorail.cart.set: true
       gregorail.cart.speed: true
-      gregorail.cart.speedif: true
     
   gregorail.cart.clear:
-    description: Allows the player to use the /gcart clear command.
+    description: Allows the player to use the /gcart clear and clearif commands.
     default: true
       
   gregorail.cart.promptset:
-    description: Allows the player to use the /gcart promptset command.
+    description: Allows the player to use the /gcart promptset and promptsetif commands.
     default: true
       
   gregorail.cart.set:
-    description: Allows the player to use the /gcart set command.
+    description: Allows the player to use the /gcart set and setif commands.
     default: true
     
   gregorail.cart.speed:
-    description: Allows the player to use the /gcart speed command.
-    default: true
-    
-  gregorail.cart.speedif:
-    description: Allows the player to use the /gcart speedif command.
+    description: Allows the player to use the /gcart speed and speedif commands.
     default: true
     
   gregorail.rail:
@@ -66,24 +61,14 @@ permissions:
     default: true
     children:
       gregorail.rail.block: true
-      gregorail.rail.blockif: true
       gregorail.rail.switch: true
-      gregorail.rail.switchif: true
       
   gregorail.rail.block:
-    description: Allows the player to use the /grail block command.
-    default: true
-    
-  gregorail.rail.blockif:
-    description: Allows the player to use the /grail blockif command.
+    description: Allows the player to use the /grail block and blockif commands.
     default: true
       
   gregorail.rail.switch:
-    description: Allows the player to use the /grail switch command.
-    default: true
-    
-  gregorail.rail.switchif:
-    description: Allows the player to use the /grail switchif command.
+    description: Allows the player to use the /grail switch and switchif commands.
     default: true
     
   gregorail.locate:
