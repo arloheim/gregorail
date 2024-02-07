@@ -21,7 +21,6 @@ import dev.danae.gregorail.commands.rail.RailSwitchCommand;
 import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandGroupHandler;
 import dev.danae.gregorail.util.commands.CommandHandler;
-import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.webhooks.Webhook;
 import dev.danae.gregorail.util.webhooks.WebhookExecutor;
 import dev.danae.gregorail.util.webhooks.WebhookType;
@@ -166,32 +165,37 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
   // Load the command handlers
   private void loadCommandHandlers()
   {
-    this.setCommandHandler("gregorail", new CommandGroupHandler()
+    var adminCommandHandler = new CommandGroupHandler()
       .registerSubcommand("code", new CommandGroupHandler()
         .registerSubcommand("list", new AdminCodeListCommand())
         .registerSubcommand("remove", new AdminCodeRemoveCommand())
         .registerSubcommand("set", new AdminCodeSetCommand()))
       .registerSubcommand("reload", new AdminReloadCommand())
-      .registerSubcommand("version", new AdminVersionCommand()));
+      .registerSubcommand("version", new AdminVersionCommand());
     
-    this.setCommandHandler("gcart", new CommandGroupHandler()
+    var cartCommandHandler = new CommandGroupHandler()
       .registerSubcommand("clear", new CartClearCommand(CommandExecutionType.ALWAYS))
       .registerSubcommand("clearif", new CartClearCommand(CommandExecutionType.CONDITIONAL))
       .registerSubcommand("promptset", new CartPromptSetCommand(this.cartPromptOptions))
       .registerSubcommand("set", new CartSetCommand(CommandExecutionType.ALWAYS))
       .registerSubcommand("setif", new CartSetCommand(CommandExecutionType.CONDITIONAL))
       .registerSubcommand("speed", new CartSpeedCommand(CommandExecutionType.ALWAYS))
-      .registerSubcommand("speedif", new CartSpeedCommand(CommandExecutionType.CONDITIONAL)));
+      .registerSubcommand("speedif", new CartSpeedCommand(CommandExecutionType.CONDITIONAL));
     
-    this.setCommandHandler("grail", new CommandGroupHandler()
+    var railCommandHandler = new CommandGroupHandler()
       .registerSubcommand("block", new RailBlockCommand(CommandExecutionType.ALWAYS))
       .registerSubcommand("blockif", new RailBlockCommand(CommandExecutionType.CONDITIONAL))
       .registerSubcommand("switch", new RailSwitchCommand(CommandExecutionType.ALWAYS))
-      .registerSubcommand("switchif", new RailSwitchCommand(CommandExecutionType.CONDITIONAL)));
+      .registerSubcommand("switchif", new RailSwitchCommand(CommandExecutionType.CONDITIONAL));
     
-    this.setCommandHandler("glocate", new CommandGroupHandler()
+    var locateCommandHandler = new CommandGroupHandler()
       .registerSubcommand("block", new LocateBlockCommand())
-      .registerSubcommand("cart", new LocateCartCommand()));
+      .registerSubcommand("cart", new LocateCartCommand());
+    
+    this.setCommandHandler("gregorail", adminCommandHandler);
+    this.setCommandHandler("gcart", cartCommandHandler);
+    this.setCommandHandler("grail", railCommandHandler);
+    this.setCommandHandler("glocate", locateCommandHandler);
   }
   
   // Load the listeners
