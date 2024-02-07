@@ -15,7 +15,7 @@ public class CodeUtils
   // Display names for minecart codes
   private static final CodeDisplayNameData displayNames = new CodeDisplayNameData(new File(RailPlugin.getInstance().getDataFolder(), "code_display_names.yml"));
   
-  // Pattern to parsing codes
+  // Patterns for parsing codes
   private static final Pattern pattern = Pattern.compile("[a-z0-9_]+", Pattern.CASE_INSENSITIVE);
   private static final Pattern delimiterPattern = Pattern.compile("\\|");
   

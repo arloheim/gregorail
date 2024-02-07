@@ -9,6 +9,8 @@ cart-prompt:
   title: "Select a code"
   # The material to use for items in the /gcart prompt command
   item-material: MINECART
+  # The distance in blocks to search for a player to display the prompt to
+  player-search-radius: 5
   
 butcher:
   # Should mobs within the specified radius of a player riding a minecart be killed?

@@ -41,6 +41,9 @@ public class CartSetCommand extends CartCommand
     {      
       // Assert that the command sender has a location
       context.assertSenderHasLocation();
+
+      // Parse the properties
+      var entityDistance = context.getPropertyAsUnsignedInt("distance", RailPlugin.getEntitySearchRadius());
     
       // Parse the arguments
       if (!context.hasAtLeastArgumentsCount(this.executionType == CommandExecutionType.CONDITIONAL ? 2 : 1))
@@ -52,7 +55,7 @@ public class CartSetCommand extends CartCommand
       
       var code = CodeUtils.createCode(context.getArgument(argumentIndex++));
       
-      var cart = this.findMinecart(context, argumentIndex++);
+      var cart = this.findMinecart(context, argumentIndex++, entityDistance);
       if (cart == null)
         throw new CommandException("No cart found");
       
@@ -84,6 +87,9 @@ public class CartSetCommand extends CartCommand
   @Override
   public List<String> handleTabCompletion(CommandContext context)
   {
+    if (context.getLastArgument().startsWith("#"))
+      return CommandUtils.handlePropertyTabCompletion(context.getLastArgument(), "distance=");
+    
     switch (this.executionType)
     {
       case ALWAYS:

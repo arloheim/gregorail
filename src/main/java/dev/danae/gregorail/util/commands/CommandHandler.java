@@ -48,7 +48,7 @@ public abstract class CommandHandler implements CommandExecutor, TabCompleter, L
   {
     try
     {
-      var context = new CommandContext(command, args, sender);
+      var context = CommandContext.parse(command, args, sender);
       context.assertSenderHasPermissions(this.permissions);
       this.handle(context);
       
@@ -69,7 +69,7 @@ public abstract class CommandHandler implements CommandExecutor, TabCompleter, L
   @Override
   public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args)
   {
-    var context = new CommandContext(command, args, sender);
+    var context = CommandContext.parse(command, args, sender);
     return this.handleTabCompletion(context);
   }
   

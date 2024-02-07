@@ -63,6 +63,20 @@ public class CommandUtils
   }
   
   
+  // Handle tab completion for a property
+  public static List<String> handlePropertyTabCompletion(String arg, String... properties)
+  {
+    if (!arg.startsWith("#"))
+      return null;
+    
+    var stream = Arrays.stream(properties).map(p -> String.format("#%s", p)).sorted();
+    
+    if (!arg.isEmpty())
+      return stream.filter(s -> s.startsWith(arg)).toList();
+    else
+      return stream.toList();
+  }
+  
   // Handle tab completion of a code argument
   public static List<String> handleCodeTabCompletion(String arg)
   {

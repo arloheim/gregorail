@@ -50,7 +50,7 @@ public class CartPromptSetCommand extends CartCommand
       context.assertSenderHasLocation();
       
       // Assert the the command sender is a player, or get the nearest player to the sender
-      var player = context.nearestPlayerOrSender();
+      var player = context.nearestPlayerOrSender(this.options.getPlayerSearchRadius());
       if (player == null)
         throw new CommandException("No player found");
       

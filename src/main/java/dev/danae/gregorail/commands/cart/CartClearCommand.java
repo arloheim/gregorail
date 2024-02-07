@@ -39,6 +39,9 @@ public class CartClearCommand extends CartCommand
     {      
       // Assert that the command sender has a location
       context.assertSenderHasLocation();
+      
+      // Parse the properties
+      var entityDistance = context.getPropertyAsUnsignedInt("distance", RailPlugin.getEntitySearchRadius());
     
       // Parse the arguments
       if (!context.hasAtLeastArgumentsCount(this.executionType == CommandExecutionType.CONDITIONAL ? 1 : 0))
@@ -48,7 +51,7 @@ public class CartClearCommand extends CartCommand
       
       var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryUtils.parseQuery(context.getArgument(argumentIndex++)) : null;
       
-      var cart = this.findMinecart(context, argumentIndex++);
+      var cart = this.findMinecart(context, argumentIndex++, entityDistance);
       if (cart == null)
         throw new CommandException("No cart found");
       
@@ -80,6 +83,9 @@ public class CartClearCommand extends CartCommand
   @Override
   public List<String> handleTabCompletion(CommandContext context)
   {
+    if (context.getLastArgument().startsWith("#"))
+      return CommandUtils.handlePropertyTabCompletion(context.getLastArgument(), "distance=");
+    
     switch (this.executionType)
     {
       case ALWAYS:

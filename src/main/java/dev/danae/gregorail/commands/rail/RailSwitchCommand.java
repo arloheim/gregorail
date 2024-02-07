@@ -47,6 +47,10 @@ public class RailSwitchCommand extends CommandHandler
       // Assert that the command sender has a location
       var senderLocation = context.assertSenderHasLocation();
       
+      // Parse the properties
+      var blockDistance = context.getPropertyAsUnsignedInt("block-distance", RailPlugin.getBlockSearchRadius());
+      var entityDistance = context.getPropertyAsUnsignedInt("distance", RailPlugin.getEntitySearchRadius());
+      
       // Parse the arguments
       if (!context.hasAtLeastArgumentsCount(this.executionType == CommandExecutionType.CONDITIONAL ? 3 : 2))
         throw new CommandUsageException();
@@ -57,7 +61,7 @@ public class RailSwitchCommand extends CommandHandler
       
       var shape = CommandUtils.parseShape(context.getArgument(argumentIndex++));
     
-      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(argumentIndex++));
+      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(argumentIndex++), blockDistance);
       if (block == null)
         throw new CommandException("No block found");
       if (!EnumSet.of(Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL).contains(block.getType()))
@@ -70,7 +74,7 @@ public class RailSwitchCommand extends CommandHandler
         throw new CommandException(String.format("%s cannot be set to shape %s", BaseComponent.toPlainText(LocationUtils.formatBlock(block)), shape.toString().toLowerCase()));
       
       // Check if the minecart matches the query
-      var cart = LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class);
+      var cart = LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class, entityDistance);
       if (query == null || (cart != null && MinecartUtils.matchCode(cart, query)))
       {
         // Set the shape of the block
@@ -89,7 +93,7 @@ public class RailSwitchCommand extends CommandHandler
         CommandMessages.sendSwitchUnchangedMessage(context, block, shape, cart);
       }
     }
-    catch (InvalidLocationException | InvalidQueryException ex)
+    catch (InvalidLocationException | InvalidQueryException | NumberFormatException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }
@@ -99,6 +103,9 @@ public class RailSwitchCommand extends CommandHandler
   @Override
   public List<String> handleTabCompletion(CommandContext context)
   {
+    if (context.getLastArgument().startsWith("#"))
+      return CommandUtils.handlePropertyTabCompletion(context.getLastArgument(), "block-distance=", "distance=");
+    
     switch (this.executionType)
     {
       case ALWAYS:

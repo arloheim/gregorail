@@ -17,13 +17,6 @@ import org.bukkit.entity.Entity;
 
 public class LocationUtils
 {  
-  // Radius for searching for blocks
-  public static int blockSearchRadius = 10;
-  
-  // Radius for searching for entities
-  public static int entitySearchRadius = 10;
-  
-  
   // Pattern for parsing locations
   private static final Pattern pattern = Pattern.compile(
     // Current location: "~"
@@ -35,59 +28,69 @@ public class LocationUtils
   
   
   // Parse a location from a string
-  public static Location parseLocation(Location loc, String string) throws InvalidLocationException
+  public static Location parseLocation(Location loc, String string, int distance) throws InvalidLocationException
   {
-    // Match the string against the pattern
-    var m = pattern.matcher(string);
-    if (!m.matches())
-      throw new InvalidLocationException(String.format("The location string \"%s\" contains an invalid format", string));
-    
-    // Check for a current location
-    if (m.group("cur") != null)
-      return loc;
-    
-    // Check for a numeric location
-    if (m.group("xyz") != null)
+    try
     {
-      var x = m.group("rx") != null ? loc.getBlockX() + (m.group("dx") != null ? Integer.parseInt(m.group("dx")) : 0) : Integer.parseInt(m.group("x"));
-      var y = m.group("ry") != null ? loc.getBlockY() + (m.group("dy") != null ? Integer.parseInt(m.group("dy")) : 0) : Integer.parseInt(m.group("y"));
-      var z = m.group("rz") != null ? loc.getBlockZ() + (m.group("dz") != null ? Integer.parseInt(m.group("dz")) : 0) : Integer.parseInt(m.group("z"));
-      
-      return new Location(loc.getWorld(), x, y, z);
-    }
+      // Match the string against the pattern
+      var m = pattern.matcher(string);
+      if (!m.matches())
+        throw new InvalidLocationException(String.format("The location string \"%s\" contains an invalid format", string));
     
-    // Check for a block location
-    if (m.group("block") != null)
-    {      
-      // Parse the block name
-      var materialName = m.group("name");
-      var material = Material.matchMaterial(materialName);
-      if (material == null)
-        throw new InvalidLocationException(String.format("Material \"%s\" is an invalid material", materialName.toLowerCase()));
-      if (!material.isBlock())
-        throw new InvalidLocationException(String.format("Material \"%s\" is not a block material", materialName.toLowerCase()));
+      // Check for a current location
+      if (m.group("cur") != null)
+        return loc;
+    
+      // Check for a numeric location
+      else if (m.group("xyz") != null)
+      {
+        var x = m.group("rx") != null ? loc.getBlockX() + (m.group("dx") != null ? Integer.parseInt(m.group("dx")) : 0) : Integer.parseInt(m.group("x"));
+        var y = m.group("ry") != null ? loc.getBlockY() + (m.group("dy") != null ? Integer.parseInt(m.group("dy")) : 0) : Integer.parseInt(m.group("y"));
+        var z = m.group("rz") != null ? loc.getBlockZ() + (m.group("dz") != null ? Integer.parseInt(m.group("dz")) : 0) : Integer.parseInt(m.group("z"));
       
-      // Find the block
-      var block = Cuboid.of(loc, blockSearchRadius).findNearestBlockToCenter(material);
-      if (block == null)
-        return null;
+        return new Location(loc.getWorld(), x, y, z);
+      }
+    
+      // Check for a block location
+      else if (m.group("block") != null)
+      {      
+        // Parse the block name
+        var materialName = m.group("name");
+        var material = Material.matchMaterial(materialName);
+        if (material == null)
+          throw new InvalidLocationException(String.format("Material \"%s\" is an invalid material", materialName.toLowerCase()));
+        if (!material.isBlock())
+          throw new InvalidLocationException(String.format("Material \"%s\" is not a block material", materialName.toLowerCase()));
       
-      // Parse the block mode and return the appropriate position
-      var mode = m.group("mode");
-      if (mode.equals("^"))
-        return block.getLocation().add(0, 1, 0);
+        // Find the block
+        var block = Cuboid.of(loc, distance).findNearestBlockToCenter(material);
+        if (block == null)
+          return null;
+      
+        // Parse the block mode and return the appropriate position
+        var mode = m.group("mode");
+        if (mode.equals("@"))
+          return block.getLocation();
+        else if (mode.equals("^"))
+          return block.getLocation().add(0, 1, 0);
+        else
+          return null;
+      }
+    
+      // No suitable location found
       else
-        return block.getLocation();
+        return null;
     }
-    
-    // No suitable location found
-    return null;
+    catch (NumberFormatException ex)
+    {
+      throw new InvalidLocationException(String.format("The location string \"%s\" contains an invalid number format: %s", string, ex.getMessage()));
+    }
   }
   
-  // Return the block from a string
-  public static Block parseBlockAtLocation(Location loc, String string) throws InvalidLocationException
+  // Parse a location from a string and return its block
+  public static Block parseBlockAtLocation(Location loc, String string, int distance) throws InvalidLocationException
   {
-    var location = parseLocation(loc, string);
+    var location = parseLocation(loc, string, distance);
     if (location == null)
       return null;
     
@@ -96,21 +99,21 @@ public class LocationUtils
   
   
   // Get the nearest entity that matches the predicate at a location
-  public static Entity findNearestEntity(Location loc, Predicate<Entity> predicate)
+  public static Entity findNearestEntity(Location loc, Predicate<Entity> predicate, int distance)
   {
-    return Cuboid.of(loc, entitySearchRadius).findNearestEntityToCenter(predicate);
+    return Cuboid.of(loc, distance).findNearestEntityToCenter(predicate);
   }
   
   // Get the nearest entity of the specified class at a location
-  public static <T extends Entity> T findNearestEntity(Location loc, Class<T> cls)
+  public static <T extends Entity> T findNearestEntity(Location loc, Class<T> cls, int distance)
   {
-    return Cuboid.of(loc, entitySearchRadius).findNearestEntityToCenter(cls);
+    return Cuboid.of(loc, distance).findNearestEntityToCenter(cls);
   }
   
   // Get the nearest entity of the specified class and that matches the predicate at a location
-  public static <T extends Entity> T findNearestEntity(Location loc, Class<T> cls, Predicate<T> predicate)
+  public static <T extends Entity> T findNearestEntity(Location loc, Class<T> cls, Predicate<T> predicate, int distance)
   {
-    return Cuboid.of(loc, entitySearchRadius).findNearestEntityToCenter(cls, predicate);
+    return Cuboid.of(loc, distance).findNearestEntityToCenter(cls, predicate);
   }
   
   

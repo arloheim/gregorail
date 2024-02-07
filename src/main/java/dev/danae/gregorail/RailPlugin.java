@@ -41,6 +41,12 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
   private static RailPlugin instance;
   
   
+  // The distance in blocks to search for blocks while parsing a location
+  private int blockSearchRadius = 10;
+  
+  // The distance in blocks to search for entities while setting or querying codes
+  private int entitySearchRadius = 10;
+  
   // The options for the prompt
   private final CartPromptOptions cartPromptOptions = new CartPromptOptions();
   
@@ -55,6 +61,18 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
   public static RailPlugin getInstance()
   {
     return instance;
+  }
+  
+  // Return the distance in blocks to search for blocks while parsing a location
+  public static int getBlockSearchRadius()
+  {
+    return instance.blockSearchRadius;
+  }
+  
+  // Return the distance in blocks to search for entities while setting or querying codes
+  public static int getEntitySearchRadius()
+  {
+    return instance.entitySearchRadius;
   }
   
   
@@ -93,8 +111,8 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
     var generalConfig = this.getConfig().getConfigurationSection("general");
     if (generalConfig != null)
     {
-      LocationUtils.blockSearchRadius = generalConfig.getInt("block-search-radius", 10);      
-      LocationUtils.entitySearchRadius = generalConfig.getInt("entity-search-radius", 10);
+      this.blockSearchRadius = generalConfig.getInt("block-search-radius", 10);      
+      this.entitySearchRadius = generalConfig.getInt("entity-search-radius", 10);
     }
     
     var cartPromptConfig = this.getConfig().getConfigurationSection("cart-prompt");
@@ -102,6 +120,7 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
     {
       this.cartPromptOptions.setTitle(cartPromptConfig.getString("title", "Select a code"));
       this.cartPromptOptions.setItemMaterial(Material.matchMaterial(cartPromptConfig.getString("item-material", Material.MINECART.name())));
+      this.cartPromptOptions.setPlayerSearchRadius(cartPromptConfig.getInt("player-search-radius", 5));
    }
     
     var butcherConfig = this.getConfig().getConfigurationSection("butcher");

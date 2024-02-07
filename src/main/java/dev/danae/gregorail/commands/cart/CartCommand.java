@@ -28,18 +28,18 @@ public abstract class CartCommand extends CommandHandler
   
   
   // Find the minecart from the command
-  public RideableMinecart findMinecart(CommandContext context, int argumentIndex) throws CommandException, InvalidLocationException
+  public RideableMinecart findMinecart(CommandContext context, int argumentIndex, int radius) throws CommandException, InvalidLocationException
   {
     var senderLocation = context.assertSenderHasLocation();
     
     if (context.hasAtLeastArgumentsCount(argumentIndex + 1))
     {
       // Return the nearest minecart at the location in the argument
-      var cartLocation = LocationUtils.parseLocation(senderLocation, context.getJoinedArguments(argumentIndex));
+      var cartLocation = LocationUtils.parseLocation(senderLocation, context.getJoinedArguments(argumentIndex), radius);
       if (cartLocation == null)
         throw new CommandException("No location found");
       
-      return LocationUtils.findNearestEntity(cartLocation, RideableMinecart.class);
+      return LocationUtils.findNearestEntity(cartLocation, RideableMinecart.class, radius);
     }
     else if (context.getSender() instanceof Player player && player.getVehicle() instanceof RideableMinecart playerCart)
     {
@@ -49,7 +49,7 @@ public abstract class CartCommand extends CommandHandler
     else
     {
       // Return the nearest minecart at the sender location
-      return LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class);
+      return LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class, radius);
     }
   }
 }

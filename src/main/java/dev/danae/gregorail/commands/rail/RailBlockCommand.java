@@ -43,6 +43,10 @@ public class RailBlockCommand extends CommandHandler
       // Assert that the command sender has a location
       var senderLocation = context.assertSenderHasLocation();
       
+      // Parse the properties
+      var blockDistance = context.getPropertyAsUnsignedInt("block-distance", RailPlugin.getBlockSearchRadius());
+      var entityDistance = context.getPropertyAsUnsignedInt("distance", RailPlugin.getEntitySearchRadius());
+      
       // Parse the arguments
       if (!context.hasAtLeastArgumentsCount(this.executionType == CommandExecutionType.CONDITIONAL ? 3 : 2))
         throw new CommandUsageException();
@@ -53,14 +57,14 @@ public class RailBlockCommand extends CommandHandler
       
       var material = CommandUtils.parseMaterial(context.getArgument(argumentIndex++), true);
     
-      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(argumentIndex++));
+      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(argumentIndex++), blockDistance);
       if (block == null)
         throw new CommandException("No block found");
       
       var blockState = block.getState();
       
       // Check if the minecart matches the query
-      var cart = LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class);
+      var cart = LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class, entityDistance);
       if (query == null || (cart != null && MinecartUtils.matchCode(cart, query)))
       {
         // Set the material of the block
@@ -78,7 +82,7 @@ public class RailBlockCommand extends CommandHandler
         CommandMessages.sendBlockUnchangedMessage(context, blockState, material, cart);
       }
     }
-    catch (InvalidLocationException | InvalidQueryException ex)
+    catch (InvalidLocationException | InvalidQueryException | NumberFormatException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }
@@ -88,6 +92,9 @@ public class RailBlockCommand extends CommandHandler
   @Override
   public List<String> handleTabCompletion(CommandContext context)
   {
+    if (context.getLastArgument().startsWith("#"))
+      return CommandUtils.handlePropertyTabCompletion(context.getLastArgument(), "block-distance=", "distance=");
+    
     switch (this.executionType)
     {
       case ALWAYS:
