@@ -31,8 +31,7 @@ webhooks:
   cart-moved:
     type: [CART_MOVED]
     url: "https://www.example.com/webhook"
-    
-  # Definition of a webhook that is called when a player enters or exits cart
-  player-entered-cart:
+  # Definition of a webhook that is called when a player enters or exits a cart
+  player-entered-or-exited-cart:
     type: [PLAYER_ENTERED_CART, PLAYER_EXITED_CART]
     url: "https://www.example.com/webhook"
