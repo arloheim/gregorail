@@ -1,4 +1,4 @@
-package dev.danae.gregorail.listeners;
+package dev.danae.gregorail.butcher;
 
 import java.util.EnumSet;
 import org.bukkit.entity.EntityType;

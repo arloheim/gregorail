@@ -1,6 +1,8 @@
 package dev.danae.gregorail;
 
 import com.google.gson.JsonObject;
+import dev.danae.gregorail.butcher.ButcherListener;
+import dev.danae.gregorail.butcher.ButcherOptions;
 import dev.danae.gregorail.commands.CommandExecutionType;
 import dev.danae.gregorail.commands.admin.AdminCodeListCommand;
 import dev.danae.gregorail.commands.admin.AdminCodeRemoveCommand;
@@ -16,9 +18,6 @@ import dev.danae.gregorail.commands.locate.LocateBlockCommand;
 import dev.danae.gregorail.commands.locate.LocateCartCommand;
 import dev.danae.gregorail.commands.rail.RailBlockCommand;
 import dev.danae.gregorail.commands.rail.RailSwitchCommand;
-import dev.danae.gregorail.listeners.ButcherListener;
-import dev.danae.gregorail.listeners.ButcherOptions;
-import dev.danae.gregorail.listeners.GeneralListener;
 import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandGroupHandler;
 import dev.danae.gregorail.util.commands.CommandHandler;
@@ -179,7 +178,7 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
   // Load the listeners
   private void loadListeners()
   {
-    this.getServer().getPluginManager().registerEvents(new GeneralListener(), this);
+    this.getServer().getPluginManager().registerEvents(new RailListener(), this);
     this.getServer().getPluginManager().registerEvents(new ButcherListener(this.butcherOptions), this);
   }
   

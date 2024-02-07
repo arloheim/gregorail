@@ -1,4 +1,4 @@
-package dev.danae.gregorail.listeners;
+package dev.danae.gregorail.butcher;
 
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.location.Cuboid;

@@ -1,6 +1,5 @@
-package dev.danae.gregorail.listeners;
+package dev.danae.gregorail;
 
-import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.webhooks.WebhookType;
 import dev.danae.gregorail.util.webhooks.WebhookUtils;
@@ -14,7 +13,7 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 
 
-public final class GeneralListener implements Listener
+public final class RailListener implements Listener
 {
   // Event listener for when an entity enters a vehicle
   @EventHandler
