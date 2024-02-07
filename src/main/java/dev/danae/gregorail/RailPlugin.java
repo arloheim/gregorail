@@ -32,7 +32,6 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -93,22 +92,16 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
     var generalConfig = this.getConfig().getConfigurationSection("general");
     if (generalConfig != null)
     {
-      LocationUtils.blockSearchRadius = generalConfig.getInt("block-search-radius", 10);
-      this.getLogger().log(Level.INFO, String.format("general.block-search-radius = %d", LocationUtils.blockSearchRadius));
-      
+      LocationUtils.blockSearchRadius = generalConfig.getInt("block-search-radius", 10);      
       LocationUtils.entitySearchRadius = generalConfig.getInt("entity-search-radius", 10);
-      this.getLogger().log(Level.INFO, String.format("general.entity-search-radius = %d", LocationUtils.entitySearchRadius));
     }
     
     var cartPromptConfig = this.getConfig().getConfigurationSection("cart-prompt");
     if (cartPromptConfig != null)
     {
       CartPromptSetCommand.title = cartPromptConfig.getString("title", "Select a code");
-      this.getLogger().log(Level.INFO, String.format("cart-prompt.title = %s", CartPromptSetCommand.title));
-      
       CartPromptSetCommand.itemMaterial = Material.matchMaterial(cartPromptConfig.getString("item-material", Material.MINECART.name()));
-      this.getLogger().log(Level.INFO, String.format("cart-prompt.item-material = %s", CartPromptSetCommand.itemMaterial));
-    }
+   }
     
     var butcherConfig = this.getConfig().getConfigurationSection("butcher");
     if (butcherConfig != null)
@@ -116,22 +109,11 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
       try
       {
         this.butcherOptions.setEnabled(butcherConfig.getBoolean("enabled", true));
-        this.getLogger().log(Level.INFO, String.format("butcher.enabled = %s", this.butcherOptions.isEnabled() ? "true" : "false"));
-        
-        this.butcherOptions.setRadius(butcherConfig.getInt("radius", 5));
-        this.getLogger().log(Level.INFO, String.format("butcher.radius = %d", this.butcherOptions.getRadius()));
-        
+        this.butcherOptions.setRadius(butcherConfig.getInt("radius", 5)); 
         this.butcherOptions.setIgnoreEntitiesOfType(EnumUtils.parseEnumSet(butcherConfig.getStringList("ignore-entities-of-type"), EntityType.class));
-        this.getLogger().log(Level.INFO, String.format("butcher.ignore-entities-of-type = %s", this.butcherOptions.getIgnoreEntitiesOfType().stream().map(e -> e.toString()).collect(Collectors.joining(", ", "[", "]"))));
-        
         this.butcherOptions.setIgnoreNamedEntities(butcherConfig.getBoolean("ignore-named-entities", true));
-        this.getLogger().log(Level.INFO, String.format("butcher.ignore-named-entities = %s", this.butcherOptions.isIgnoreNamedEntities() ? "true" : "false"));
-        
         this.butcherOptions.setLightningBoltEffect(butcherConfig.getBoolean("lightning-bolt-effect", true));
-        this.getLogger().log(Level.INFO, String.format("butcher.lightning-bolt-effect = %s", this.butcherOptions.isLightningBoltEffect() ? "true" : "false"));
-        
         this.butcherOptions.setDisableItemDrops(butcherConfig.getBoolean("disable-item-drops", true));
-        this.getLogger().log(Level.INFO, String.format("butcher.disable-item-drops = %s", this.butcherOptions.isDisableItemDrops() ? "true" : "false"));
       }
       catch (IllegalArgumentException | NullPointerException ex)
       {
@@ -150,11 +132,7 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
           var webhookConfig = webhooksConfig.getConfigurationSection(webhookName);
         
           var webhookTypes = EnumUtils.parseEnumSet(webhookConfig.getStringList("type"), WebhookType.class);
-          this.getLogger().log(Level.INFO, String.format("webhooks.%s.type = %s", webhookName, webhookTypes.stream().map(e -> e.toString()).collect(Collectors.joining(", ", "[", "]"))));
-          
           var webhookUrl = new URL(webhookConfig.getString("url"));
-          this.getLogger().log(Level.INFO, String.format("webhooks.%s.url = %s", webhookName, webhookUrl.toString()));
-          
           this.webhooks.add(new Webhook(webhookName, webhookTypes, webhookUrl));
         }
         catch (IllegalArgumentException | NullPointerException | MalformedURLException ex)
