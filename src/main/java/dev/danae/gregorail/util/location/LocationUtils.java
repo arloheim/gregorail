@@ -28,7 +28,7 @@ public class LocationUtils
   
   
   // Parse a location from a string
-  public static Location parseLocation(Location loc, String string, int distance) throws InvalidLocationException
+  public static Location parseLocation(Location origin, String string, int distance) throws InvalidLocationException
   {
     try
     {
@@ -39,16 +39,16 @@ public class LocationUtils
     
       // Check for a current location
       if (m.group("cur") != null)
-        return loc;
+        return origin;
     
       // Check for a numeric location
       else if (m.group("xyz") != null)
       {
-        var x = m.group("rx") != null ? loc.getBlockX() + (m.group("dx") != null ? Integer.parseInt(m.group("dx")) : 0) : Integer.parseInt(m.group("x"));
-        var y = m.group("ry") != null ? loc.getBlockY() + (m.group("dy") != null ? Integer.parseInt(m.group("dy")) : 0) : Integer.parseInt(m.group("y"));
-        var z = m.group("rz") != null ? loc.getBlockZ() + (m.group("dz") != null ? Integer.parseInt(m.group("dz")) : 0) : Integer.parseInt(m.group("z"));
+        var x = m.group("rx") != null ? origin.getBlockX() + (m.group("dx") != null ? Integer.parseInt(m.group("dx")) : 0) : Integer.parseInt(m.group("x"));
+        var y = m.group("ry") != null ? origin.getBlockY() + (m.group("dy") != null ? Integer.parseInt(m.group("dy")) : 0) : Integer.parseInt(m.group("y"));
+        var z = m.group("rz") != null ? origin.getBlockZ() + (m.group("dz") != null ? Integer.parseInt(m.group("dz")) : 0) : Integer.parseInt(m.group("z"));
       
-        return new Location(loc.getWorld(), x, y, z);
+        return new Location(origin.getWorld(), x, y, z);
       }
     
       // Check for a block location
@@ -63,7 +63,7 @@ public class LocationUtils
           throw new InvalidLocationException(String.format("Material \"%s\" is not a block material", materialName.toLowerCase()));
       
         // Find the block
-        var block = Cuboid.of(loc, distance).findNearestBlockToCenter(material);
+        var block = Cuboid.of(origin, distance).findNearestBlockToCenter(material);
         if (block == null)
           return null;
       
@@ -88,9 +88,9 @@ public class LocationUtils
   }
   
   // Parse a location from a string and return its block
-  public static Block parseBlockAtLocation(Location loc, String string, int distance) throws InvalidLocationException
+  public static Block parseBlockAtLocation(Location origin, String string, int distance) throws InvalidLocationException
   {
-    var location = parseLocation(loc, string, distance);
+    var location = parseLocation(origin, string, distance);
     if (location == null)
       return null;
     

@@ -18,8 +18,8 @@ commands:
     usage: "Usage: /<command> clear [location] | clearif <query> [location] | promptset <codes> [location] | set <code> [location] | setif <query> <code> [location] | speed <speed> [location] | speedif <code> <speed> [location]"
     
   grail:
-    description: Changes the state of rails and blocks by querying properties of minecarts.
-    usage: "Usage: /<command> block <material> <location> | blockif <query> <material> <location> | sound <sound> <location> | soundif <query> <sound> <location> | switch <shape> <location> | switchif <query> <shape> <location>"
+    description: Changes the state of rails and blocks based on properties of minecarts.
+    usage: "Usage: /<command> block <material> <location> | blockif <query> <material> <location> | sound <sound> | soundif <query> <sound> | switch <shape> <location> | switchif <query> <shape> <location>"
     
   glocate:
     description: Locate blocks or carts for debug purposes.
