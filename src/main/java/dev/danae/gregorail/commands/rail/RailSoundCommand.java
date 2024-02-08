@@ -3,7 +3,6 @@ package dev.danae.gregorail.commands.rail;
 import dev.danae.gregorail.RailPlugin;
 import dev.danae.gregorail.commands.CommandExecutionType;
 import dev.danae.gregorail.commands.CommandUtils;
-import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
@@ -14,7 +13,6 @@ import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.minecart.QueryUtils;
 import java.util.List;
 import org.bukkit.NamespacedKey;
-import org.bukkit.SoundCategory;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
