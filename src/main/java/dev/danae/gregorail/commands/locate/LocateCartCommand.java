@@ -49,7 +49,7 @@ public class LocateCartCommand extends CommandHandler
       // Send information about the cart
       context.sendMessage(LocationUtils.formatEntity(cart));
     }
-    catch (InvalidLocationException | NumberFormatException ex)
+    catch (InvalidLocationException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

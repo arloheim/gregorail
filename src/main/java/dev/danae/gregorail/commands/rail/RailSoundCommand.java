@@ -13,6 +13,7 @@ import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.minecart.QueryUtils;
 import java.util.List;
+import org.bukkit.NamespacedKey;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.minecart.RideableMinecart;
 
@@ -43,7 +44,6 @@ public class RailSoundCommand extends CommandHandler
       
       // Parse the properties
       var entityDistance = context.getPropertyAsUnsignedInt("distance", RailPlugin.getEntitySearchRadius());
-      var category = context.hasProperty("category") ? EnumUtils.parseEnum(context.getProperty("category"), SoundCategory.class) : SoundCategory.MASTER;
       var volume = CommandUtils.clamp(context.getPropertyAsFloat("volume", 1.0f), 0.0f, 1.0f);
       var pitch = CommandUtils.clamp(context.getPropertyAsFloat("pitch", 1.0f), 0.0f, 2.0f);
       
@@ -56,16 +56,18 @@ public class RailSoundCommand extends CommandHandler
       var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryUtils.parseQuery(context.getArgument(argumentIndex++)) : null;
       
       var sound = context.getArgument(argumentIndex++);
+      if (NamespacedKey.fromString(sound) == null)
+        throw new CommandException(String.format("\"%s\" is an invalid sound resource", sound));
       
       // Check if the minecart matches the query
       var cart = LocationUtils.findNearestEntity(senderLocation, RideableMinecart.class, entityDistance);
       if (query == null || (cart != null && MinecartUtils.matchCode(cart, query)))
       {
         // Play the sound
-        senderLocation.getWorld().playSound(cart != null ? cart.getLocation() : senderLocation, sound, category, volume, pitch);
+        senderLocation.getWorld().playSound(cart != null ? cart.getLocation() : senderLocation, sound, volume, pitch);
       }
     }
-    catch (InvalidQueryException | NumberFormatException ex)
+    catch (InvalidQueryException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }
@@ -76,7 +78,7 @@ public class RailSoundCommand extends CommandHandler
   public List<String> handleTabCompletion(CommandContext context)
   {
     if (context.getLastArgument().startsWith("#"))
-      return CommandUtils.handlePropertyTabCompletion(context.getLastArgument(), "distance=", "category=", "volume=", "pitch=");
+      return CommandUtils.handlePropertyTabCompletion(context.getLastArgument(), "distance=", "volume=", "pitch=");
     
     switch (this.executionType)
     {

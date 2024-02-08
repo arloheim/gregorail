@@ -82,7 +82,7 @@ public class RailBlockCommand extends CommandHandler
         CommandMessages.sendBlockUnchangedMessage(context, blockState, material, cart);
       }
     }
-    catch (InvalidLocationException | InvalidQueryException | NumberFormatException ex)
+    catch (InvalidLocationException | InvalidQueryException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

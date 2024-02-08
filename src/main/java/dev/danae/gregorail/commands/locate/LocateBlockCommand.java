@@ -43,7 +43,7 @@ public class LocateBlockCommand extends CommandHandler
       // Send information about the block
       context.sendMessage(LocationUtils.formatBlock(block));
     }
-    catch (InvalidLocationException | NumberFormatException ex)
+    catch (InvalidLocationException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

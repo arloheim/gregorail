@@ -165,31 +165,59 @@ public class CommandContext
   }
   
   // Return a single integer property with a default value if it doesn't exist
-  public int getPropertyAsInt(String key, int defaultValue)
+  public int getPropertyAsInt(String key, int defaultValue) throws CommandException
   {
-    var value = this.getProperty(key, null);
-    return value != null ? Integer.parseInt(value) : defaultValue;
+    try
+    {
+      var value = this.getProperty(key, null);
+      return value != null ? Integer.parseInt(value) : defaultValue;
+    }
+    catch (NumberFormatException ex)
+    {
+      throw new CommandException(String.format("Invalid number format for property %s", key), ex);
+    }
   }
   
   // Return a single unsigned integer property with a default value if it doesn't exist
-  public int getPropertyAsUnsignedInt(String key, int defaultValue)
+  public int getPropertyAsUnsignedInt(String key, int defaultValue) throws CommandException
   {
-    var value = this.getProperty(key, null);
-    return value != null ? Integer.parseUnsignedInt(value) : defaultValue;
+    try
+    {
+      var value = this.getProperty(key, null);
+      return value != null ? Integer.parseUnsignedInt(value) : defaultValue;
+    }
+    catch (NumberFormatException ex)
+    {
+      throw new CommandException(String.format("Invalid number format for property %s", key), ex);
+    }
   }
   
   // Return a single float property with a default value if it doesn't exist
-  public float getPropertyAsFloat(String key, float defaultValue)
+  public float getPropertyAsFloat(String key, float defaultValue) throws CommandException
   {
-    var value = this.getProperty(key, null);
-    return value != null ? Float.parseFloat(key) : defaultValue;
+    try
+    {
+      var value = this.getProperty(key, null);
+      return value != null ? Float.parseFloat(key) : defaultValue;
+    }
+    catch (NumberFormatException ex)
+    {
+      throw new CommandException(String.format("Invalid number format for property %s", key), ex);
+    }
   }
   
   // Return a single double property with a default value if it doesn't exist
-  public double getPropertyAsDouble(String key, double defaultValue)
+  public double getPropertyAsDouble(String key, double defaultValue) throws CommandException
   {
-    var value = this.getProperty(key, null);
-    return value != null ? Double.parseDouble(key) : defaultValue;
+    try
+    {
+      var value = this.getProperty(key, null);
+      return value != null ? Double.parseDouble(key) : defaultValue;
+    }
+    catch (NumberFormatException ex)
+    {
+      throw new CommandException(String.format("Invalid number format for property %s", key), ex);
+    }
   }
   
   
