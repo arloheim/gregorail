@@ -1,4 +1,4 @@
-package dev.danae.gregorail.util.webhooks;
+package dev.danae.gregorail.webhooks;
 
 
 public enum WebhookType

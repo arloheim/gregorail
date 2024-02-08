@@ -13,8 +13,8 @@ import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import dev.danae.gregorail.util.minecart.QueryUtils;
-import dev.danae.gregorail.util.webhooks.WebhookType;
-import dev.danae.gregorail.util.webhooks.WebhookUtils;
+import dev.danae.gregorail.webhooks.WebhookType;
+import dev.danae.gregorail.webhooks.WebhookUtils;
 import java.util.List;
 import org.bukkit.entity.minecart.RideableMinecart;
 

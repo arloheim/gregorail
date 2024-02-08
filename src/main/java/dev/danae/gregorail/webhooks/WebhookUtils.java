@@ -1,4 +1,4 @@
-package dev.danae.gregorail.util.webhooks;
+package dev.danae.gregorail.webhooks;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;

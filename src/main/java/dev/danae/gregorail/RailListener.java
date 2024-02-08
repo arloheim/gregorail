@@ -1,8 +1,8 @@
 package dev.danae.gregorail;
 
 import dev.danae.gregorail.util.minecart.MinecartUtils;
-import dev.danae.gregorail.util.webhooks.WebhookType;
-import dev.danae.gregorail.util.webhooks.WebhookUtils;
+import dev.danae.gregorail.webhooks.WebhookType;
+import dev.danae.gregorail.webhooks.WebhookUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
 import org.bukkit.event.EventHandler;
