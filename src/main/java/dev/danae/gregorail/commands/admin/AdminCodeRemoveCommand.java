@@ -6,7 +6,7 @@ import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.minecart.CodeUtils;
-import dev.danae.gregorail.util.minecart.InvalidCodeException;
+import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -43,7 +43,7 @@ public class AdminCodeRemoveCommand extends CommandHandler
         .append(" has been removed", ComponentBuilder.FormatRetention.NONE)
         .create());
     }
-    catch (InvalidCodeException ex)
+    catch (ParserException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }
