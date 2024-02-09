@@ -1,6 +1,5 @@
 package dev.danae.gregorail.util.commands;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +77,7 @@ public class CommandGroupHandler extends CommandHandler
       throw new CommandException("You must provide a valid subcommand");
     
     // Handle the subcommand
-    handler.handle(context.withArguments(Arrays.copyOfRange(context.getArguments(), 1, context.getArguments().length)));
+    handler.handle(context.sliceArguments(1));
   }
   
   // Handle tab completion of a command
@@ -106,6 +105,6 @@ public class CommandGroupHandler extends CommandHandler
     if (handler == null)
       return null;
     
-    return handler.handleTabCompletion(context.withArguments(Arrays.copyOfRange(context.getArguments(), 1, context.getArguments().length)));
+    return handler.handleTabCompletion(context.sliceArguments(1));
   }
 }

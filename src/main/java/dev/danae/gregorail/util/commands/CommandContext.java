@@ -2,11 +2,7 @@ package dev.danae.gregorail.util.commands;
 
 import dev.danae.gregorail.util.location.LocationUtils;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.command.BlockCommandSender;
@@ -18,30 +14,22 @@ import org.bukkit.entity.Player;
 
 
 public class CommandContext
-{
-  // Patterns for parsing properties
-  private static final Pattern propertyPattern = Pattern.compile("#(?<key>[a-z][a-z0-9-]*)(?:=(?<value>.+))?", Pattern.CASE_INSENSITIVE);
-  
-  
+{  
   // The command that is being executed
   private final Command command;
   
   // The arguments of the command that is being executed
   private final String[] arguments;
   
-  // The properties of the command that is being executed
-  private final Map<String, String> properties;
-  
   // The sender of the command that is being executed
   private final CommandSender sender;
   
   
   // Constructor
-  private CommandContext(Command command, String[] arguments, Map<String, String> properties, CommandSender sender)
+  public CommandContext(Command command, String[] arguments, CommandSender sender)
   {
     this.command = command;
     this.arguments = arguments;
-    this.properties = properties;
     this.sender = sender;
   }
   
@@ -58,43 +46,17 @@ public class CommandContext
     return this.arguments;
   }
   
-  // Return the properties of the command that is being executed
-  public Map<String, String> getProperties()
+  // Return an iterator over the arguments of the context
+  public CommandArgumentsIterator getArgumentsIterator()
   {
-    return this.properties;
+    return new CommandArgumentsIterator(this.arguments);
   }
   
-  // Return the sender of the command that is being executed
-  public CommandSender getSender()
+  // Return the argument of the context with the specified index
+  public String getArgument(int index)
   {
-    return this.sender;
+    return this.arguments[index];
   }
-  
-  
-  // Return a context with a new command
-  public CommandContext withCommand(Command command)
-  {
-    return new CommandContext(command, this.arguments, this.properties, this.sender);
-  }
-  
-  // Return a context with new arguments
-  public CommandContext withArguments(String[] arguments)
-  {
-    return new CommandContext(this.command, arguments, this.properties, this.sender);
-  }
-  
-  // Return a context with new properties
-  public CommandContext withProperties(Map<String, String> properties)
-  {
-    return new CommandContext(this.command, arguments, properties, this.sender);
-  }
-  
-  // Return a context with a new sender
-  public CommandContext withSender(CommandSender sender)
-  {
-    return new CommandContext(this.command, this.arguments, this.properties, sender);
-  }
-  
   
   // Return if the context has exactly the specified number of arguments
   public boolean hasArgumentsCount(int length)
@@ -114,110 +76,10 @@ public class CommandContext
     return this.arguments.length <= length;
   }
   
-  // Return a single argument
-  public String getArgument(int index)
+  // Return the sender of the command that is being executed
+  public CommandSender getSender()
   {
-    return this.arguments[index];
-  }
-  
-  // Return the last argument
-  public String getLastArgument()
-  {
-    return this.arguments[this.arguments.length - 1];
-  }
-  
-  // Return multiple arguments joined by a single space starting at the specified index
-  public String getJoinedArguments(int index)
-  {
-    return String.join(" ", Arrays.copyOfRange(this.arguments, index, this.arguments.length));
-  }
-  
-  // Return all arguments joined by a single space
-  public String getJoinedArguments()
-  {
-    return String.join(" ", this.arguments);
-  }
-  
-  
-  // Return if the context contains a property with the specified key
-  public boolean hasProperty(String key)
-  {
-    return this.properties.containsKey(key);
-  }
-  
-  // Return a single property
-  public String getProperty(String key)
-  {
-    return this.properties.get(key);
-  }
-  
-  // Return a single property with a default value if it doesn't exist
-  public String getProperty(String key, String defaultValue)
-  {
-    return this.properties.getOrDefault(key, defaultValue);
-  }
-  
-  // Return a single boolean property with a default value if it doesn't exist or can't be parsed
-  public boolean getPropertyAsBoolean(String key, boolean defaultValue)
-  {
-    var value = this.getProperty(key, null);
-    return value != null ? Boolean.parseBoolean(key) : defaultValue;
-  }
-  
-  // Return a single integer property with a default value if it doesn't exist
-  public int getPropertyAsInt(String key, int defaultValue) throws CommandException
-  {
-    try
-    {
-      var value = this.getProperty(key, null);
-      return value != null ? Integer.parseInt(value) : defaultValue;
-    }
-    catch (NumberFormatException ex)
-    {
-      throw new CommandException(String.format("Invalid number format for property %s", key), ex);
-    }
-  }
-  
-  // Return a single unsigned integer property with a default value if it doesn't exist
-  public int getPropertyAsUnsignedInt(String key, int defaultValue) throws CommandException
-  {
-    try
-    {
-      var value = this.getProperty(key, null);
-      return value != null ? Integer.parseUnsignedInt(value) : defaultValue;
-    }
-    catch (NumberFormatException ex)
-    {
-      throw new CommandException(String.format("Invalid number format for property %s", key), ex);
-    }
-  }
-  
-  // Return a single float property with a default value if it doesn't exist
-  public float getPropertyAsFloat(String key, float defaultValue) throws CommandException
-  {
-    try
-    {
-      var value = this.getProperty(key, null);
-      return value != null ? Float.parseFloat(key) : defaultValue;
-    }
-    catch (NumberFormatException ex)
-    {
-      throw new CommandException(String.format("Invalid number format for property %s", key), ex);
-    }
-  }
-  
-  // Return a single double property with a default value if it doesn't exist
-  public double getPropertyAsDouble(String key, double defaultValue) throws CommandException
-  {
-    try
-    {
-      var value = this.getProperty(key, null);
-      return value != null ? Double.parseDouble(key) : defaultValue;
-    }
-    catch (NumberFormatException ex)
-    {
-      throw new CommandException(String.format("Invalid number format for property %s", key), ex);
-    }
+    return this.sender;
   }
   
   
@@ -300,21 +162,15 @@ public class CommandContext
   }
   
   
-  // Parse a command context
-  public static CommandContext parse(Command command, String[] rawArguments, CommandSender sender)
+  // Slice the arguments of the context with the specified range
+  public CommandContext sliceArguments(int from, int to)
   {
-    var arguments = new LinkedList<String>();
-    var properties = new HashMap<String, String>();
-    
-    for (var rawArgument : rawArguments)
-    {
-      var matcher = propertyPattern.matcher(rawArgument);
-      if (matcher.matches())
-        properties.put(matcher.group("key"), matcher.group("value"));
-      else
-        arguments.add(rawArgument);
-    }
-    
-    return new CommandContext(command, arguments.toArray(new String[0]), properties, sender);
+    return new CommandContext(this.command, Arrays.copyOfRange(this.arguments, from, to), this.sender);
+  }
+  
+  // Slice the arguments of the context with the specified start
+  public CommandContext sliceArguments(int from)
+  {
+    return this.sliceArguments(from, this.arguments.length);
   }
 }
