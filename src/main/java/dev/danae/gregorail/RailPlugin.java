@@ -19,9 +19,10 @@ import dev.danae.gregorail.commands.locate.LocateCartCommand;
 import dev.danae.gregorail.commands.rail.RailBlockCommand;
 import dev.danae.gregorail.commands.rail.RailSoundCommand;
 import dev.danae.gregorail.commands.rail.RailSwitchCommand;
-import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandGroupHandler;
 import dev.danae.gregorail.util.commands.CommandHandler;
+import dev.danae.gregorail.util.parser.Parser;
+import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.webhooks.Webhook;
 import dev.danae.gregorail.webhooks.WebhookExecutor;
 import dev.danae.gregorail.webhooks.WebhookType;
@@ -130,14 +131,14 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
       {
         this.butcherOptions.setEnabled(butcherConfig.getBoolean("enabled", true));
         this.butcherOptions.setRadius(butcherConfig.getInt("radius", 5)); 
-        this.butcherOptions.setIgnoreEntitiesOfType(EnumUtils.parseEnumSet(butcherConfig.getStringList("ignore-entities-of-type"), EntityType.class));
+        this.butcherOptions.setIgnoreEntitiesOfType(Parser.parseEnumSet(butcherConfig.getStringList("ignore-entities-of-type"), EntityType.class));
         this.butcherOptions.setIgnoreNamedEntities(butcherConfig.getBoolean("ignore-named-entities", true));
         this.butcherOptions.setLightningBoltEffect(butcherConfig.getBoolean("lightning-bolt-effect", true));
         this.butcherOptions.setDisableItemDrops(butcherConfig.getBoolean("disable-item-drops", true));
       }
-      catch (IllegalArgumentException | NullPointerException ex)
+      catch (ParserException ex)
       {
-        this.getLogger().log(Level.WARNING, "Could not load the configuration for the butcher listener, so it will remain disabled", ex);
+        this.getLogger().log(Level.WARNING, "Could not load the configuration for the butcher, so it will remain disabled", ex);
         this.butcherOptions.setEnabled(false);
       }
     }
@@ -151,13 +152,13 @@ public final class RailPlugin extends JavaPlugin implements WebhookExecutor
         {
           var webhookConfig = webhooksConfig.getConfigurationSection(webhookName);
         
-          var webhookTypes = EnumUtils.parseEnumSet(webhookConfig.getStringList("type"), WebhookType.class);
+          var webhookTypes = Parser.parseEnumSet(webhookConfig.getStringList("type"), WebhookType.class);
           var webhookUrl = new URL(webhookConfig.getString("url"));
           this.webhooks.add(new Webhook(webhookName, webhookTypes, webhookUrl));
         }
-        catch (IllegalArgumentException | NullPointerException | MalformedURLException ex)
+        catch (ParserException | MalformedURLException ex)
         {
-          this.getLogger().log(Level.WARNING, String.format("Could not load the configuration for webhook %s, so it will remain disabled", webhookName), ex);
+          this.getLogger().log(Level.WARNING, String.format("Could not load the configuration for the webhook with name %s, so it will remain disabled", webhookName), ex);
         }
       }
     }

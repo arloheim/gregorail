@@ -1,8 +1,6 @@
 package dev.danae.gregorail.commands;
 
-import dev.danae.gregorail.util.EnumUtils;
 import dev.danae.gregorail.util.commands.CommandContext;
-import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.minecart.CodeUtils;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
 import java.util.ArrayList;
@@ -37,49 +35,6 @@ public class CommandUtils
   public static double clamp(double value, double min, double max) 
   {
     return Math.max(min, Math.min(max, value));
-  }
-  
-  
-  // Parse a block material from a string
-  public static Material parseMaterial(String string, boolean requireBlock) throws CommandException
-  {
-    var material = Material.matchMaterial(string);
-    if (material == null)
-      throw new CommandException(String.format("Material \"%s\" is an invalid material", string.toLowerCase()));
-    if (requireBlock && !material.isBlock())
-      throw new CommandException(String.format("Material \"%s\" is not a block material", string.toLowerCase()));
-      
-    return material;
-  }
-  
-  // Parse a rail shape from a string
-  public static Rail.Shape parseShape(String string) throws CommandException
-  {
-    try
-    {
-      return EnumUtils.parseEnum(string, Rail.Shape.class);
-    }
-    catch (IllegalArgumentException | NullPointerException ex)
-    {
-      throw new CommandException(String.format("Shape \"%s\" is an invalid shape", string.toLowerCase()), ex);
-    }
-  }
-  
-  // Parse a speed multiplier from a string
-  public static double parseSpeedMultiplier(String string) throws CommandException
-  {
-    try
-    {
-      var speedMultiplier = Double.parseDouble(string);
-      if (speedMultiplier < 0 || speedMultiplier > 4)
-        throw new CommandException("Speed multiplier must be between 0 and 4");
-      
-      return speedMultiplier;
-    }
-    catch (NumberFormatException ex)
-    {
-      throw new CommandException(String.format("Speed multiplier \"%s\" is an invalid speed multiplier", string), ex);
-    }
   }
   
   
@@ -240,7 +195,7 @@ public class CommandUtils
   public static BaseComponent[] formatSpeedMultiplier(double speedMultiplier)
   {
     return new ComponentBuilder()
-      .append(String.format(Locale.ENGLISH, "%.2f", speedMultiplier))
+      .append(String.format(Locale.ROOT, "%.2f", speedMultiplier))
         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format(Locale.ENGLISH, "%.2f m/s, %.2f km/h", speedMultiplier * MinecartUtils.defaultSpeed * 20, speedMultiplier * MinecartUtils.defaultSpeed * 20 * 3.6))))
       .create();
   }

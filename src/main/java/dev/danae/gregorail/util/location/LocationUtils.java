@@ -9,7 +9,6 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
@@ -17,87 +16,6 @@ import org.bukkit.entity.Entity;
 
 public class LocationUtils
 {  
-  // Pattern for parsing locations
-  private static final Pattern pattern = Pattern.compile(
-    // Current location: "~"
-    "(?<cur>~)|" +
-    // Numeric location: "x y z" or "~x ~y ~z
-    "(?<xyz>(?:(?<x>0|-?[1-9][0-9]*)|(?<rx>~(?<dx>-?[1-9][0-9]*)?))\\s+(?:(?<y>0|-?[1-9][0-9]*)|(?<ry>~(?<dy>-?[1-9][0-9]*)?))\\s+(?:(?<z>0|-?[1-9][0-9]*)|(?<rz>~(?<dz>-?[1-9][0-9]*)?)))|" + 
-    // Block location: "@block" or "^block"
-    "(?<block>(?<mode>[@^])(?<name>[a-z_][a-z0-9_]*))");
-  
-  
-  // Parse a location from a string
-  public static Location parseLocation(Location origin, String string, int distance) throws InvalidLocationException
-  {
-    try
-    {
-      // Match the string against the pattern
-      var m = pattern.matcher(string);
-      if (!m.matches())
-        throw new InvalidLocationException(String.format("The location string \"%s\" contains an invalid format", string));
-    
-      // Check for a current location
-      if (m.group("cur") != null)
-        return origin;
-    
-      // Check for a numeric location
-      else if (m.group("xyz") != null)
-      {
-        var x = m.group("rx") != null ? origin.getBlockX() + (m.group("dx") != null ? Integer.parseInt(m.group("dx")) : 0) : Integer.parseInt(m.group("x"));
-        var y = m.group("ry") != null ? origin.getBlockY() + (m.group("dy") != null ? Integer.parseInt(m.group("dy")) : 0) : Integer.parseInt(m.group("y"));
-        var z = m.group("rz") != null ? origin.getBlockZ() + (m.group("dz") != null ? Integer.parseInt(m.group("dz")) : 0) : Integer.parseInt(m.group("z"));
-      
-        return new Location(origin.getWorld(), x, y, z);
-      }
-    
-      // Check for a block location
-      else if (m.group("block") != null)
-      {      
-        // Parse the block name
-        var materialName = m.group("name");
-        var material = Material.matchMaterial(materialName);
-        if (material == null)
-          throw new InvalidLocationException(String.format("Material \"%s\" is an invalid material", materialName.toLowerCase()));
-        if (!material.isBlock())
-          throw new InvalidLocationException(String.format("Material \"%s\" is not a block material", materialName.toLowerCase()));
-      
-        // Find the block
-        var block = Cuboid.of(origin, distance).findNearestBlockToCenter(material);
-        if (block == null)
-          return null;
-      
-        // Parse the block mode and return the appropriate position
-        var mode = m.group("mode");
-        if (mode.equals("@"))
-          return block.getLocation();
-        else if (mode.equals("^"))
-          return block.getLocation().add(0, 1, 0);
-        else
-          return null;
-      }
-    
-      // No suitable location found
-      else
-        return null;
-    }
-    catch (NumberFormatException ex)
-    {
-      throw new InvalidLocationException(String.format("The location string \"%s\" contains an invalid number format: %s", string, ex.getMessage()));
-    }
-  }
-  
-  // Parse a location from a string and return its block
-  public static Block parseBlockAtLocation(Location origin, String string, int distance) throws InvalidLocationException
-  {
-    var location = parseLocation(origin, string, distance);
-    if (location == null)
-      return null;
-    
-    return location.getBlock();
-  }
-  
-  
   // Get the nearest entity that matches the predicate at a location
   public static Entity findNearestEntity(Location loc, Predicate<Entity> predicate, int distance)
   {

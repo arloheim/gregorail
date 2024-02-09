@@ -6,8 +6,9 @@ import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.InvalidLocationException;
+import dev.danae.gregorail.util.location.LocationParser;
 import dev.danae.gregorail.util.location.LocationUtils;
+import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
 
 
@@ -36,14 +37,14 @@ public class LocateBlockCommand extends CommandHandler
       if (!context.hasAtLeastArgumentsCount(1))
         throw new CommandUsageException();
       
-      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(), blockDistance);
+      var block = LocationParser.parseBlockAtLocation(context.getJoinedArguments(), senderLocation, blockDistance);
       if (block == null)
         throw new CommandException("No location found");
       
       // Send information about the block
       context.sendMessage(LocationUtils.formatBlock(block));
     }
-    catch (InvalidLocationException ex)
+    catch (ParserException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

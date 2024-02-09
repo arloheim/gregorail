@@ -8,11 +8,12 @@ import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.InvalidLocationException;
+import dev.danae.gregorail.util.location.LocationParser;
 import dev.danae.gregorail.util.location.LocationUtils;
-import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
-import dev.danae.gregorail.util.minecart.QueryUtils;
+import dev.danae.gregorail.util.minecart.QueryParser;
+import dev.danae.gregorail.util.parser.Parser;
+import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.webhooks.WebhookType;
 import dev.danae.gregorail.webhooks.WebhookUtils;
 import java.util.EnumSet;
@@ -57,11 +58,11 @@ public class RailSwitchCommand extends CommandHandler
       
       var argumentIndex = 0;
       
-      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryUtils.parseQuery(context.getArgument(argumentIndex++)) : null;
+      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryParser.parseQuery(context.getArgument(argumentIndex++)) : null;
       
-      var shape = CommandUtils.parseShape(context.getArgument(argumentIndex++));
+      var shape = Parser.parseEnum(context.getArgument(argumentIndex++), Rail.Shape.class);
     
-      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(argumentIndex++), blockDistance);
+      var block = LocationParser.parseBlockAtLocation(context.getJoinedArguments(argumentIndex++), senderLocation, blockDistance);
       if (block == null)
         throw new CommandException("No block found");
       if (!EnumSet.of(Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL).contains(block.getType()))
@@ -93,7 +94,7 @@ public class RailSwitchCommand extends CommandHandler
         CommandMessages.sendSwitchUnchangedMessage(context, block, shape, cart);
       }
     }
-    catch (InvalidLocationException | InvalidQueryException | NumberFormatException ex)
+    catch (ParserException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

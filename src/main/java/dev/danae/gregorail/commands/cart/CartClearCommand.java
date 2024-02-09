@@ -7,10 +7,10 @@ import dev.danae.gregorail.commands.CommandUtils;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.InvalidLocationException;
 import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
-import dev.danae.gregorail.util.minecart.QueryUtils;
+import dev.danae.gregorail.util.minecart.QueryParser;
+import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.webhooks.WebhookType;
 import dev.danae.gregorail.webhooks.WebhookUtils;
 import java.util.List;
@@ -49,7 +49,7 @@ public class CartClearCommand extends CartCommand
       
       var argumentIndex = 0;
       
-      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryUtils.parseQuery(context.getArgument(argumentIndex++)) : null;
+      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryParser.parseQuery(context.getArgument(argumentIndex++)) : null;
       
       var cart = this.findMinecart(context, argumentIndex++, entityDistance);
       if (cart == null)
@@ -73,7 +73,7 @@ public class CartClearCommand extends CartCommand
         CommandMessages.sendCartCodeUnchangedMessage(context, cart);
       }
     }
-    catch (InvalidLocationException | InvalidQueryException ex)
+    catch (ParserException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

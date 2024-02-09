@@ -6,8 +6,9 @@ import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.InvalidLocationException;
+import dev.danae.gregorail.util.location.LocationParser;
 import dev.danae.gregorail.util.location.LocationUtils;
+import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
 import org.bukkit.entity.minecart.RideableMinecart;
 
@@ -38,7 +39,7 @@ public class LocateCartCommand extends CommandHandler
       if (!context.hasAtLeastArgumentsCount(1))
         throw new CommandUsageException();
       
-      var cartLocation = LocationUtils.parseLocation(senderLocation, context.getJoinedArguments(), blockDistance);
+      var cartLocation = LocationParser.parseLocation(context.getJoinedArguments(), senderLocation, blockDistance);
       if (cartLocation == null)
         throw new CommandException("No location found");
       
@@ -49,7 +50,7 @@ public class LocateCartCommand extends CommandHandler
       // Send information about the cart
       context.sendMessage(LocationUtils.formatEntity(cart));
     }
-    catch (InvalidLocationException ex)
+    catch (ParserException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

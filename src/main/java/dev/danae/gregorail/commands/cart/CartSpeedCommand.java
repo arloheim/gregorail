@@ -7,13 +7,14 @@ import dev.danae.gregorail.commands.CommandUtils;
 import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.InvalidLocationException;
-import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
-import dev.danae.gregorail.util.minecart.QueryUtils;
+import dev.danae.gregorail.util.minecart.QueryParser;
+import dev.danae.gregorail.util.parser.Parser;
+import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.webhooks.WebhookType;
 import dev.danae.gregorail.webhooks.WebhookUtils;
 import java.util.List;
+import java.util.Locale;
 
 
 public class CartSpeedCommand extends CartCommand
@@ -49,9 +50,11 @@ public class CartSpeedCommand extends CartCommand
       
       var argumentIndex = 0;
       
-      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryUtils.parseQuery(context.getArgument(argumentIndex++)) : null;
+      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryParser.parseQuery(context.getArgument(argumentIndex++)) : null;
      
-      var speedMultiplier = CommandUtils.parseSpeedMultiplier(context.getArgument(argumentIndex++));
+      var speedMultiplier = Parser.parseDouble(context.getArgument(argumentIndex++));
+      if (speedMultiplier < 0.0 || speedMultiplier > 4.0)
+        throw new CommandException(String.format(Locale.ROOT, "Speed multiplier %f is out of range, speed multipliers must be between 0.0 and 4.0", speedMultiplier));
       
       var cart = this.findMinecart(context, argumentIndex++, entityDistance);
       if (cart == null)
@@ -76,7 +79,7 @@ public class CartSpeedCommand extends CartCommand
         CommandMessages.sendCartSpeedUnchangedMessage(context, cart);
       }
     }
-    catch (InvalidLocationException | InvalidQueryException ex)
+    catch (ParserException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

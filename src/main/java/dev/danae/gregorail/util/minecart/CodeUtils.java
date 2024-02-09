@@ -1,6 +1,7 @@
 package dev.danae.gregorail.util.minecart;
 
 import dev.danae.gregorail.RailPlugin;
+import dev.danae.gregorail.util.parser.ParserException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,15 +28,15 @@ public class CodeUtils
   }
   
   // Assert that a code is valid
-  public static void assertIsValidCode(String id) throws InvalidCodeException
+  public static void assertIsValidCode(String id) throws ParserException
   {
     if (!isValidCode(id))
-      throw new InvalidCodeException(String.format("Code \"%s\" is an invalid minecart code; codes may only contain alphanumeric characters and underscores", id));
+      throw new ParserException(String.format("Code \"%s\" is an invalid minecart code; codes may only contain alphanumeric characters and underscores", id));
   }
   
   
   // Create a code from an identifier
-  public static Code createCode(String id) throws InvalidCodeException
+  public static Code createCode(String id) throws ParserException
   {
     assertIsValidCode(id);
     
@@ -43,7 +44,7 @@ public class CodeUtils
   }
   
   // Create a list of codes from a string containing identfiers separated by pipes
-  public static List<Code> createCodes(String string) throws InvalidCodeException
+  public static List<Code> createCodes(String string) throws ParserException
   {
     var codeList = new ArrayList<Code>();
     

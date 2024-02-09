@@ -8,11 +8,13 @@ import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.location.InvalidLocationException;
+import dev.danae.gregorail.util.location.LocationParser;
 import dev.danae.gregorail.util.location.LocationUtils;
 import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
-import dev.danae.gregorail.util.minecart.QueryUtils;
+import dev.danae.gregorail.util.minecart.QueryParser;
+import dev.danae.gregorail.util.parser.Parser;
+import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.webhooks.WebhookType;
 import dev.danae.gregorail.webhooks.WebhookUtils;
 import java.util.List;
@@ -53,11 +55,11 @@ public class RailBlockCommand extends CommandHandler
       
       var argumentIndex = 0;
       
-      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryUtils.parseQuery(context.getArgument(argumentIndex++)) : null;
+      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryParser.parseQuery(context.getArgument(argumentIndex++)) : null;
       
-      var material = CommandUtils.parseMaterial(context.getArgument(argumentIndex++), true);
+      var material = Parser.parseMaterial(context.getArgument(argumentIndex++), true);
     
-      var block = LocationUtils.parseBlockAtLocation(senderLocation, context.getJoinedArguments(argumentIndex++), blockDistance);
+      var block = LocationParser.parseBlockAtLocation(context.getJoinedArguments(argumentIndex++), senderLocation, blockDistance);
       if (block == null)
         throw new CommandException("No block found");
       
@@ -82,7 +84,7 @@ public class RailBlockCommand extends CommandHandler
         CommandMessages.sendBlockUnchangedMessage(context, blockState, material, cart);
       }
     }
-    catch (InvalidLocationException | InvalidQueryException ex)
+    catch (ParserException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

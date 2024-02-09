@@ -7,7 +7,7 @@ import dev.danae.gregorail.util.commands.CommandContext;
 import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.minecart.CodeUtils;
-import dev.danae.gregorail.util.minecart.InvalidCodeException;
+import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -80,7 +80,7 @@ public class CartPromptSetCommand extends CartCommand
       // Open the inventory
       player.openInventory(inventory);
     }
-    catch (InvalidCodeException ex)
+    catch (ParserException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

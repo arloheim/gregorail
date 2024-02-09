@@ -8,9 +8,9 @@ import dev.danae.gregorail.util.commands.CommandException;
 import dev.danae.gregorail.util.commands.CommandHandler;
 import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.location.LocationUtils;
-import dev.danae.gregorail.util.minecart.InvalidQueryException;
 import dev.danae.gregorail.util.minecart.MinecartUtils;
-import dev.danae.gregorail.util.minecart.QueryUtils;
+import dev.danae.gregorail.util.minecart.QueryParser;
+import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -51,7 +51,7 @@ public class RailSoundCommand extends CommandHandler
       
       var argumentIndex = 0;
       
-      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryUtils.parseQuery(context.getArgument(argumentIndex++)) : null;
+      var query = this.executionType == CommandExecutionType.CONDITIONAL ? QueryParser.parseQuery(context.getArgument(argumentIndex++)) : null;
       
       var sound = context.getArgument(argumentIndex++);
       if (NamespacedKey.fromString(sound) == null)
@@ -65,7 +65,7 @@ public class RailSoundCommand extends CommandHandler
         senderLocation.getWorld().playSound(cart != null ? cart.getLocation() : senderLocation, sound, volume, pitch);
       }
     }
-    catch (InvalidQueryException ex)
+    catch (ParserException ex)
     {
       throw new CommandException(ex.getMessage(), ex);
     }

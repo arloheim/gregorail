@@ -1,10 +1,11 @@
 package dev.danae.gregorail.util.minecart;
 
+import dev.danae.gregorail.util.parser.ParserException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 
-public class QueryUtils
+public class QueryParser
 {
   // Patterns for parsing queries
   private static final Pattern pattern = Pattern.compile("^(?<suffix>\\*)?(?<name>[a-z0-9_]+)(?<prefix>\\*)?$", Pattern.CASE_INSENSITIVE);
@@ -12,7 +13,7 @@ public class QueryUtils
   
   
   // Parse a query from a string
-  public static Query parseQuery(String string) throws InvalidQueryException
+  public static Query parseQuery(String string) throws ParserException
   {
     var queryList = new ArrayList<Query>();
     
@@ -23,7 +24,7 @@ public class QueryUtils
       // Match the component against the pattern
       var m = pattern.matcher(stringComponent);
       if (!m.matches())
-        throw new InvalidQueryException(String.format("String \"%s\" is not a valid query", stringComponent));
+        throw new ParserException(String.format("String \"%s\" is not a valid query", stringComponent));
       
       // Parse the pattern
       if (m.group("prefix") != null && m.group("suffix") != null)
@@ -38,7 +39,7 @@ public class QueryUtils
     
     // Return the query
     if (queryList.isEmpty())
-      throw new InvalidQueryException(String.format("String \"%s\" is not a valid query", string));
+      throw new ParserException(String.format("String \"%s\" is not a valid query", string));
     else if(queryList.size() == 1)
       return queryList.get(0);
     else
