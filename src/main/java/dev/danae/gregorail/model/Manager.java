@@ -2,7 +2,8 @@ package dev.danae.gregorail.model;
 
 import dev.danae.gregorail.model.minecart.Minecart;
 import dev.danae.gregorail.model.minecart.MinecartCode;
-import dev.danae.gregorail.model.minecart.MinecartDataType;
+import dev.danae.gregorail.model.minecart.persistence.MinecartCodeDataType;
+import dev.danae.gregorail.model.minecart.persistence.MinecartDataType;
 import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,9 +19,11 @@ public interface Manager
   // Get the persistent minecart data type
   public MinecartDataType getMinecartDataType();
   
+  // Get the persistent minecart code data type
+  public MinecartCodeDataType getMinecartCodeDataType();
+  
   // Create a minecart
   public Minecart createCart(RideableMinecart minecart);
-  
   
   // Return all defined display names
   public Map<MinecartCode, String> getDefinedDisplayNames();
@@ -34,7 +37,6 @@ public interface Manager
   // Remove the display name of a code
   public void removeDisplayName(MinecartCode code);
   
-  
   // Return the radius in blocks to search for blocks while parsing a location
   public int getBlockSearchRadius();
   
@@ -44,23 +46,15 @@ public interface Manager
   // Return the nearest minecart at the specified location
   public Minecart findNearestCart(Location center, int distance);
   
+  // Return the nearest minecart at the specified location with the default search distance
+  public Minecart findNearestCart(Location center);
+  
   // Return the nearest minecart at the location, or the minecart that the player is riding
   public Minecart findNearestOrRidingCart(Location center, int distance, CommandSender sender);
   
-  
-  // Return the nearest minecart at the specified location with the default search distance
-  public default Minecart findNearestCart(Location center)
-  {
-    return this.findNearestCart(center, this.getCartSearchDistance());
-  }
-  
   // Return the nearest minecart at the location with the default search distance, or the minecart that the player is riding
-  public default Minecart findNearestOrRidingCart(Location center, CommandSender sender)
-  {
-    return this.findNearestOrRidingCart(center, this.getCartSearchDistance(), sender);
-  }
+  public Minecart findNearestOrRidingCart(Location center, CommandSender sender);
 
-  
   // Update the code of a cart
   public boolean updateCartCode(Minecart cart, MinecartCode code);
   

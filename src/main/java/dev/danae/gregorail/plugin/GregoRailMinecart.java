@@ -2,7 +2,6 @@ package dev.danae.gregorail.plugin;
 
 import dev.danae.gregorail.model.minecart.MinecartCode;
 import dev.danae.gregorail.model.minecart.Minecart;
-import dev.danae.gregorail.model.minecart.MinecartCodeDataType;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -64,7 +63,7 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
   @Override
   public MinecartCode getCode()
   {
-    return this.minecart.getPersistentDataContainer().getOrDefault(this.codeKey, MinecartCodeDataType.MINECART_CODE, MinecartCode.empty());
+    return this.minecart.getPersistentDataContainer().getOrDefault(this.codeKey, this.getManager().getMinecartCodeDataType(), MinecartCode.empty());
   }
   
   // Set the code of the cart
@@ -73,7 +72,7 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
   {    
     if (!code.isEmpty())
     {      
-      this.minecart.getPersistentDataContainer().set(this.codeKey, MinecartCodeDataType.MINECART_CODE, code);
+      this.minecart.getPersistentDataContainer().set(this.codeKey, this.getManager().getMinecartCodeDataType(), code);
       this.minecart.setCustomNameVisible(true);
       this.minecart.setCustomName(this.getManager().getDisplayName(code));
     }
@@ -84,7 +83,6 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
       this.minecart.setCustomName(null);
     }    
   }
-  
   
   // Get the speed multiplier of the cart
   @Override

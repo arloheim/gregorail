@@ -1,7 +1,6 @@
 package dev.danae.gregorail.plugin.commands.cart;
 
 import dev.danae.gregorail.model.Manager;
-import dev.danae.gregorail.model.minecart.MinecartCodeDataType;
 import dev.danae.gregorail.plugin.GregoRailPlugin;
 import dev.danae.gregorail.plugin.commands.CommandContext;
 import dev.danae.gregorail.plugin.commands.CommandException;
@@ -84,7 +83,7 @@ public class CartPromptSetCommand extends ManagerQueryCommand
       
           itemMeta.setDisplayName(this.getManager().getDisplayName(code));
           itemMeta.getPersistentDataContainer().set(this.commandCartKey, this.getManager().getMinecartDataType(), result.getCart());
-          itemMeta.getPersistentDataContainer().set(this.commandCodeKey, MinecartCodeDataType.MINECART_CODE, code);
+          itemMeta.getPersistentDataContainer().set(this.commandCodeKey, this.getManager().getMinecartCodeDataType(), code);
         
           itemStack.setItemMeta(itemMeta);
           return itemStack;
@@ -137,11 +136,11 @@ public class CartPromptSetCommand extends ManagerQueryCommand
     // Parse the arguments
     var itemMeta = item.getItemMeta();
     var itemMetaContainer =itemMeta.getPersistentDataContainer();
-    if (!itemMetaContainer.has(this.commandCartKey, this.getManager().getMinecartDataType()) || !itemMetaContainer.has(this.commandCodeKey, MinecartCodeDataType.MINECART_CODE))
+    if (!itemMetaContainer.has(this.commandCartKey, this.getManager().getMinecartDataType()) || !itemMetaContainer.has(this.commandCodeKey, this.getManager().getMinecartCodeDataType()))
       return;
     
     var cart = itemMetaContainer.get(this.commandCartKey, this.getManager().getMinecartDataType());    
-    var code = itemMetaContainer.get(this.commandCodeKey, MinecartCodeDataType.MINECART_CODE);
+    var code = itemMetaContainer.get(this.commandCodeKey, this.getManager().getMinecartCodeDataType());
     
     // Execute the command
     if (cart != null)

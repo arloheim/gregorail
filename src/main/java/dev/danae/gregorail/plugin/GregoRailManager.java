@@ -8,7 +8,8 @@ import dev.danae.gregorail.model.events.MinecartSpeedMultiplierChangedEvent;
 import dev.danae.gregorail.model.events.SoundPlayedEvent;
 import dev.danae.gregorail.model.minecart.MinecartCode;
 import dev.danae.gregorail.model.minecart.Minecart;
-import dev.danae.gregorail.model.minecart.MinecartDataType;
+import dev.danae.gregorail.model.minecart.persistence.MinecartCodeDataType;
+import dev.danae.gregorail.model.minecart.persistence.MinecartDataType;
 import dev.danae.gregorail.util.Cuboid;
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   
   // Persistent data types
   public final MinecartDataType minecartDataType = new MinecartDataType(this);
+  public final MinecartCodeDataType minecartCodeDataType = new MinecartCodeDataType(this);
   
   
   // Constructor
@@ -104,7 +106,13 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   {
     return this.minecartDataType;
   }
-  
+
+  // Get the persistent minecart codedata type
+  @Override
+  public MinecartCodeDataType getMinecartCodeDataType()
+  {
+    return this.minecartCodeDataType;
+  }
   
   // Create a minecart
   @Override
@@ -114,7 +122,6 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
       return null;
     return new GregoRailMinecart(this.getPlugin(), minecart);
   }
-  
   
   // Return all defined display names
   @Override
@@ -147,7 +154,6 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     this.saveDisplayNames();
   }
   
-  
   // Return the radius in blocks to search for blocks while parsing a location
   @Override
   public int getBlockSearchRadius()
@@ -169,6 +175,13 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     return this.createCart(Cuboid.findNearestEntity(center, distance, RideableMinecart.class));
   }
   
+  // Return the nearest minecart at the specified location with the default search distance
+  @Override
+  public Minecart findNearestCart(Location center)
+  {
+    return this.findNearestCart(center, this.getCartSearchDistance());
+  }
+  
   // Return the nearest minecart at the location, or the minecart that the player is riding
   @Override
   public Minecart findNearestOrRidingCart(Location center, int distance, CommandSender sender)
@@ -185,6 +198,12 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
       return null;
   }
   
+  // Return the nearest minecart at the location with the default search distance, or the minecart that the player is riding
+  @Override
+  public Minecart findNearestOrRidingCart(Location center, CommandSender sender)
+  {
+    return this.findNearestOrRidingCart(center, this.getCartSearchDistance(), sender);
+  }
   
   // Update the code of a cart
   @Override

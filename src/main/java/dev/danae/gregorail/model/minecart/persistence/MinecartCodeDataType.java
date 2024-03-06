@@ -1,13 +1,19 @@
-package dev.danae.gregorail.model.minecart;
+package dev.danae.gregorail.model.minecart.persistence;
 
+import dev.danae.gregorail.model.Manager;
+import dev.danae.gregorail.model.ManagerComponent;
+import dev.danae.gregorail.model.minecart.MinecartCode;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 
 
-public class MinecartCodeDataType implements PersistentDataType<String, MinecartCode> 
+public class MinecartCodeDataType extends ManagerComponent implements PersistentDataType<String, MinecartCode> 
 {  
-  // Static instance for the persistent data type
-  public static final MinecartCodeDataType MINECART_CODE = new MinecartCodeDataType();
+  // Constructor
+  public MinecartCodeDataType(Manager manager)
+  {
+    super(manager);
+  }
   
   
   // Return the primitive type of the data type
