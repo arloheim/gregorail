@@ -1,8 +1,20 @@
 general:
   # The distance in blocks to search for blocks while parsing a location
   block-search-radius: 10
-  # The distance in blocks to search for entities while setting or querying codes
-  entity-search-radius: 10
+  # The distance in blocks to search for carts while setting or querying codes
+  cart-search-distance: 10
+  # Are webhooks enabled in the plugin?
+  webhooks-enabled: true
+  
+webhooks:
+  # Definition of a webhook that is called when a cart moved
+  cart-moved:
+    type: [CART_MOVED]
+    url: "https://www.example.com/webhook/cart_moved"
+  # Definition of a webhook that is called when a player enters a cart
+  player-entered-cart:
+    type: [CART_ENTERED]
+    url: "https://www.example.com/webhook/cart_entered"
   
 cart-prompt:
   # The title to use in the /gcart prompt command
@@ -25,13 +37,3 @@ butcher:
   ignore-named-entities: true
   # Should item drops of killed entities be disabled?
   disable-item-drops: true
-  
-webhooks:
-  # Definition of a webhook that is called when a cart moved
-  cart-moved:
-    type: [CART_MOVED]
-    url: "https://www.example.com/webhook"
-  # Definition of a webhook that is called when a player enters or exits a cart
-  player-entered-or-exited-cart:
-    type: [PLAYER_ENTERED_CART, PLAYER_EXITED_CART]
-    url: "https://www.example.com/webhook"
