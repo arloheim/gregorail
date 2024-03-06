@@ -1,10 +1,10 @@
 name: GregoRail
 description: Powerful railroad management tools for Minecraft.
-version: 1.1.0
+version: 2.0.0
 author: danae
 website: https://github.com/danae/gregorail
-main: dev.danae.gregorail.RailPlugin
 api-version: 1.19
+main: dev.danae.gregorail.plugin.GregoRailPlugin
 
 
 commands:
