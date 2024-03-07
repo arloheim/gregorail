@@ -69,9 +69,11 @@ public class TagClearCommand extends ManagerCommand
   @Override
   public List<String> handleTabCompletion(CommandContext context)
   {
-    if (context.hasArgumentsCount(1))
+    if (context.hasArgumentsCount(2))
+      return List.of("name", "url");
+    else if (context.hasArgumentsCount(1))
       return this.handleCodeTabCompletion(context.getArgument(0));
     else
-      return null;
+      return List.of();
   }
 }
