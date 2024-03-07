@@ -168,10 +168,13 @@ public class Formatter
     var builder = new ComponentBuilder(String.format("%d code tags are defined", codeTags.size()));
     for (var e : codeTags.entrySet())
     {
+      if (e.getValue() == null)
+        continue;
+      
       var name = e.getValue().getName();
-      var url = e.getValue().getUrl() != null ? e.getValue().getUrl() : "<no URL set>";
+      var url = e.getValue().getUrl();
 
-      builder.append(String.format("\n- %s", e.getKey()), ComponentBuilder.FormatRetention.NONE);
+      builder.append(String.format("\n- %s: ", e.getKey()), ComponentBuilder.FormatRetention.NONE);
 
       if (name != null)
         builder.append(name, ComponentBuilder.FormatRetention.NONE);

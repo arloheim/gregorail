@@ -37,7 +37,7 @@ public class TagClearCommand extends ManagerCommand
       var propertyName = scanner.nextIdentifier();
 
       // Set the property of the code tag
-      if (propertyName == "name")
+      if (propertyName.equals("name"))
       {
         // Remove the name of the code tag
         this.getManager().setCodeTag(code, codeTag -> codeTag.withName(null));
@@ -45,7 +45,7 @@ public class TagClearCommand extends ManagerCommand
         // Send a message about the removed name of the code tag
         context.sendMessage(Formatter.formatTagNameClearedMessage(code));
       }
-      else if (propertyName == "url")
+      else if (propertyName.equals("url"))
       {
         // Remove the URL of the code tag
         this.getManager().setCodeTag(code, codeTag -> codeTag.withUrl(null));

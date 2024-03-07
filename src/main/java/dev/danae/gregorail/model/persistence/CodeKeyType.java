@@ -6,6 +6,10 @@ import dev.danae.gregorail.plugin.ConfigurationMapKeyType;
 
 public class CodeKeyType implements ConfigurationMapKeyType<Code>
 {
+  // Static instance of the key type
+  public static CodeKeyType INSTANCE = new CodeKeyType();
+
+
   // Convert the specified key to its string representation
   public String toString(Code key)
   {

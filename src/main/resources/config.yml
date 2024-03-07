@@ -5,7 +5,7 @@ general:
   cart-search-distance: 10
   # Are webhooks enabled in the plugin?
   webhooks-enabled: true
-  
+
 webhooks:
   # Definition of a webhook that is called when a cart moved
   cart-moved:
@@ -15,7 +15,7 @@ webhooks:
   player-entered-cart:
     type: [CART_ENTERED]
     url: "https://www.example.com/webhook/cart_entered"
-  
+
 cart-prompt:
   # The title to use in the /gcart prompt command
   title: "Select a code"
@@ -23,7 +23,7 @@ cart-prompt:
   item-material: MINECART
   # The distance in blocks to search for a player to display the prompt to
   player-search-radius: 5
-  
+
 butcher:
   # Should mobs within the specified radius of a player riding a minecart be killed?
   enabled: true

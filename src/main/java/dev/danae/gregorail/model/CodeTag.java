@@ -63,4 +63,10 @@ public class CodeTag implements ConfigurationSerializable
     var url = (String)map.getOrDefault("url", null);
     return new CodeTag(name, url);
   }
+
+  // Return an empty code tag
+  public static CodeTag empty()
+  {
+    return new CodeTag(null, null);
+  }
 }

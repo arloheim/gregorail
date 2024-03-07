@@ -52,7 +52,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     
     this.options = options;
     this.codeTagsFile = new File(plugin.getDataFolder(), "code_tags.yml");
-    this.codeTags = new ConfigurationMap<>(plugin, this.codeTagsFile, CodeTag.class, new CodeKeyType());
+    this.codeTags = new ConfigurationMap<>(plugin, this.codeTagsFile, CodeTag.class, CodeKeyType.INSTANCE);
   }
   
   

@@ -39,7 +39,7 @@ public class TagSetCommand extends ManagerCommand
       var propertyValue = scanner.rest("value");
 
       // Set the property of the code tag
-      if (propertyName == "name")
+      if (propertyName.equals("name"))
       {
         // Set the name of the code tag
         var name = ChatColor.translateAlternateColorCodes('&', propertyValue);
@@ -48,7 +48,7 @@ public class TagSetCommand extends ManagerCommand
         // Send a message about the updated name of the code tag
         context.sendMessage(Formatter.formatTagNameChangedMessage(code, name));
       }
-      else if (propertyName == "url")
+      else if (propertyName.equals("url"))
       {
         // Set the URL of the code tag
         var url = propertyValue;

@@ -2,6 +2,7 @@ package dev.danae.gregorail.plugin;
 
 import dev.danae.gregorail.plugin.butcher.ButcherOptions;
 import dev.danae.gregorail.plugin.butcher.Butcher;
+import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.QueryCommandType;
 import dev.danae.gregorail.plugin.commands.admin.AdminReloadCommand;
@@ -25,12 +26,12 @@ import dev.danae.gregorail.util.parser.Parser;
 import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.plugin.webhooks.Webhook;
 import dev.danae.gregorail.plugin.webhooks.WebhookType;
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -71,6 +72,9 @@ public final class GregoRailPlugin extends JavaPlugin
   @Override
   public void onEnable()
   {    
+    // Register serializable classes for the configuration API
+    ConfigurationSerialization.registerClass(CodeTag.class);
+
     // Load the configuration
     this.loadConfiguration();
     
