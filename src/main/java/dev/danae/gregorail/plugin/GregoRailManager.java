@@ -2,6 +2,7 @@ package dev.danae.gregorail.plugin;
 
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.CodeTag;
+import dev.danae.gregorail.model.DynamicSign;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.Minecart;
 import dev.danae.gregorail.model.events.BlockMaterialChangedEvent;
@@ -39,6 +40,9 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   
   // The configuration map of the defined code tags
   private final ConfigurationMap<Code, CodeTag> codeTags;
+
+  // The configuration map of the defined dynamic signs
+  private final ConfigurationMap<NamespacedKey, DynamicSign> dynamicSigns;
   
   // Persistent data types
   public final MinecartDataType minecartDataType = new MinecartDataType(this);
@@ -52,6 +56,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     
     this.options = options;
     this.codeTags = plugin.createConfigurationMap("code_tags.yml", CodeTag.class, ConfigurationMapKeyType.CODE);
+    this.dynamicSigns = plugin.createConfigurationMap("dynamic_signs.yml", DynamicSign.class, ConfigurationMapKeyType.NAMESPACED_KEY);
   }
   
   
@@ -114,6 +119,34 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   public void removeCodeTag(Code code)
   {
     this.codeTags.remove(code);
+  }
+
+  // Return all defined dynamic signs
+  @Override
+  public Map<NamespacedKey, DynamicSign> getDefinedDynamicSigns()
+  {
+    return this.dynamicSigns;
+  }
+
+  // Return the dymaic sign with the specified key
+  @Override
+  public DynamicSign getDynamicSign(NamespacedKey key)
+  {
+    return this.dynamicSigns.get(key);
+  }
+
+  // Set the dynamic sign with the specified key
+  @Override
+  public void setDynamicSign(NamespacedKey key, DynamicSign dynamicSign)
+  {
+    this.dynamicSigns.put(key, dynamicSign);
+  }
+
+  // Remove the dynamic sign with the specified key
+  @Override
+  public void removeDynamicSign(NamespacedKey key)
+  {
+    this.dynamicSigns.remove(key);
   }
   
   // Return the radius in blocks to search for blocks while parsing a location
