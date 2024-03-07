@@ -1,6 +1,7 @@
 package dev.danae.gregorail.plugin;
 
 import dev.danae.gregorail.model.minecart.MinecartCode;
+import dev.danae.gregorail.model.minecart.MinecartCodeTag;
 import dev.danae.gregorail.model.minecart.Minecart;
 import java.util.Arrays;
 import java.util.Locale;
@@ -161,32 +162,84 @@ public class Formatter
   
   
   
-  // Format an admin code displau name list message
-  public static BaseComponent[] formatAdminCodeDisplayNameListMessage(Map<MinecartCode, String> displayNames)
+  // Format an tag list message
+  public static BaseComponent[] formatTagListMessage(Map<MinecartCode, MinecartCodeTag> codeTags)
   {
-    var builder = new ComponentBuilder(String.format("%d display names are defined", displayNames.size()));
-    for (var e : displayNames.entrySet())
-      builder.append(String.format("\n- %s : %s", e.getKey(), e.getValue()), ComponentBuilder.FormatRetention.NONE);
+    var builder = new ComponentBuilder(String.format("%d code tags are defined", codeTags.size()));
+    for (var e : codeTags.entrySet())
+    {
+      var name = e.getValue().getName();
+      var url = e.getValue().getUrl() != null ? e.getValue().getUrl() : "<no URL set>";
+
+      builder.append(String.format("\n- %s", e.getKey()), ComponentBuilder.FormatRetention.NONE);
+
+      if (name != null)
+        builder.append(name, ComponentBuilder.FormatRetention.NONE);
+      else
+        builder.append("<empty>", ComponentBuilder.FormatRetention.NONE);
+
+      if (url != null)
+      {
+        builder
+          .append(" (", ComponentBuilder.FormatRetention.NONE)
+          .append("link", ComponentBuilder.FormatRetention.NONE).color(ChatColor.BLUE).underlined(true)
+            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format(url))))
+            .event(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
+          .append(")", ComponentBuilder.FormatRetention.NONE);
+      }
+    }
     return builder.create();
   }
   
-  // Format an admin code display name changed message
-  public static BaseComponent[] formatAdminCodeDisplayNameChangedMessage(MinecartCode code, String displayName)
+  // Format a tag name changed message
+  public static BaseComponent[] formatTagNameChangedMessage(MinecartCode code, String name)
   {
     return new ComponentBuilder()
-      .append("The display name for code ", ComponentBuilder.FormatRetention.NONE)
+      .append("The name of code tag ", ComponentBuilder.FormatRetention.NONE)
       .append(code.toString(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
       .append(" has been changed to \"", ComponentBuilder.FormatRetention.NONE)
-      .append(TextComponent.fromLegacyText(displayName), ComponentBuilder.FormatRetention.NONE)
+      .append(TextComponent.fromLegacyText(name), ComponentBuilder.FormatRetention.NONE)
       .append("\"", ComponentBuilder.FormatRetention.NONE)
       .create();
   }
-  
-  // Format an admin code display name removed message
-  public static BaseComponent[] formatAdminCodeDisplayNameRemovedMessage(MinecartCode code)
+
+  // Format a tag URL changed message
+  public static BaseComponent[] formatTagUrlChangedMessage(MinecartCode code, String url)
   {
     return new ComponentBuilder()
-      .append("The display name for code ", ComponentBuilder.FormatRetention.NONE)
+      .append("The URL of code tag ", ComponentBuilder.FormatRetention.NONE)
+      .append(code.toString(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
+      .append(" has been changed to \"", ComponentBuilder.FormatRetention.NONE)
+      .append(url, ComponentBuilder.FormatRetention.NONE)
+      .append("\"", ComponentBuilder.FormatRetention.NONE)
+      .create();
+  }
+
+  // Format a tag name cleared message
+  public static BaseComponent[] formatTagNameClearedMessage(MinecartCode code)
+  {
+    return new ComponentBuilder()
+      .append("The name of code tag ", ComponentBuilder.FormatRetention.NONE)
+      .append(code.toString(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
+      .append(" has been cleared", ComponentBuilder.FormatRetention.NONE)
+      .create();
+  }
+
+  // Format a tag URL cleared message
+  public static BaseComponent[] formatTagUrlClearedMessage(MinecartCode code)
+  {
+    return new ComponentBuilder()
+      .append("The URL of code tag ", ComponentBuilder.FormatRetention.NONE)
+      .append(code.toString(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
+      .append(" has been cleared", ComponentBuilder.FormatRetention.NONE)
+      .create();
+  }
+  
+  // Format a tag removed message
+  public static BaseComponent[] formatTagRemovedMessage(MinecartCode code)
+  {
+    return new ComponentBuilder()
+      .append("Code tag ", ComponentBuilder.FormatRetention.NONE)
       .append(code.toString(), ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
       .append(" has been removed", ComponentBuilder.FormatRetention.NONE)
       .create();

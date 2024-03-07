@@ -1,8 +1,7 @@
-package dev.danae.gregorail.model.minecart.persistence;
+package dev.danae.gregorail.model.minecart;
 
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
-import dev.danae.gregorail.model.minecart.MinecartCode;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 

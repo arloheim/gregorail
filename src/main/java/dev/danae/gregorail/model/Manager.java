@@ -2,9 +2,11 @@ package dev.danae.gregorail.model;
 
 import dev.danae.gregorail.model.minecart.Minecart;
 import dev.danae.gregorail.model.minecart.MinecartCode;
-import dev.danae.gregorail.model.minecart.persistence.MinecartCodeDataType;
-import dev.danae.gregorail.model.minecart.persistence.MinecartDataType;
+import dev.danae.gregorail.model.minecart.MinecartCodeDataType;
+import dev.danae.gregorail.model.minecart.MinecartCodeTag;
+import dev.danae.gregorail.model.minecart.MinecartDataType;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -25,17 +27,20 @@ public interface Manager
   // Create a minecart
   public Minecart createCart(RideableMinecart minecart);
   
-  // Return all defined display names
-  public Map<MinecartCode, String> getDefinedDisplayNames();
+  // Return all defined tags of minecart codes
+  public Map<MinecartCode, MinecartCodeTag> getDefinedCodeTags();
   
-  // Return the display name of a code
-  public String getDisplayName(MinecartCode code);
+  // Return the tag of a minecart code
+  public MinecartCodeTag getCodeTag(MinecartCode code);
   
-  // Set the display name of a code
-  public void setDisplayName(MinecartCode code, String displayName);
+  // Set the tag of a minecart code
+  public void setCodeTag(MinecartCode code, MinecartCodeTag tag);
+
+  // Set the tag of a minecart code using the specified update function
+  public void setCodeTag(MinecartCode code, UnaryOperator<MinecartCodeTag> updater);
   
-  // Remove the display name of a code
-  public void removeDisplayName(MinecartCode code);
+  // Remove the tag of a minecart code
+  public void removeCodeTag(MinecartCode code);
   
   // Return the radius in blocks to search for blocks while parsing a location
   public int getBlockSearchRadius();

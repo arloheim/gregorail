@@ -1,4 +1,4 @@
-package dev.danae.gregorail.plugin.commands.admin;
+package dev.danae.gregorail.plugin.commands.tag;
 
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
@@ -11,12 +11,12 @@ import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 
 
-public class AdminCodeSetCommand extends ManagerCommand
+public class TagSetCommand extends ManagerCommand
 {
   // Constructor
-  public AdminCodeSetCommand(Manager manager)
+  public TagSetCommand(Manager manager)
   {
-    super(manager, "gregorail.admin");
+    super(manager, "gregorail.tag.set");
   }
     
   
@@ -27,7 +27,7 @@ public class AdminCodeSetCommand extends ManagerCommand
     try
     {
       // Validate the number of arguments
-      if (!context.hasAtLeastArgumentsCount(2))
+      if (!context.hasAtLeastArgumentsCount(3))
         throw new CommandUsageException();
       
       // Create a scanner for the arguments
@@ -35,16 +35,33 @@ public class AdminCodeSetCommand extends ManagerCommand
       
       // Parse the arguments
       var code = scanner.nextCode();
+      var propertyName = scanner.nextIdentifier();
+      var propertyValue = scanner.rest("value");
+
+      // Set the property of the code tag
+      if (propertyName == "name")
+      {
+        // Set the name of the code tag
+        var name = ChatColor.translateAlternateColorCodes('&', propertyValue);
+        this.getManager().setCodeTag(code, codeTag -> codeTag.withName(name));
       
-      var displayName = ChatColor.translateAlternateColorCodes('&', scanner.rest("string"));
-      if (displayName.isBlank())
-        throw new CommandException("No display name provided");
+        // Send a message about the updated name of the code tag
+        context.sendMessage(Formatter.formatTagNameChangedMessage(code, name));
+      }
+      else if (propertyName == "url")
+      {
+        // Set the URL of the code tag
+        var url = propertyValue;
+        this.getManager().setCodeTag(code, codeTag -> codeTag.withUrl(url));
       
-      // Set the display name of the code
-      this.getManager().setDisplayName(code, displayName);
-      
-      // Send a message about the updated display name
-      context.sendMessage(Formatter.formatAdminCodeDisplayNameChangedMessage(code, displayName));
+        // Send a message about the updated URL of the code tag
+        context.sendMessage(Formatter.formatTagUrlChangedMessage(code, url));
+      }
+      else
+      {
+        // Invalid property
+        throw new CommandException(String.format("\"%s\" is an invalid code tag property ", propertyName));
+      }
     }
     catch (ParserException ex)
     {

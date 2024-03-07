@@ -1,8 +1,7 @@
-package dev.danae.gregorail.model.minecart.persistence;
+package dev.danae.gregorail.model.minecart;
 
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
-import dev.danae.gregorail.model.minecart.Minecart;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -41,7 +40,7 @@ public class MinecartDataType extends ManagerComponent implements PersistentData
     if (complex == null)
       return new byte[0];
     
-    var uuid = complex.getUUID();
+    var uuid = complex.getId();
     
     var bb = ByteBuffer.wrap(new byte[16]);
     bb.putLong(uuid.getMostSignificantBits());

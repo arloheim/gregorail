@@ -254,6 +254,19 @@ public class Scanner
     return ParserSupplier.getOrElse(() -> this.nextDouble(), defaultValue);
   }
   
+  // Return the next element in the scanner as an identifier
+  public String nextIdentifier() throws ParserException
+  {
+    return this.take(Parser::parseIdentifier, "identifier");
+  }
+  
+  // Return the next element in the scanner as an identifier
+  public String nextIdentifier(String defaultValue)
+  {
+    return ParserSupplier.getOrElse(() -> this.nextIdentifier(), defaultValue);
+  }
+  
+  
   // Return the next element in the scanner as a namespaced key
   public NamespacedKey nextKey() throws ParserException
   {

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 public interface Minecart
 {  
   // Return the identifier of the cart
-  public UUID getUUID();
+  public UUID getId();
   
   // Return the location of the cart
   public Location getLocation();

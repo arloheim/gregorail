@@ -20,7 +20,7 @@ public class MinecartCodeSerializer extends ManagerComponent implements JsonSeri
   }
   
   
-  // Serialize a world to a JSON element
+  // Serialize a minecart to a JSON element
   @Override
   public JsonElement serialize(MinecartCode code, Type type, JsonSerializationContext context)
   {

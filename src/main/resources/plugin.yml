@@ -11,7 +11,11 @@ commands:
   gregorail:
     description: Executes various administration commands.
     permission: gregorail.admin
-    usage: "Usage: /<command> code (list | remove <code> | set <code> <name>) | reload | version"
+    usage: "Usage: /<command> reload | version"
+
+  gtag:
+    description: Manages tags of minecart codes.
+    usage: "Usage: /command list clear <code> <property> | list | remove <code> | set <code> <property> <value>"
     
   gcart:
     description: Manages properties of minecarts.
@@ -29,6 +33,31 @@ commands:
 permissions:
   gregorail.admin:
     description: Allows the player to use the /gregorail command.
+    default: op
+
+  gregorail.tag:
+    description: Allows the player to use the /gtag command.
+    default: op
+    children:
+      gregorail.cart.clear: true
+      gregorail.cart.list: true
+      gregorail.cart.remove: true
+      gregorail.cart.set: true
+
+  gregorail.tag.clear:
+    description: Allows the player to use the /gtag clear command.
+    default: op
+
+  gregorail.tag.list:
+    description: Allows the player to use the /gtag list command.
+    default: op
+
+  gregorail.tag.remove:
+    description: Allows the player to use the /gtag remove command.
+    default: op
+
+  gregorail.tag.set:
+    description: Allows the player to use the /gtag set command.
     default: op
     
   gregorail.cart:

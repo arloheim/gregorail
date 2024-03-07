@@ -8,9 +8,11 @@ import com.google.gson.JsonPrimitive;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
 import dev.danae.gregorail.model.minecart.MinecartCode;
+import dev.danae.gregorail.model.minecart.MinecartCodeTag;
 import dev.danae.gregorail.model.minecart.Minecart;
 import dev.danae.gregorail.plugin.webhooks.serializers.LocationSerializer;
 import dev.danae.gregorail.plugin.webhooks.serializers.MinecartCodeSerializer;
+import dev.danae.gregorail.plugin.webhooks.serializers.MinecartCodeTagSerializer;
 import dev.danae.gregorail.plugin.webhooks.serializers.MinecartSerializer;
 import dev.danae.gregorail.plugin.webhooks.serializers.PlayerSerializer;
 import dev.danae.gregorail.plugin.webhooks.serializers.WorldSerializer;
@@ -40,6 +42,7 @@ public class WebhookPayloadFactory extends ManagerComponent
       .registerTypeAdapter(World.class, new WorldSerializer(manager))
       .registerTypeAdapter(Minecart.class, new MinecartSerializer(manager))
       .registerTypeAdapter(MinecartCode.class, new MinecartCodeSerializer(manager))
+      .registerTypeAdapter(MinecartCodeTag.class, new MinecartCodeTagSerializer(manager))
       .serializeNulls()
       .setPrettyPrinting()
       .create();

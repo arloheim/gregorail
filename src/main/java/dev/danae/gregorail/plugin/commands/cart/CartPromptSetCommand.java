@@ -80,8 +80,9 @@ public class CartPromptSetCommand extends ManagerQueryCommand
         var inventory = CartPromptUtils.createInventory(player, result.getValue(), code -> {
           var itemStack = new ItemStack(this.options.getItemMaterial());
           var itemMeta = itemStack.getItemMeta();
+          var codeTag = this.getManager().getCodeTag(code);
       
-          itemMeta.setDisplayName(this.getManager().getDisplayName(code));
+          itemMeta.setDisplayName(codeTag != null && codeTag.getName() != null ? codeTag.getName() : code.getId());
           itemMeta.getPersistentDataContainer().set(this.commandCartKey, this.getManager().getMinecartDataType(), result.getCart());
           itemMeta.getPersistentDataContainer().set(this.commandCodeKey, this.getManager().getMinecartCodeDataType(), code);
         

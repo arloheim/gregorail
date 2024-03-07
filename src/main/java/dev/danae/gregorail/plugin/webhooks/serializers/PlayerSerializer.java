@@ -21,7 +21,7 @@ public class PlayerSerializer extends ManagerComponent implements JsonSerializer
   }
   
   
-  // Serialize a world to a JSON element
+  // Serialize a player to a JSON element
   @Override
   public JsonElement serialize(Player player, Type type, JsonSerializationContext context)
   {

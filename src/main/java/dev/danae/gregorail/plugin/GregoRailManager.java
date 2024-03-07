@@ -7,9 +7,11 @@ import dev.danae.gregorail.model.events.MinecartCodeChangedEvent;
 import dev.danae.gregorail.model.events.MinecartSpeedMultiplierChangedEvent;
 import dev.danae.gregorail.model.events.SoundPlayedEvent;
 import dev.danae.gregorail.model.minecart.MinecartCode;
+import dev.danae.gregorail.model.minecart.MinecartCodeDataType;
+import dev.danae.gregorail.model.minecart.MinecartCodeKeyType;
+import dev.danae.gregorail.model.minecart.MinecartCodeTag;
+import dev.danae.gregorail.model.minecart.MinecartDataType;
 import dev.danae.gregorail.model.minecart.Minecart;
-import dev.danae.gregorail.model.minecart.persistence.MinecartCodeDataType;
-import dev.danae.gregorail.model.minecart.persistence.MinecartDataType;
 import dev.danae.gregorail.util.Cuboid;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +19,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,11 +42,9 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   // The options for the manager
   private final GregoRailPluginOptions options;
   
-  // The file to store defined display names in
-  private final File displayNamesFile;
-  
-  // The map of all defined display names
-  private final Map<MinecartCode, String> definedDisplayNames = new HashMap<>();
+  // The database of all defined display names
+  private final File codeTagsFile;
+  private final ConfigurationMap<MinecartCode, MinecartCodeTag> codeTags;
   
   // Persistent data types
   public final MinecartDataType minecartDataType = new MinecartDataType(this);
@@ -50,53 +52,13 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   
   
   // Constructor
-  public GregoRailManager(GregoRailPlugin plugin, GregoRailPluginOptions options, File displayNamesFile)
+  public GregoRailManager(GregoRailPlugin plugin, GregoRailPluginOptions options)
   {
     super(plugin);
     
     this.options = options;
-    this.displayNamesFile = displayNamesFile;
-    
-    this.loadDisplayNames();
-  }
-  
-  
-  // Load the display names from the configuration file
-  private void loadDisplayNames()
-  {
-    try
-    {
-      if (!this.displayNamesFile.exists())
-        this.displayNamesFile.createNewFile();
-      
-      var config = new YamlConfiguration();
-      config.load(this.displayNamesFile);
-      
-      this.definedDisplayNames.clear();
-      for (String key : config.getKeys(false))
-        this.definedDisplayNames.put(MinecartCode.of(key), config.getString(key));
-    }
-    catch (IOException | InvalidConfigurationException ex)
-    {
-      this.getPlugin().getLogger().log(Level.WARNING, "Could not load the defined display names", ex);
-    }
-  }
-  
-  // Save the display names to the configuration file
-  private void saveDisplayNames()
-  {
-    try
-    {
-      var config = new YamlConfiguration();
-      for (var e : this.definedDisplayNames.entrySet())
-        config.set(e.getKey().getId(), e.getValue());
-      
-      config.save(this.displayNamesFile);
-    }
-    catch (IOException ex)
-    {
-      this.getPlugin().getLogger().log(Level.WARNING, "Could not save the defined display names", ex);
-    }
+    this.codeTagsFile = new File(plugin.getDataFolder(), "code_tags.yml");
+    this.codeTags = new ConfigurationMap<>(plugin, this.codeTagsFile, MinecartCodeTag.class, new MinecartCodeKeyType());
   }
   
   
@@ -122,36 +84,45 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
       return null;
     return new GregoRailMinecart(this.getPlugin(), minecart);
   }
+
   
-  // Return all defined display names
+  
+  // Return all defined tags of minecart codes
   @Override
-  public Map<MinecartCode, String> getDefinedDisplayNames()
+  public Map<MinecartCode, MinecartCodeTag> getDefinedCodeTags()
   {
-    return this.definedDisplayNames;
+    return this.codeTags;
   }
   
-  // Return the display name of a code
+  // Return the tag of a minecart code
   @Override
-  public String getDisplayName(MinecartCode code)
+  public MinecartCodeTag getCodeTag(MinecartCode code)
   {
-    var displayName = this.definedDisplayNames.get(code);
-    return displayName != null ? displayName : code.getId();
+    return this.codeTags.getOrDefault(code, null);
   }
   
-  // Set the display name of a code
+  // Set the tag of a minecart code
   @Override
-  public void setDisplayName(MinecartCode code, String displayName)
+  public void setCodeTag(MinecartCode code, MinecartCodeTag codeTag)
   {
-    this.definedDisplayNames.put(code, displayName);
-    this.saveDisplayNames();
+    this.codeTags.put(code, codeTag);
   }
   
-  // Remove the display name of a code
+  // Set the tag of a minecart code using the specified update function
   @Override
-  public void removeDisplayName(MinecartCode code)
+  public void setCodeTag(MinecartCode code, UnaryOperator<MinecartCodeTag> updater)
   {
-    this.definedDisplayNames.remove(code);
-    this.saveDisplayNames();
+    var codeTag = this.getCodeTag(code);
+    if (codeTag == null)
+      codeTag = new MinecartCodeTag(null, null);
+    this.codeTags.put(code, updater.apply(codeTag));
+  }
+  
+  // Remove the tag of a minecart code
+  @Override
+  public void removeCodeTag(MinecartCode code)
+  {
+    this.codeTags.remove(code);
   }
   
   // Return the radius in blocks to search for blocks while parsing a location

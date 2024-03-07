@@ -10,8 +10,8 @@ import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
 import dev.danae.gregorail.model.minecart.Minecart;
 import dev.danae.gregorail.model.minecart.MinecartCode;
+import dev.danae.gregorail.model.minecart.MinecartCodeTag;
 import java.lang.reflect.Type;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -25,7 +25,7 @@ public class MinecartSerializer extends ManagerComponent implements JsonSerializ
   }
   
   
-  // Serialize a world to a JSON element
+  // Serialize a minecart to a JSON element
   @Override
   public JsonElement serialize(Minecart cart, Type type, JsonSerializationContext context)
   {
@@ -33,10 +33,10 @@ public class MinecartSerializer extends ManagerComponent implements JsonSerializ
       return JsonNull.INSTANCE;
     
     var obj = new JsonObject();
-    obj.add("uuid", new JsonPrimitive(cart.getUUID().toString()));
+    obj.add("uuid", new JsonPrimitive(cart.getId().toString()));
     obj.add("location", context.serialize(cart.getLocation(), Location.class));
     obj.add("code", context.serialize(cart.getCode(), MinecartCode.class));
-    obj.add("displayName", !cart.getCode().isEmpty() ? new JsonPrimitive(ChatColor.stripColor(this.getManager().getDisplayName(cart.getCode()))) : JsonNull.INSTANCE);
+    obj.add("codeTag", !cart.getCode().isEmpty() ? context.serialize(this.getManager().getCodeTag(cart.getCode()), MinecartCodeTag.class) : JsonNull.INSTANCE);
     obj.add("speedMultiplier", new JsonPrimitive(cart.getSpeedMultiplier()));   
     obj.add("passenger", context.serialize(cart.getPassenger(), Player.class));
     return obj;

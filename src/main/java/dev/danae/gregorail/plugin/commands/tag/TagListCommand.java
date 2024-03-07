@@ -1,4 +1,4 @@
-package dev.danae.gregorail.plugin.commands.admin;
+package dev.danae.gregorail.plugin.commands.tag;
 
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
@@ -9,12 +9,12 @@ import dev.danae.gregorail.plugin.Formatter;
 import java.util.List;
 
 
-public class AdminCodeListCommand extends ManagerCommand
+public class TagListCommand extends ManagerCommand
 {
   // Constructor
-  public AdminCodeListCommand(Manager manager)
+  public TagListCommand(Manager manager)
   {
-    super(manager, "gregorail.admin");
+    super(manager, "gregorail.tag.list");
   }
     
   
@@ -26,8 +26,8 @@ public class AdminCodeListCommand extends ManagerCommand
     if (!context.hasArgumentsCount(0))
       throw new CommandUsageException();
       
-    // Send a message listing the codes
-    context.sendMessage(Formatter.formatAdminCodeDisplayNameListMessage(this.getManager().getDefinedDisplayNames()));
+    // Send a message listing the code tags
+    context.sendMessage(Formatter.formatTagListMessage(this.getManager().getDefinedCodeTags()));
   }
 
   // Handle tab completion of the command

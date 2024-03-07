@@ -37,7 +37,7 @@ public abstract class ManagerCommand extends Command
   // Handle tab completion of a code argument
   protected List<String> handleCodeTabCompletion(String arg)
   {
-    return this.getManager().getDefinedDisplayNames().keySet().stream()
+    return this.getManager().getDefinedCodeTags().keySet().stream()
       .filter(code -> arg.isEmpty() || code.getId().startsWith(arg))
       .map(code -> code.getId())
       .toList();
@@ -51,7 +51,7 @@ public abstract class ManagerCommand extends Command
     var prefix = delimiterPos > -1 ? arg.substring(0, delimiterPos + 1) : "";
     var currentArg = delimiterPos > -1 ? arg.substring(delimiterPos + 1) : arg;
     
-    return this.getManager().getDefinedDisplayNames().keySet().stream()
+    return this.getManager().getDefinedCodeTags().keySet().stream()
       .filter(code -> arg.isEmpty() || code.getId().startsWith(currentArg))
       .map(code -> prefix + code.getId())
       .toList();

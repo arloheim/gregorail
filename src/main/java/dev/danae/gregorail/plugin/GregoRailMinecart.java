@@ -35,7 +35,7 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
   
   // Return the identifier of the cart
   @Override
-  public UUID getUUID()
+  public UUID getId()
   {
     return this.minecart.getUniqueId();
   }
@@ -72,9 +72,11 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
   {    
     if (!code.isEmpty())
     {      
+      var codeTag = this.getManager().getCodeTag(code);
+
       this.minecart.getPersistentDataContainer().set(this.codeKey, this.getManager().getMinecartCodeDataType(), code);
       this.minecart.setCustomNameVisible(true);
-      this.minecart.setCustomName(this.getManager().getDisplayName(code));
+      this.minecart.setCustomName(codeTag != null && codeTag.getName() != null ? codeTag.getName() : code.getId());
     }
     else
     {

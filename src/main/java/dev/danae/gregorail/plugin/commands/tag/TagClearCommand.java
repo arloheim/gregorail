@@ -1,4 +1,4 @@
-package dev.danae.gregorail.plugin.commands.admin;
+package dev.danae.gregorail.plugin.commands.tag;
 
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
@@ -10,12 +10,12 @@ import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
 
 
-public class AdminCodeRemoveCommand extends ManagerCommand
+public class TagClearCommand extends ManagerCommand
 {
   // Constructor
-  public AdminCodeRemoveCommand(Manager manager)
+  public TagClearCommand(Manager manager)
   {
-    super(manager, "gregorail.admin");
+    super(manager, "gregorail.tag.clear");
   }
     
   
@@ -26,7 +26,7 @@ public class AdminCodeRemoveCommand extends ManagerCommand
     try
     {
       // Validate the number of arguments
-      if (!context.hasArgumentsCount(1))
+      if (!context.hasArgumentsCount(2))
         throw new CommandUsageException();
       
       // Create a scanner for the arguments
@@ -34,12 +34,30 @@ public class AdminCodeRemoveCommand extends ManagerCommand
       
       // Parse the arguments
       var code = scanner.nextCode();
+      var propertyName = scanner.nextIdentifier();
+
+      // Set the property of the code tag
+      if (propertyName == "name")
+      {
+        // Remove the name of the code tag
+        this.getManager().setCodeTag(code, codeTag -> codeTag.withName(null));
       
-      // Remove the display name of the code
-      this.getManager().removeDisplayName(code);
+        // Send a message about the removed name of the code tag
+        context.sendMessage(Formatter.formatTagNameClearedMessage(code));
+      }
+      else if (propertyName == "url")
+      {
+        // Remove the URL of the code tag
+        this.getManager().setCodeTag(code, codeTag -> codeTag.withUrl(null));
       
-      // Send a message about the removed display name
-      context.sendMessage(Formatter.formatAdminCodeDisplayNameRemovedMessage(code));
+        // Send a message about the removed URL of the code tag
+        context.sendMessage(Formatter.formatTagUrlClearedMessage(code));
+      }
+      else
+      {
+        // Invalid property
+        throw new CommandException(String.format("\"%s\" is an invalid code tag property ", propertyName));
+      }
     }
     catch (ParserException ex)
     {

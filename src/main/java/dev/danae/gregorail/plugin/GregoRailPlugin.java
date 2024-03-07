@@ -4,9 +4,6 @@ import dev.danae.gregorail.plugin.butcher.ButcherOptions;
 import dev.danae.gregorail.plugin.butcher.Butcher;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.QueryCommandType;
-import dev.danae.gregorail.plugin.commands.admin.AdminCodeListCommand;
-import dev.danae.gregorail.plugin.commands.admin.AdminCodeRemoveCommand;
-import dev.danae.gregorail.plugin.commands.admin.AdminCodeSetCommand;
 import dev.danae.gregorail.plugin.commands.admin.AdminReloadCommand;
 import dev.danae.gregorail.plugin.commands.admin.AdminVersionCommand;
 import dev.danae.gregorail.plugin.commands.cart.CartClearCommand;
@@ -19,6 +16,10 @@ import dev.danae.gregorail.plugin.commands.locate.LocateCartCommand;
 import dev.danae.gregorail.plugin.commands.rail.RailBlockCommand;
 import dev.danae.gregorail.plugin.commands.rail.RailSoundCommand;
 import dev.danae.gregorail.plugin.commands.rail.RailSwitchCommand;
+import dev.danae.gregorail.plugin.commands.tag.TagRemoveCommand;
+import dev.danae.gregorail.plugin.commands.tag.TagSetCommand;
+import dev.danae.gregorail.plugin.commands.tag.TagClearCommand;
+import dev.danae.gregorail.plugin.commands.tag.TagListCommand;
 import dev.danae.gregorail.plugin.commands.CommandGroup;
 import dev.danae.gregorail.util.parser.Parser;
 import dev.danae.gregorail.util.parser.ParserException;
@@ -74,7 +75,7 @@ public final class GregoRailPlugin extends JavaPlugin
     this.loadConfiguration();
     
     // Create the componenets
-    this.manager = new GregoRailManager(this, this.options, new File(this.getDataFolder(), "code_display_names.yml"));
+    this.manager = new GregoRailManager(this, this.options);
     this.listener = new GregoRailListener(this);
     this.webhookExecutor = new GregoRailWebhookExecutor(this, this.options);
     this.butcher = new Butcher(this, this.butcherOptions);
@@ -86,13 +87,16 @@ public final class GregoRailPlugin extends JavaPlugin
     
     // Set the command handlers    
     new CommandGroup()
-      .registerSubcommand("code", new CommandGroup()
-        .registerSubcommand("list", new AdminCodeListCommand(this.manager))
-        .registerSubcommand("remove", new AdminCodeRemoveCommand(this.manager))
-        .registerSubcommand("set", new AdminCodeSetCommand(this.manager)))
       .registerSubcommand("reload", new AdminReloadCommand(this.manager, this))
       .registerSubcommand("version", new AdminVersionCommand(this.manager, this))
       .publishCommandHandler(this, this.getCommand("gregorail"));
+
+    new CommandGroup()
+      .registerSubcommand("clear", new TagClearCommand(this.manager))
+      .registerSubcommand("list", new TagListCommand(this.manager))
+      .registerSubcommand("remove", new TagRemoveCommand(this.manager))
+      .registerSubcommand("set", new TagSetCommand(this.manager))
+      .publishCommandHandler(this, this.getCommand("gtag"));
       
     new CommandGroup()
       .registerSubcommand("clear", new CartClearCommand(this.manager, QueryCommandType.ALWAYS))

@@ -19,8 +19,8 @@ public class Parser
   private static final Pattern INT_PATTERN = Pattern.compile("0|-?[1-9][0-9]*");
   private static final Pattern UNSIGNED_INT_PATTERN = Pattern.compile("0|[1-9][0-9]*");
   private static final Pattern FLOAT_PATTERN = Pattern.compile("-?[0-9]+(\\.[0-9]+)?");
-  private static final Pattern NAMESPACED_KEY_PATTERN = Pattern.compile("[a-zA-Z_][a-zA-Z0-9]*:[a-zA-Z_][a-zA-Z0-9]*(?:\\.[a-zA-Z_][a-zA-Z0-9]*)*");
   private static final Pattern IDENTIFIER_PATTERN = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*");
+  private static final Pattern NAMESPACED_KEY_PATTERN = Pattern.compile("[a-zA-Z_][a-zA-Z0-9]*:[a-zA-Z_][a-zA-Z0-9]*(?:\\.[a-zA-Z_][a-zA-Z0-9]*)*");
   private static final Pattern LOCATION_PATTERN = Pattern.compile("(?<cur>~)|(?<xyz>(?:(?<x>0|-?[1-9][0-9]*)|(?<rx>~(?<dx>-?[1-9][0-9]*)?))\\s+(?:(?<y>0|-?[1-9][0-9]*)|(?<ry>~(?<dy>-?[1-9][0-9]*)?))\\s+(?:(?<z>0|-?[1-9][0-9]*)|(?<rz>~(?<dz>-?[1-9][0-9]*)?)))|(?<block>(?<mode>[@^])(?<name>[a-z_][a-z0-9_]*))");
   private static final Pattern CODE_PATTERN = Pattern.compile("(?<code>[a-zA-Z0-9_]+)|(?<empty>\\*)");
   private static final Pattern QUERY_PATTERN = Pattern.compile("(?<query>(?<suffix>\\*)?(?<code>[a-zA-Z0-9_]+)(?<prefix>\\*)?)|(?<all>\\*)");
@@ -139,6 +139,18 @@ public class Parser
     {
       throw new ParserException(String.format("\"%s\" is an invalid float value", string), ex);
     }
+  }
+  
+  // Parse an identifier from a string
+  public static String parseIdentifier(String string) throws ParserException
+  {
+    // Match the string against the pattern
+    var m = IDENTIFIER_PATTERN.matcher(string);
+    if (!m.matches())
+      throw new ParserException(String.format("\"%s\" is an invalid identifier value", string.toLowerCase()));
+    
+    // Return the value
+    return string;
   }
   
   // Parse a namespaced key from a string
