@@ -19,6 +19,8 @@ import dev.danae.gregorail.plugin.commands.rail.RailSoundCommand;
 import dev.danae.gregorail.plugin.commands.rail.RailSwitchCommand;
 import dev.danae.gregorail.plugin.commands.tag.TagRemoveCommand;
 import dev.danae.gregorail.plugin.commands.tag.TagSetCommand;
+import dev.danae.gregorail.plugin.configuration.ConfigurationMap;
+import dev.danae.gregorail.plugin.configuration.ConfigurationMapKeyType;
 import dev.danae.gregorail.plugin.migrations.v1_1_0.CodeDisplayNamesMigration;
 import dev.danae.gregorail.plugin.commands.tag.TagClearCommand;
 import dev.danae.gregorail.plugin.commands.tag.TagListCommand;
@@ -27,11 +29,13 @@ import dev.danae.gregorail.util.parser.Parser;
 import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.plugin.webhooks.Webhook;
 import dev.danae.gregorail.plugin.webhooks.WebhookType;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -224,5 +228,12 @@ public final class GregoRailPlugin extends JavaPlugin
         this.butcherOptions.setEnabled(false);
       }
     }
+  }
+
+
+  // Create a new configuration map
+  public <K, V extends ConfigurationSerializable> ConfigurationMap<K, V> createConfigurationMap(String file, Class<V> clazz, ConfigurationMapKeyType<K> keyType)
+  {
+    return new ConfigurationMap<>(this, new File(this.getDataFolder(), file), clazz, keyType);
   }
 }

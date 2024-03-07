@@ -1,5 +1,8 @@
-package dev.danae.gregorail.plugin;
+package dev.danae.gregorail.plugin.configuration;
 
+import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.plugin.GregoRailPlugin;
+import dev.danae.gregorail.plugin.GregoRailPluginComponent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -14,6 +17,25 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public class ConfigurationMap<K, V extends ConfigurationSerializable> extends GregoRailPluginComponent implements Map<K, V>
 {
+  // Static key type instance for a code tag
+  public static StringKeyType STRING_KEY_TYPE = new StringKeyType();
+
+  // Class that defines a configuration map key type for a string
+  public static class StringKeyType implements ConfigurationMapKeyType<Code>
+  {
+    // Convert the specified key to its string representation
+    public String toString(Code key)
+    {
+      return key.getId();
+    }
+
+    // Convert the specified string to its key representation
+    public Code toKey(String string)
+    {
+      return Code.of(string);
+    }
+  }
+
   // The file where the map is stored
   private final File file;
 

@@ -10,8 +10,9 @@ import dev.danae.gregorail.model.events.MinecartCodeChangedEvent;
 import dev.danae.gregorail.model.events.MinecartSpeedMultiplierChangedEvent;
 import dev.danae.gregorail.model.events.SoundPlayedEvent;
 import dev.danae.gregorail.model.persistence.CodeDataType;
-import dev.danae.gregorail.model.persistence.CodeKeyType;
 import dev.danae.gregorail.model.persistence.MinecartDataType;
+import dev.danae.gregorail.plugin.configuration.ConfigurationMap;
+import dev.danae.gregorail.plugin.configuration.ConfigurationMapKeyType;
 import dev.danae.gregorail.util.Cuboid;
 import java.io.File;
 import java.util.EnumSet;
@@ -36,8 +37,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   // The options for the manager
   private final GregoRailPluginOptions options;
   
-  // The database of all defined display names
-  private final File codeTagsFile;
+  // The configuration map of the defined code tags
   private final ConfigurationMap<Code, CodeTag> codeTags;
   
   // Persistent data types
@@ -51,8 +51,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     super(plugin);
     
     this.options = options;
-    this.codeTagsFile = new File(plugin.getDataFolder(), "code_tags.yml");
-    this.codeTags = new ConfigurationMap<>(plugin, this.codeTagsFile, CodeTag.class, CodeKeyType.INSTANCE);
+    this.codeTags = plugin.createConfigurationMap("code_tags.yml", CodeTag.class, ConfigurationMapKeyType.CODE);
   }
   
   
