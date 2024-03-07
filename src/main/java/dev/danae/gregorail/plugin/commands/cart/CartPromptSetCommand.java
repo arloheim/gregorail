@@ -1,6 +1,8 @@
 package dev.danae.gregorail.plugin.commands.cart;
 
+import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Manager;
+import dev.danae.gregorail.model.Minecart;
 import dev.danae.gregorail.plugin.GregoRailPlugin;
 import dev.danae.gregorail.plugin.commands.CommandContext;
 import dev.danae.gregorail.plugin.commands.CommandException;
@@ -9,24 +11,27 @@ import dev.danae.gregorail.plugin.commands.ManagerQueryCommand;
 import dev.danae.gregorail.plugin.commands.QueryCommandType;
 import dev.danae.gregorail.plugin.Formatter;
 import dev.danae.gregorail.util.parser.ParserException;
+import java.util.Collection;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 
 public class CartPromptSetCommand extends ManagerQueryCommand
 {  
-  // The options for the cart prompt
+  // The options for the command
   private final CartPromptOptions options;
   
-  // The plugin of the cart prompt
+  // The plugin of the command
   private final GregoRailPlugin plugin;
   
-  // Keys to store properties in the cart prompt
+  // Keys to store properties in the command
   private final NamespacedKey commandCartKey;
   private final NamespacedKey commandCodeKey;
   
@@ -38,7 +43,6 @@ public class CartPromptSetCommand extends ManagerQueryCommand
     
     this.options = options;
     this.plugin = plugin;
-    
     this.commandCartKey = new NamespacedKey(plugin, "command_cart");
     this.commandCodeKey = new NamespacedKey(plugin, "command_code");
   }
@@ -76,21 +80,8 @@ public class CartPromptSetCommand extends ManagerQueryCommand
       // Execute the command
       if (result.getCart() != null)
       {
-        // Create the inventory
-        var inventory = CartPromptUtils.createInventory(player, result.getValue(), code -> {
-          var itemStack = new ItemStack(this.options.getItemMaterial());
-          var itemMeta = itemStack.getItemMeta();
-          var codeTag = this.getManager().getCodeTag(code);
-      
-          itemMeta.setDisplayName(codeTag != null && codeTag.getName() != null ? codeTag.getName() : code.getId());
-          itemMeta.getPersistentDataContainer().set(this.commandCartKey, this.getManager().getMinecartDataType(), result.getCart());
-          itemMeta.getPersistentDataContainer().set(this.commandCodeKey, this.getManager().getCodeDataType(), code);
-        
-          itemStack.setItemMeta(itemMeta);
-          return itemStack;
-        }, this.options.getTitle());
-      
-        // Open the inventory
+        // Create and open an inventory containing the codes
+        var inventory = this.createCodeMetaInventory(player, this.options.getTitle(), result.getValue(), result.getCart());
         player.openInventory(inventory);
       }
       else
@@ -159,17 +150,17 @@ public class CartPromptSetCommand extends ManagerQueryCommand
     var item = e.getCurrentItem();
     if (item == null || item.getType() != this.options.getItemMaterial())
       return;
-      
-    // Parse the arguments
+        
+    // Get the item meta associated with the event
     var itemMeta = item.getItemMeta();
-    var itemMetaContainer =itemMeta.getPersistentDataContainer();
-    if (!itemMetaContainer.has(this.commandCartKey, this.getManager().getMinecartDataType()) || !itemMetaContainer.has(this.commandCodeKey, this.getManager().getCodeDataType()))
+    if (!itemMeta.getPersistentDataContainer().has(this.commandCartKey, this.getManager().getMinecartDataType()) || !itemMeta.getPersistentDataContainer().has(this.commandCodeKey, this.getManager().getCodeDataType()))
       return;
     
-    var cart = itemMetaContainer.get(this.commandCartKey, this.getManager().getMinecartDataType());    
-    var code = itemMetaContainer.get(this.commandCodeKey, this.getManager().getCodeDataType());
+    // Parse the arguments
+    var cart = itemMeta.getPersistentDataContainer().get(this.commandCartKey, this.getManager().getMinecartDataType());    
+    var code = itemMeta.getPersistentDataContainer().get(this.commandCodeKey, this.getManager().getCodeDataType());
     
-    // Execute the command
+    // Update the code of the cart
     if (cart != null)
     {
       var originalCode = cart.getCode();
@@ -186,5 +177,55 @@ public class CartPromptSetCommand extends ManagerQueryCommand
     // Cancel the event and close the inventory
     e.setCancelled(true);
     Bukkit.getScheduler().runTask(this.plugin, () -> e.getWhoClicked().closeInventory());
+  }
+
+
+  // Return the minimal inventory size for the specified size
+  private int minimalInventorySize(int size)
+  {
+    if (size < 0 || size > 54)
+      throw new IllegalArgumentException("size must be between 0 and 54");
+    
+    while (size % 9 > 0) 
+      size ++;
+    return Math.max(9, size);
+  }
+
+  // Create an inventory containing item stacks containing a code each
+  private Inventory createCodeMetaInventory(InventoryHolder owner, String title, Collection<Code> codes, Minecart minecart)
+  {
+    // Check the size of the codes
+    if (codes.size() > 54)
+      throw new IllegalArgumentException("codes must contain at most 54 elements");
+
+    // Create the inventory
+    var inventory = Bukkit.createInventory(owner, this.minimalInventorySize(codes.size()), title);
+
+    // Add the codes to the inventory
+    for (var code : codes)
+      inventory.addItem(this.createCodeMeta(code, minecart));
+
+    // Return the inventory
+    return inventory;
+  }
+
+  // Create an item stack containing a code
+  private ItemStack createCodeMeta(Code code, Minecart cart)
+  {
+    // Create an item stack
+    var itemStack = new ItemStack(this.options.getItemMaterial());
+    var itemMeta = itemStack.getItemMeta();
+    
+    // Set the persistent data of the item meta
+    itemMeta.getPersistentDataContainer().set(this.commandCartKey, this.getManager().getMinecartDataType(), cart);
+    itemMeta.getPersistentDataContainer().set(this.commandCodeKey, this.getManager().getCodeDataType(), code);
+
+    // Set the display name of the item meta
+    var codeTag = this.getManager().getCodeTag(code);
+    itemMeta.setDisplayName(codeTag != null && codeTag.getName() != null ? codeTag.getName() : code.getId());
+  
+    // Set the item meta and return the item stack
+    itemStack.setItemMeta(itemMeta);
+    return itemStack;
   }
 }
