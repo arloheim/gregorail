@@ -161,16 +161,12 @@ public class Formatter
   }
   
   
-  
-  // Format an tag list message
+  // Format a tag list message
   public static BaseComponent[] formatTagListMessage(Map<Code, CodeTag> codeTags)
   {
     var builder = new ComponentBuilder(String.format("%d code tags are defined", codeTags.size()));
     for (var e : codeTags.entrySet())
-    {
-      if (e.getValue() == null)
-        continue;
-      
+    {      
       var name = e.getValue().getName();
       var url = e.getValue().getUrl();
 
