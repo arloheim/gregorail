@@ -29,7 +29,7 @@ public class AdminReloadCommand extends ManagerCommand
   public void handle(CommandContext context) throws CommandException, CommandUsageException
   {     
     // Reload the plugin
-    this.plugin.loadConfiguration();
+    this.plugin.loadPlugin();
     
     // Send information about the reload
     context.sendMessage(String.format("Reloaded %s", this.plugin.getDescription().getName()));

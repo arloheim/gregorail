@@ -19,6 +19,7 @@ import dev.danae.gregorail.plugin.commands.rail.RailSoundCommand;
 import dev.danae.gregorail.plugin.commands.rail.RailSwitchCommand;
 import dev.danae.gregorail.plugin.commands.tag.TagRemoveCommand;
 import dev.danae.gregorail.plugin.commands.tag.TagSetCommand;
+import dev.danae.gregorail.plugin.migrations.v1_1_0.CodeDisplayNamesMigration;
 import dev.danae.gregorail.plugin.commands.tag.TagClearCommand;
 import dev.danae.gregorail.plugin.commands.tag.TagListCommand;
 import dev.danae.gregorail.plugin.commands.CommandGroup;
@@ -66,18 +67,24 @@ public final class GregoRailPlugin extends JavaPlugin
   {
     return this.manager;
   }
-  
+
+
+
+  // Load the plugin
+  @Override
+  public void onLoad()
+  {
+    // Register serializable classes for the configuration API
+    ConfigurationSerialization.registerClass(CodeTag.class);
+
+    // Load the plugin
+    this.loadPlugin();
+  }
   
   // Enable the plugin
   @Override
   public void onEnable()
   {    
-    // Register serializable classes for the configuration API
-    ConfigurationSerialization.registerClass(CodeTag.class);
-
-    // Load the configuration
-    this.loadConfiguration();
-    
     // Create the componenets
     this.manager = new GregoRailManager(this, this.options);
     this.listener = new GregoRailListener(this);
@@ -127,11 +134,33 @@ public final class GregoRailPlugin extends JavaPlugin
       .registerSubcommand("cart", new LocateCartCommand(this.manager))
       .publishCommandHandler(this, this.getCommand("glocate"));
   }
-  
+
+
+  // Load the plugin
+  public void loadPlugin()
+  {
+    // Execute migrations
+    this.executeMigrations();
+
+    // Load the configuration
+    this.loadConfiguration();
+  }
+
+  // Execute migrations
+  public void executeMigrations()
+  {
+    this.getLogger().log(Level.INFO, "Checking for migrations to execute...");
+
+    // Execute v1.1.0 migrations
+    new CodeDisplayNamesMigration(this).migrate();
+  }
   
   // Load the configuration
   public void loadConfiguration()
   {
+    this.getLogger().log(Level.INFO, "Loading configuration...");
+
+    // Save the default configuration
     this.saveDefaultConfig();
     this.reloadConfig();
     
