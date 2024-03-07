@@ -1,16 +1,16 @@
-package dev.danae.gregorail.model.minecart;
+package dev.danae.gregorail.model;
 
 import java.util.Objects;
 
 
-public class MinecartCode
+public class Code
 {  
   // The identifier of the code
   private final String id;
   
   
   // Constructor
-  private MinecartCode(String id)
+  private Code(String id)
   {    
     this.id = id;
   }
@@ -33,7 +33,7 @@ public class MinecartCode
   @Override
   public boolean equals(Object obj)
   {
-    return obj instanceof MinecartCode other && Objects.equals(this.id, other.id);
+    return obj instanceof Code other && Objects.equals(this.id, other.id);
   }
   
   // Return the hash code of the code
@@ -57,14 +57,14 @@ public class MinecartCode
   
   
   // Return a code from an identifier
-  public static MinecartCode of(String id)
+  public static Code of(String id)
   {
-    return new MinecartCode(id);
+    return new Code(id);
   }
   
   // Return an empty code
-  public static MinecartCode empty()
+  public static Code empty()
   {
-    return new MinecartCode(null);
+    return new Code(null);
   }
 }

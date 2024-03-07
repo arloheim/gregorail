@@ -1,10 +1,7 @@
 package dev.danae.gregorail.model;
 
-import dev.danae.gregorail.model.minecart.Minecart;
-import dev.danae.gregorail.model.minecart.MinecartCode;
-import dev.danae.gregorail.model.minecart.MinecartCodeDataType;
-import dev.danae.gregorail.model.minecart.MinecartCodeTag;
-import dev.danae.gregorail.model.minecart.MinecartDataType;
+import dev.danae.gregorail.model.persistence.CodeDataType;
+import dev.danae.gregorail.model.persistence.MinecartDataType;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 import org.bukkit.Location;
@@ -21,26 +18,26 @@ public interface Manager
   // Get the persistent minecart data type
   public MinecartDataType getMinecartDataType();
   
-  // Get the persistent minecart code data type
-  public MinecartCodeDataType getMinecartCodeDataType();
+  // Get the persistent code data type
+  public CodeDataType getCodeDataType();
   
   // Create a minecart
   public Minecart createCart(RideableMinecart minecart);
   
   // Return all defined tags of minecart codes
-  public Map<MinecartCode, MinecartCodeTag> getDefinedCodeTags();
+  public Map<Code, CodeTag> getDefinedCodeTags();
   
-  // Return the tag of a minecart code
-  public MinecartCodeTag getCodeTag(MinecartCode code);
+  // Return the tag of a code
+  public CodeTag getCodeTag(Code code);
   
-  // Set the tag of a minecart code
-  public void setCodeTag(MinecartCode code, MinecartCodeTag tag);
+  // Set the tag of a code
+  public void setCodeTag(Code code, CodeTag tag);
 
-  // Set the tag of a minecart code using the specified update function
-  public void setCodeTag(MinecartCode code, UnaryOperator<MinecartCodeTag> updater);
+  // Set the tag of a code using the specified update function
+  public void setCodeTag(Code code, UnaryOperator<CodeTag> updater);
   
-  // Remove the tag of a minecart code
-  public void removeCodeTag(MinecartCode code);
+  // Remove the tag of a code
+  public void removeCodeTag(Code code);
   
   // Return the radius in blocks to search for blocks while parsing a location
   public int getBlockSearchRadius();
@@ -61,7 +58,7 @@ public interface Manager
   public Minecart findNearestOrRidingCart(Location center, CommandSender sender);
 
   // Update the code of a cart
-  public boolean updateCartCode(Minecart cart, MinecartCode code);
+  public boolean updateCartCode(Minecart cart, Code code);
   
   // Update the speed multiplier of a cart
   public boolean updateCartSpeedMultiplier(Minecart cart, Double speedMultiplier);

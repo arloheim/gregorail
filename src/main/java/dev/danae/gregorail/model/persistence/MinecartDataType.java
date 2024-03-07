@@ -1,7 +1,8 @@
-package dev.danae.gregorail.model.minecart;
+package dev.danae.gregorail.model.persistence;
 
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
+import dev.danae.gregorail.model.Minecart;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 import org.bukkit.Bukkit;

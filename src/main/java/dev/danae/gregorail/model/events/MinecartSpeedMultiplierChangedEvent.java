@@ -1,6 +1,6 @@
 package dev.danae.gregorail.model.events;
 
-import dev.danae.gregorail.model.minecart.Minecart;
+import dev.danae.gregorail.model.Minecart;
 import org.bukkit.event.HandlerList;
 
 

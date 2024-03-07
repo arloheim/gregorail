@@ -1,4 +1,4 @@
-package dev.danae.gregorail.model.minecart;
+package dev.danae.gregorail.model;
 
 import java.util.UUID;
 import org.bukkit.Location;
@@ -17,10 +17,10 @@ public interface Minecart
   public Player getPassenger();
   
   // Get the code of the cart
-  public MinecartCode getCode();
+  public Code getCode();
   
   // Set the code of the cart
-  public void setCode(MinecartCode code);
+  public void setCode(Code code);
   
   // Get the speed multiplier of the cart
   public double getSpeedMultiplier();

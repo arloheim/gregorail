@@ -1,27 +1,23 @@
 package dev.danae.gregorail.plugin;
 
+import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
+import dev.danae.gregorail.model.Minecart;
 import dev.danae.gregorail.model.events.BlockMaterialChangedEvent;
 import dev.danae.gregorail.model.events.BlockShapeChangedEvent;
 import dev.danae.gregorail.model.events.MinecartCodeChangedEvent;
 import dev.danae.gregorail.model.events.MinecartSpeedMultiplierChangedEvent;
 import dev.danae.gregorail.model.events.SoundPlayedEvent;
-import dev.danae.gregorail.model.minecart.MinecartCode;
-import dev.danae.gregorail.model.minecart.MinecartCodeDataType;
-import dev.danae.gregorail.model.minecart.MinecartCodeKeyType;
-import dev.danae.gregorail.model.minecart.MinecartCodeTag;
-import dev.danae.gregorail.model.minecart.MinecartDataType;
-import dev.danae.gregorail.model.minecart.Minecart;
+import dev.danae.gregorail.model.persistence.CodeDataType;
+import dev.danae.gregorail.model.persistence.CodeKeyType;
+import dev.danae.gregorail.model.persistence.MinecartDataType;
 import dev.danae.gregorail.util.Cuboid;
 import java.io.File;
-import java.io.IOException;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,8 +26,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.Rail;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -44,11 +38,11 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   
   // The database of all defined display names
   private final File codeTagsFile;
-  private final ConfigurationMap<MinecartCode, MinecartCodeTag> codeTags;
+  private final ConfigurationMap<Code, CodeTag> codeTags;
   
   // Persistent data types
   public final MinecartDataType minecartDataType = new MinecartDataType(this);
-  public final MinecartCodeDataType minecartCodeDataType = new MinecartCodeDataType(this);
+  public final CodeDataType codeDataType = new CodeDataType(this);
   
   
   // Constructor
@@ -58,7 +52,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     
     this.options = options;
     this.codeTagsFile = new File(plugin.getDataFolder(), "code_tags.yml");
-    this.codeTags = new ConfigurationMap<>(plugin, this.codeTagsFile, MinecartCodeTag.class, new MinecartCodeKeyType());
+    this.codeTags = new ConfigurationMap<>(plugin, this.codeTagsFile, CodeTag.class, new CodeKeyType());
   }
   
   
@@ -69,11 +63,11 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     return this.minecartDataType;
   }
 
-  // Get the persistent minecart codedata type
+  // Get the persistent code data type
   @Override
-  public MinecartCodeDataType getMinecartCodeDataType()
+  public CodeDataType getCodeDataType()
   {
-    return this.minecartCodeDataType;
+    return this.codeDataType;
   }
   
   // Create a minecart
@@ -83,44 +77,42 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     if (minecart == null)
       return null;
     return new GregoRailMinecart(this.getPlugin(), minecart);
-  }
-
+  }  
   
-  
-  // Return all defined tags of minecart codes
+  // Return all defined tags of codes
   @Override
-  public Map<MinecartCode, MinecartCodeTag> getDefinedCodeTags()
+  public Map<Code, CodeTag> getDefinedCodeTags()
   {
     return this.codeTags;
   }
   
-  // Return the tag of a minecart code
+  // Return the tag of a code
   @Override
-  public MinecartCodeTag getCodeTag(MinecartCode code)
+  public CodeTag getCodeTag(Code code)
   {
     return this.codeTags.getOrDefault(code, null);
   }
   
-  // Set the tag of a minecart code
+  // Set the tag of a code
   @Override
-  public void setCodeTag(MinecartCode code, MinecartCodeTag codeTag)
+  public void setCodeTag(Code code, CodeTag codeTag)
   {
     this.codeTags.put(code, codeTag);
   }
   
-  // Set the tag of a minecart code using the specified update function
+  // Set the tag of a code using the specified update function
   @Override
-  public void setCodeTag(MinecartCode code, UnaryOperator<MinecartCodeTag> updater)
+  public void setCodeTag(Code code, UnaryOperator<CodeTag> updater)
   {
     var codeTag = this.getCodeTag(code);
     if (codeTag == null)
-      codeTag = new MinecartCodeTag(null, null);
+      codeTag = new CodeTag(null, null);
     this.codeTags.put(code, updater.apply(codeTag));
   }
   
-  // Remove the tag of a minecart code
+  // Remove the tag of a code
   @Override
-  public void removeCodeTag(MinecartCode code)
+  public void removeCodeTag(Code code)
   {
     this.codeTags.remove(code);
   }
@@ -178,7 +170,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   
   // Update the code of a cart
   @Override
-  public boolean updateCartCode(Minecart cart, MinecartCode code)
+  public boolean updateCartCode(Minecart cart, Code code)
   {
     // Validate the cart
     if (cart == null)

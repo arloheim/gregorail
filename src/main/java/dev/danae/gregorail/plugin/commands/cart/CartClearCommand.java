@@ -1,6 +1,6 @@
 package dev.danae.gregorail.plugin.commands.cart;
 
-import dev.danae.gregorail.model.minecart.MinecartCode;
+import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.CommandContext;
 import dev.danae.gregorail.plugin.commands.CommandException;
@@ -49,7 +49,7 @@ public class CartClearCommand extends ManagerQueryCommand
       if (result.getCart() != null)
       {
         var originalCode = result.getCart().getCode();
-        if (result.getValue() && this.getManager().updateCartCode(result.getCart(), MinecartCode.empty()))
+        if (result.getValue() && this.getManager().updateCartCode(result.getCart(), Code.empty()))
           context.sendMessage(Formatter.formatCartCodeClearedMessage(result.getCart(), originalCode));
         else
           context.sendMessage(Formatter.formatCartCodeRetainedMessage(result.getCart(), originalCode));

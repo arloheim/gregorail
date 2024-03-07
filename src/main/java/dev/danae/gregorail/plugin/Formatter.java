@@ -1,8 +1,8 @@
 package dev.danae.gregorail.plugin;
 
-import dev.danae.gregorail.model.minecart.MinecartCode;
-import dev.danae.gregorail.model.minecart.MinecartCodeTag;
-import dev.danae.gregorail.model.minecart.Minecart;
+import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.model.CodeTag;
+import dev.danae.gregorail.model.Minecart;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
@@ -163,7 +163,7 @@ public class Formatter
   
   
   // Format an tag list message
-  public static BaseComponent[] formatTagListMessage(Map<MinecartCode, MinecartCodeTag> codeTags)
+  public static BaseComponent[] formatTagListMessage(Map<Code, CodeTag> codeTags)
   {
     var builder = new ComponentBuilder(String.format("%d code tags are defined", codeTags.size()));
     for (var e : codeTags.entrySet())
@@ -192,7 +192,7 @@ public class Formatter
   }
   
   // Format a tag name changed message
-  public static BaseComponent[] formatTagNameChangedMessage(MinecartCode code, String name)
+  public static BaseComponent[] formatTagNameChangedMessage(Code code, String name)
   {
     return new ComponentBuilder()
       .append("The name of code tag ", ComponentBuilder.FormatRetention.NONE)
@@ -204,7 +204,7 @@ public class Formatter
   }
 
   // Format a tag URL changed message
-  public static BaseComponent[] formatTagUrlChangedMessage(MinecartCode code, String url)
+  public static BaseComponent[] formatTagUrlChangedMessage(Code code, String url)
   {
     return new ComponentBuilder()
       .append("The URL of code tag ", ComponentBuilder.FormatRetention.NONE)
@@ -216,7 +216,7 @@ public class Formatter
   }
 
   // Format a tag name cleared message
-  public static BaseComponent[] formatTagNameClearedMessage(MinecartCode code)
+  public static BaseComponent[] formatTagNameClearedMessage(Code code)
   {
     return new ComponentBuilder()
       .append("The name of code tag ", ComponentBuilder.FormatRetention.NONE)
@@ -226,7 +226,7 @@ public class Formatter
   }
 
   // Format a tag URL cleared message
-  public static BaseComponent[] formatTagUrlClearedMessage(MinecartCode code)
+  public static BaseComponent[] formatTagUrlClearedMessage(Code code)
   {
     return new ComponentBuilder()
       .append("The URL of code tag ", ComponentBuilder.FormatRetention.NONE)
@@ -236,7 +236,7 @@ public class Formatter
   }
   
   // Format a tag removed message
-  public static BaseComponent[] formatTagRemovedMessage(MinecartCode code)
+  public static BaseComponent[] formatTagRemovedMessage(Code code)
   {
     return new ComponentBuilder()
       .append("Code tag ", ComponentBuilder.FormatRetention.NONE)
@@ -246,7 +246,7 @@ public class Formatter
   }
   
   // Format a cart code changed message
-  public static BaseComponent[] formatCartCodeChangedMessage(Minecart cart, MinecartCode originalCode, MinecartCode code)
+  public static BaseComponent[] formatCartCodeChangedMessage(Minecart cart, Code originalCode, Code code)
   {
     return new ComponentBuilder()
       .append(formatCart(cart), ComponentBuilder.FormatRetention.NONE)
@@ -258,7 +258,7 @@ public class Formatter
   }
   
   // Format a cart code changed message
-  public static BaseComponent[] formatCartCodeClearedMessage(Minecart cart, MinecartCode originalCode)
+  public static BaseComponent[] formatCartCodeClearedMessage(Minecart cart, Code originalCode)
   {
     return new ComponentBuilder()
       .append(formatCart(cart), ComponentBuilder.FormatRetention.NONE)
@@ -268,7 +268,7 @@ public class Formatter
   }
   
   // Format a cart code retained message
-  public static BaseComponent[] formatCartCodeRetainedMessage(Minecart cart, MinecartCode originalCode)
+  public static BaseComponent[] formatCartCodeRetainedMessage(Minecart cart, Code originalCode)
   {
     return new ComponentBuilder()
       .append("The code of ", ComponentBuilder.FormatRetention.NONE)

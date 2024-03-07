@@ -1,16 +1,16 @@
 package dev.danae.gregorail.util.parser;
 
-import dev.danae.gregorail.model.minecart.MinecartCode;
-import dev.danae.gregorail.model.query.QueryMatcher;
+import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.model.Query;
+import dev.danae.gregorail.model.QueryMatcher;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import dev.danae.gregorail.model.query.Query;
-import java.util.regex.MatchResult;
 
 
 public class Scanner
@@ -316,25 +316,25 @@ public class Scanner
   }
   
   // Return the next element in the scanner as a code
-  public MinecartCode nextCode() throws ParserException
+  public Code nextCode() throws ParserException
   {
     return this.take(Parser::parseCode, "code");
   }
   
   // Return the next element in the scanner as a code, or the default value if no such element exists
-  public MinecartCode nextCode(MinecartCode defaultValue)
+  public Code nextCode(Code defaultValue)
   {
     return ParserSupplier.getOrElse(() -> this.nextCode(), defaultValue);
   }
   
   // Return the next element in the scanner as a list of codes
-  public List<MinecartCode> nextCodeList() throws ParserException
+  public List<Code> nextCodeList() throws ParserException
   {
     return this.take(Parser::parseCodeList, "code list");
   }
   
   // Return the next element in the scanner as a list of codes, or the default value if no such element exists
-  public List<MinecartCode> nextCodeList(List<MinecartCode> defaultValue)
+  public List<Code> nextCodeList(List<Code> defaultValue)
   {
     return ParserSupplier.getOrElse(() -> this.nextCodeList(), defaultValue);
   }

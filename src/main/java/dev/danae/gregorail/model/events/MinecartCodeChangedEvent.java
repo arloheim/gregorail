@@ -1,7 +1,7 @@
 package dev.danae.gregorail.model.events;
 
-import dev.danae.gregorail.model.minecart.Minecart;
-import dev.danae.gregorail.model.minecart.MinecartCode;
+import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.model.Minecart;
 import org.bukkit.event.HandlerList;
 
 
@@ -12,14 +12,14 @@ public class MinecartCodeChangedEvent extends MinecartEvent
   
   
   // The original code of the minecart
-  private final MinecartCode originalCode;
+  private final Code originalCode;
   
   // The new code of the minecart
-  private final MinecartCode code;
+  private final Code code;
   
   
   // Constructor
-  public MinecartCodeChangedEvent(Minecart cart, MinecartCode originalCode, MinecartCode code)
+  public MinecartCodeChangedEvent(Minecart cart, Code originalCode, Code code)
   {
     super(cart);
     
@@ -29,13 +29,13 @@ public class MinecartCodeChangedEvent extends MinecartEvent
   
   
   // Return the original code of the minecart
-  public MinecartCode getOriginalCode()
+  public Code getOriginalCode()
   {
     return this.originalCode;
   }
   
   // Return the new code of the minecart
-  public MinecartCode getCode()
+  public Code getCode()
   {
     return this.code;
   }

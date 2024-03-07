@@ -1,6 +1,5 @@
-package dev.danae.gregorail.model.query;
+package dev.danae.gregorail.model;
 
-import dev.danae.gregorail.model.minecart.Minecart;
 import java.util.LinkedList;
 import java.util.List;
 

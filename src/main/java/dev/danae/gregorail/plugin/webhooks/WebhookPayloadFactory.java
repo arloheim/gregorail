@@ -5,14 +5,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
-import dev.danae.gregorail.model.minecart.MinecartCode;
-import dev.danae.gregorail.model.minecart.MinecartCodeTag;
-import dev.danae.gregorail.model.minecart.Minecart;
+import dev.danae.gregorail.model.Minecart;
 import dev.danae.gregorail.plugin.webhooks.serializers.LocationSerializer;
-import dev.danae.gregorail.plugin.webhooks.serializers.MinecartCodeSerializer;
-import dev.danae.gregorail.plugin.webhooks.serializers.MinecartCodeTagSerializer;
+import dev.danae.gregorail.plugin.webhooks.serializers.CodeSerializer;
+import dev.danae.gregorail.plugin.webhooks.serializers.CodeTagSerializer;
 import dev.danae.gregorail.plugin.webhooks.serializers.MinecartSerializer;
 import dev.danae.gregorail.plugin.webhooks.serializers.PlayerSerializer;
 import dev.danae.gregorail.plugin.webhooks.serializers.WorldSerializer;
@@ -41,8 +41,8 @@ public class WebhookPayloadFactory extends ManagerComponent
       .registerTypeAdapter(Player.class, new PlayerSerializer(manager))
       .registerTypeAdapter(World.class, new WorldSerializer(manager))
       .registerTypeAdapter(Minecart.class, new MinecartSerializer(manager))
-      .registerTypeAdapter(MinecartCode.class, new MinecartCodeSerializer(manager))
-      .registerTypeAdapter(MinecartCodeTag.class, new MinecartCodeTagSerializer(manager))
+      .registerTypeAdapter(Code.class, new CodeSerializer(manager))
+      .registerTypeAdapter(CodeTag.class, new CodeTagSerializer(manager))
       .serializeNulls()
       .setPrettyPrinting()
       .create();
@@ -77,7 +77,7 @@ public class WebhookPayloadFactory extends ManagerComponent
   }
   
   // Create a webhook payload for a modified cart code
-  public JsonObject createCartCodePayload(Minecart minecart, MinecartCode originalCode, MinecartCode code)
+  public JsonObject createCartCodePayload(Minecart minecart, Code originalCode, Code code)
   {
     var obj = new JsonObject();
     obj.add("minecart", this.gson.toJsonTree(minecart, Minecart.class));

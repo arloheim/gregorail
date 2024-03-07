@@ -84,7 +84,7 @@ public class CartPromptSetCommand extends ManagerQueryCommand
       
           itemMeta.setDisplayName(codeTag != null && codeTag.getName() != null ? codeTag.getName() : code.getId());
           itemMeta.getPersistentDataContainer().set(this.commandCartKey, this.getManager().getMinecartDataType(), result.getCart());
-          itemMeta.getPersistentDataContainer().set(this.commandCodeKey, this.getManager().getMinecartCodeDataType(), code);
+          itemMeta.getPersistentDataContainer().set(this.commandCodeKey, this.getManager().getCodeDataType(), code);
         
           itemStack.setItemMeta(itemMeta);
           return itemStack;
@@ -137,11 +137,11 @@ public class CartPromptSetCommand extends ManagerQueryCommand
     // Parse the arguments
     var itemMeta = item.getItemMeta();
     var itemMetaContainer =itemMeta.getPersistentDataContainer();
-    if (!itemMetaContainer.has(this.commandCartKey, this.getManager().getMinecartDataType()) || !itemMetaContainer.has(this.commandCodeKey, this.getManager().getMinecartCodeDataType()))
+    if (!itemMetaContainer.has(this.commandCartKey, this.getManager().getMinecartDataType()) || !itemMetaContainer.has(this.commandCodeKey, this.getManager().getCodeDataType()))
       return;
     
     var cart = itemMetaContainer.get(this.commandCartKey, this.getManager().getMinecartDataType());    
-    var code = itemMetaContainer.get(this.commandCodeKey, this.getManager().getMinecartCodeDataType());
+    var code = itemMetaContainer.get(this.commandCodeKey, this.getManager().getCodeDataType());
     
     // Execute the command
     if (cart != null)

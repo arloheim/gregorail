@@ -1,15 +1,16 @@
-package dev.danae.gregorail.model.minecart;
+package dev.danae.gregorail.model.persistence;
 
+import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 
 
-public class MinecartCodeDataType extends ManagerComponent implements PersistentDataType<String, MinecartCode> 
+public class CodeDataType extends ManagerComponent implements PersistentDataType<String, Code> 
 {  
   // Constructor
-  public MinecartCodeDataType(Manager manager)
+  public CodeDataType(Manager manager)
   {
     super(manager);
   }
@@ -24,22 +25,22 @@ public class MinecartCodeDataType extends ManagerComponent implements Persistent
 
   // Return the complex type of the data type
   @Override
-  public Class<MinecartCode> getComplexType() 
+  public Class<Code> getComplexType() 
   {
-    return MinecartCode.class;
+    return Code.class;
   }
 
   // Convert a complex type to a primitive type
   @Override
-  public String toPrimitive(MinecartCode complex, PersistentDataAdapterContext context) 
+  public String toPrimitive(Code complex, PersistentDataAdapterContext context) 
   {
     return complex.getId();
   }
 
   // Convert a primitive type to a complex type
   @Override
-  public MinecartCode fromPrimitive(String primitive, PersistentDataAdapterContext context) 
+  public Code fromPrimitive(String primitive, PersistentDataAdapterContext context) 
   {
-    return primitive != null ? MinecartCode.of(primitive) : MinecartCode.empty();
+    return primitive != null ? Code.of(primitive) : Code.empty();
   }
 }

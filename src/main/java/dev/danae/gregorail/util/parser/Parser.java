@@ -1,7 +1,9 @@
 package dev.danae.gregorail.util.parser;
 
-import dev.danae.gregorail.model.minecart.MinecartCode;
+import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.model.Query;
 import dev.danae.gregorail.util.Cuboid;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,8 +11,6 @@ import java.util.regex.Pattern;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import dev.danae.gregorail.model.query.Query;
-import java.util.Arrays;
 
 
 public class Parser
@@ -221,7 +221,7 @@ public class Parser
   }
   
   // Parse a code from a string
-  public static MinecartCode parseCode(String string) throws ParserException
+  public static Code parseCode(String string) throws ParserException
   {
     // Match the string against the pattern
     var m = CODE_PATTERN.matcher(string);
@@ -230,20 +230,20 @@ public class Parser
     
     // Check for a code
     if (m.group("code") != null)
-      return MinecartCode.of(m.group("code"));
+      return Code.of(m.group("code"));
     
     // Check for an empty code
     if (m.group("empty") != null)
-      return MinecartCode.empty();
+      return Code.empty();
     
     // Invalid code format
     throw new ParserException(String.format("\"%s\" is an invalid code value", string));
   }
   
   // Parse a list of codes from a string
-  public static List<MinecartCode> parseCodeList(String string) throws ParserException
+  public static List<Code> parseCodeList(String string) throws ParserException
   {
-    var list = new LinkedList<MinecartCode>();
+    var list = new LinkedList<Code>();
     for (var stringComponent : string.split("\\|"))
       list.add(parseCode(stringComponent));
     return list;

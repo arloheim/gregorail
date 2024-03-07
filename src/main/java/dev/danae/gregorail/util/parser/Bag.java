@@ -1,6 +1,7 @@
 package dev.danae.gregorail.util.parser;
 
-import dev.danae.gregorail.model.minecart.MinecartCode;
+import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.model.Query;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -8,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import dev.danae.gregorail.model.query.Query;
 
 
 public class Bag
@@ -123,13 +123,13 @@ public class Bag
   }
   
   // Return a property as a code, or the default value if no such element exists
-  public MinecartCode getCode(String key, MinecartCode defaultValue) throws ParserException
+  public Code getCode(String key, Code defaultValue) throws ParserException
   {
     return this.get(key, Parser::parseCode, defaultValue);
   }
   
   // Return a property as a list of codes, or the default value if no such element exists
-  public List<MinecartCode> getCodeList(String key, List<MinecartCode> defaultValue) throws ParserException
+  public List<Code> getCodeList(String key, List<Code> defaultValue) throws ParserException
   {
     return this.get(key, Parser::parseCodeList, defaultValue);
   }

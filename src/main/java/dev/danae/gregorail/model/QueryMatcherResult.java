@@ -1,7 +1,4 @@
-package dev.danae.gregorail.model.query;
-
-import dev.danae.gregorail.model.minecart.Minecart;
-
+package dev.danae.gregorail.model;
 
 public class QueryMatcherResult<T>
 {

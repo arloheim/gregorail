@@ -1,9 +1,9 @@
 package dev.danae.gregorail.plugin.commands;
 
 import dev.danae.gregorail.model.Manager;
+import dev.danae.gregorail.model.Minecart;
+import dev.danae.gregorail.model.QueryMatcherResult;
 import dev.danae.gregorail.util.parser.Scanner;
-import dev.danae.gregorail.model.minecart.Minecart;
-import dev.danae.gregorail.model.query.QueryMatcherResult;
 import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.util.parser.ParserSupplier;
 

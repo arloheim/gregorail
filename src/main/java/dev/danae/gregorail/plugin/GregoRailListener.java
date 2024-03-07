@@ -1,10 +1,10 @@
 package dev.danae.gregorail.plugin;
 
+import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.events.MinecartDestroyedEvent;
 import dev.danae.gregorail.model.events.MinecartEnteredEvent;
 import dev.danae.gregorail.model.events.MinecartExitedEvent;
 import dev.danae.gregorail.model.events.MinecartMovedEvent;
-import dev.danae.gregorail.model.minecart.MinecartCode;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -105,6 +105,6 @@ public class GregoRailListener extends GregoRailPluginComponent implements Liste
     Bukkit.getPluginManager().callEvent(new MinecartDestroyedEvent(cart, e.getAttacker()));
     
     // Clear the code and custom name of the minecart to prevent it from dropping
-    cart.setCode(MinecartCode.empty());
+    cart.setCode(Code.empty());
   }
 }

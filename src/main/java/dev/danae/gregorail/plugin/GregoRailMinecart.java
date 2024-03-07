@@ -1,7 +1,7 @@
 package dev.danae.gregorail.plugin;
 
-import dev.danae.gregorail.model.minecart.MinecartCode;
-import dev.danae.gregorail.model.minecart.Minecart;
+import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.model.Minecart;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -61,20 +61,20 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
   
   // Get the code of the cart
   @Override
-  public MinecartCode getCode()
+  public Code getCode()
   {
-    return this.minecart.getPersistentDataContainer().getOrDefault(this.codeKey, this.getManager().getMinecartCodeDataType(), MinecartCode.empty());
+    return this.minecart.getPersistentDataContainer().getOrDefault(this.codeKey, this.getManager().getCodeDataType(), Code.empty());
   }
   
   // Set the code of the cart
   @Override
-  public void setCode(MinecartCode code)
+  public void setCode(Code code)
   {    
     if (!code.isEmpty())
     {      
       var codeTag = this.getManager().getCodeTag(code);
 
-      this.minecart.getPersistentDataContainer().set(this.codeKey, this.getManager().getMinecartCodeDataType(), code);
+      this.minecart.getPersistentDataContainer().set(this.codeKey, this.getManager().getCodeDataType(), code);
       this.minecart.setCustomNameVisible(true);
       this.minecart.setCustomName(codeTag != null && codeTag.getName() != null ? codeTag.getName() : code.getId());
     }

@@ -6,17 +6,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
-import dev.danae.gregorail.model.minecart.MinecartCodeTag;
 import java.lang.reflect.Type;
 import net.md_5.bungee.api.ChatColor;
 
 
-public class MinecartCodeTagSerializer extends ManagerComponent implements JsonSerializer<MinecartCodeTag>
+public class CodeTagSerializer extends ManagerComponent implements JsonSerializer<CodeTag>
 {
   // Constructor
-  public MinecartCodeTagSerializer(Manager manager)
+  public CodeTagSerializer(Manager manager)
   {
     super(manager);
   }
@@ -24,7 +24,7 @@ public class MinecartCodeTagSerializer extends ManagerComponent implements JsonS
   
   // Serialize a minecart code tag to a JSON element
   @Override
-  public JsonElement serialize(MinecartCodeTag codeTag, Type type, JsonSerializationContext context)
+  public JsonElement serialize(CodeTag codeTag, Type type, JsonSerializationContext context)
   {
     if (codeTag == null)
       return JsonNull.INSTANCE;
