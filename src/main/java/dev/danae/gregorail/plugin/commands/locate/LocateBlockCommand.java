@@ -52,8 +52,8 @@ public class LocateBlockCommand extends ManagerCommand
   public List<String> handleTabCompletion(CommandContext context)
   {    
     if (context.hasAtLeastArgumentsCount(1))
-      return this.handleLocationTabCompletion(context, 0);
+      return this.handleLocationTabCompletion(context, 0, false);
     else
-      return null;
+      return List.of();
   }
 }

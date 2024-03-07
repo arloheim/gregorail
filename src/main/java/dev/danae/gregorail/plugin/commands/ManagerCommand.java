@@ -58,16 +58,16 @@ public abstract class ManagerCommand extends Command
   }
   
   // Handle tab completion of a location argument
-  protected List<String> handleLocationTabCompletion(CommandContext context, int argumentIndex)
+  protected List<String> handleLocationTabCompletion(CommandContext context, int argumentIndex, boolean isQuery)
   {
     if (!context.hasAtLeastArgumentsCount(argumentIndex + 1))
-      return null;
+      return List.of();
     
     var arg = context.getArgument(argumentIndex);
     
     // If there is between 2 and 3 arguments, return just the current relative location
     if (context.hasAtLeastArgumentsCount(argumentIndex + 4))
-      return null;
+      return List.of();
     if (context.hasAtLeastArgumentsCount(argumentIndex + 2))
       return List.of("~");
     
@@ -84,14 +84,22 @@ public abstract class ManagerCommand extends Command
     
     // If the argument is another type of location, return nothing
     if (!arg.isEmpty())
-      return null;
+      return List.of();
     
     // Return all location options
     var list = new ArrayList<String>();
+    if (isQuery)
+      list.add("||");
     list.add("~");
     list.addAll(Formatter.getAllMaterials(true, s -> "@" + s).toList());
     list.addAll(Formatter.getAllMaterials(true, s -> "^" + s).toList());
     return list;
+  }
+  
+  // Handle tab completion of a speed multiplier argument
+  protected List<String> handleSpeedMultiplierTabCompletion(String arg)
+  {
+    return List.of("0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0");
   }
   
   // Handle tab completion of a shape argument
@@ -116,11 +124,5 @@ public abstract class ManagerCommand extends Command
     return Formatter.getAllSounds()
       .filter(s -> arg.isEmpty() || s.startsWith(arg))
       .toList();
-  }
-  
-  // Handle tab completion of a speed multiplier argument
-  protected List<String> handleSpeedMultiplierTabCompletion(String arg)
-  {
-    return List.of("0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0");
   }
 }

@@ -10,9 +10,6 @@ import dev.danae.gregorail.plugin.commands.QueryCommandType;
 import dev.danae.gregorail.plugin.Formatter;
 import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.entity.minecart.RideableMinecart;
 
 
 public class RailSoundCommand extends ManagerQueryCommand
@@ -66,40 +63,34 @@ public class RailSoundCommand extends ManagerQueryCommand
     switch (this.getType())
     {
       case ALWAYS:
+      {
         if (context.hasAtLeastArgumentsCount(2))
-          return this.handleLocationTabCompletion(context, 1);
+          return this.handleLocationTabCompletion(context, 1, false);
         else if (context.hasArgumentsCount(1))
           return this.handleSoundTabCompletion(context.getArgument(0));
         else
           return null;
+      }
         
       case CONDITIONAL:
-        if (context.hasAtLeastArgumentsCount(3))
-          return this.handleLocationTabCompletion(context, 2);
+      {
+        var separatorIndex = context.findLastArgumentIndex("||");
+        if (separatorIndex == 2)
+          return this.handleSoundTabCompletion(context.getLastArgument(0));
+        else if (separatorIndex == 1)
+          return this.handleCodesTabCompletion(context.getLastArgument(0));
+        else if (context.hasAtLeastArgumentsCount(3))
+          return this.handleLocationTabCompletion(context, separatorIndex >= 0 ? context.getArgumentsCount() - separatorIndex + 2 : 2, true);
         else if (context.hasArgumentsCount(2))
           return this.handleSoundTabCompletion(context.getArgument(1));
         else if (context.hasArgumentsCount(1))
           return this.handleCodesTabCompletion(context.getArgument(0));
         else
-          return null;
+          return List.of();
+      }
         
       default:
-        return null;
-    }
-  }
-  
-  // Execute the command
-  private void execute(CommandContext context, Location senderLocation, String sound, float volume, float pitch, RideableMinecart detectedCart) throws CommandException
-  {
-    // Check if the sound is set
-    if (sound != null)
-    {
-      // Validate the sound
-      if (NamespacedKey.fromString(sound) == null)
-        throw new CommandException(String.format("\"%s\" is an invalid sound resource", sound));
-      
-      // Play the sound
-      senderLocation.getWorld().playSound(detectedCart != null ? detectedCart.getLocation() : senderLocation, sound, volume, pitch);
+        return List.of();
     }
   }
 }

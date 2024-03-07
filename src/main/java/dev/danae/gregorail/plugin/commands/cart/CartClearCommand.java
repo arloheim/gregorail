@@ -72,21 +72,25 @@ public class CartClearCommand extends ManagerQueryCommand
     switch (this.getType())
     {
       case ALWAYS:
+      {
         if (context.hasAtLeastArgumentsCount(1))
-          return this.handleLocationTabCompletion(context, 0);
+          return this.handleLocationTabCompletion(context, 0, false);
         else
-          return null;
+          return List.of();
+      }
         
       case CONDITIONAL:
+      {
         if (context.hasAtLeastArgumentsCount(2))
-          return this.handleLocationTabCompletion(context, 1);
+          return this.handleLocationTabCompletion(context, 1, false);
         else if (context.hasArgumentsCount(1))
           return this.handleCodesTabCompletion(context.getArgument(0));
         else
-          return null;
+          return List.of();
+      }
         
       default:
-        return null;
+        return List.of();
     }
   }
 }

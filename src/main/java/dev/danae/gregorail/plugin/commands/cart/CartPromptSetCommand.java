@@ -108,12 +108,38 @@ public class CartPromptSetCommand extends ManagerQueryCommand
   @Override
   public List<String> handleTabCompletion(CommandContext context)
   {
-    if (context.hasAtLeastArgumentsCount(2))
-      return this.handleLocationTabCompletion(context, 1);
-    else if (context.hasArgumentsCount(1))
-      return this.handleCodesTabCompletion(context.getArgument(0));
-    else
-      return null;
+    switch (this.getType())
+    {
+      case ALWAYS:
+      {
+        if (context.hasAtLeastArgumentsCount(2))
+          return this.handleLocationTabCompletion(context, 1, false);
+        else if (context.hasArgumentsCount(1))
+          return this.handleCodesTabCompletion(context.getArgument(0));
+        else
+          return List.of();
+      }
+        
+      case CONDITIONAL:
+      {
+        var separatorIndex = context.findLastArgumentIndex("||");
+        if (separatorIndex == 2)
+          return this.handleCodesTabCompletion(context.getLastArgument(0));
+        else if (separatorIndex == 1)
+          return this.handleCodesTabCompletion(context.getLastArgument(0));
+        else if (context.hasAtLeastArgumentsCount(3))
+          return this.handleLocationTabCompletion(context, separatorIndex >= 0 ? context.getArgumentsCount() - separatorIndex + 2 : 2, true);
+        else if (context.hasArgumentsCount(2))
+          return this.handleCodesTabCompletion(context.getArgument(1));
+        else if (context.hasArgumentsCount(1))
+          return this.handleCodesTabCompletion(context.getArgument(0));
+        else
+          return List.of();
+      }
+        
+      default:
+        return List.of();
+    }
   }
   
   

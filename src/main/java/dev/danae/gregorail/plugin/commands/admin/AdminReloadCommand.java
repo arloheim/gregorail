@@ -39,6 +39,6 @@ public class AdminReloadCommand extends ManagerCommand
   @Override
   public List<String> handleTabCompletion(CommandContext context)
   {
-    return null;
+    return List.of();
   }
 }

@@ -5,6 +5,7 @@ import dev.danae.gregorail.util.parser.Scanner;
 import dev.danae.gregorail.util.Cuboid;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.command.BlockCommandSender;
@@ -57,7 +58,53 @@ public class CommandContext
   // Return the argument of the context with the specified index
   public String getArgument(int index)
   {
-    return this.arguments[index];
+    return index >= 0 && index < this.arguments.length ? this.arguments[index] : "";
+  }
+
+  // Return the argument of the context with the specified index starting at the end
+  public String getLastArgument(int index)
+  {
+    return index >= 0 && index < this.arguments.length ? this.arguments[this.arguments.length - index - 1] : "";
+  }
+
+  // Return the index of the first argument that matches the specified predicate
+  public int findArgumentIndex(Predicate<String> predicate)
+  {
+    for (var i = 0; i < this.arguments.length; i ++)
+    {
+      if (predicate.test(this.getArgument(i)))
+        return i;
+    }
+    return -1;
+  }
+  
+  // Return the index of the first argument that equals the specified string
+  public int findArgumentIndex(String other)
+  {
+    return this.findArgumentIndex(s -> s.equals(other));
+  }
+
+  // Return the index of the last argument that matches the specified predicate starting at the end
+  public int findLastArgumentIndex(Predicate<String> predicate)
+  {
+    for (var i = 0; i < this.arguments.length; i ++)
+    {
+      if (predicate.test(this.getLastArgument(i)))
+        return i;
+    }
+    return -1;
+  }
+
+  // Return the index of the last argument that equals the specified string starting at the end
+  public int findLastArgumentIndex(String other)
+  {
+    return this.findLastArgumentIndex(s -> s.equals(other));
+  }
+
+  // Return the number of arguments of the contact
+  public int getArgumentsCount()
+  {
+    return this.arguments.length;
   }
   
   // Return if the context has exactly the specified number of arguments
