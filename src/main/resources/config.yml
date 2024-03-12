@@ -4,7 +4,7 @@ general:
   # The distance in blocks to search for carts while setting or querying codes
   cart-search-distance: 10
   # Are webhooks enabled in the plugin?
-  webhooks-enabled: true
+  webhooks-enabled: false
 
 webhooks:
   # Definition of a webhook that is called when a cart moved

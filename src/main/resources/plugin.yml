@@ -1,6 +1,6 @@
 name: GregoRail
 description: Powerful railroad management tools for Minecraft.
-version: 2.0.0
+version: 2.1.0
 author: danae
 website: https://github.com/danae/gregorail
 main: dev.danae.gregorail.plugin.GregoRailPlugin
@@ -28,6 +28,10 @@ commands:
   glocate:
     description: Locate blocks or carts for debug purposes.
     usage: "Usage: /<command> block <location> | cart <location>"
+
+  gsign:
+    description: Manages dynamic signs.
+    usage: "Usage: /command edit <key> | list | remove <key>"
     
     
 permissions:
@@ -119,3 +123,23 @@ permissions:
   gregorail.locate.cart:
     description: Allows the player to use the /glocate cart command.
     default: true
+
+  gregorail.sign:
+    description: Allows the player to use the /gsign command.
+    default: true
+    children:
+      gregorail.sign.edit: true
+      gregorail.sign.list: true
+      gregorail.sign.remove: true
+
+  gregorail.sign.edit:
+    description: Allows the player to use the /gsign edit command.
+    default: op
+
+  gregorail.sign.list:
+    description: Allows the player to use the /gsign list command.
+    default: op
+
+  gregorail.sign.remove:
+    description: Allows the player to use the /gsign remove command.
+    default: op
