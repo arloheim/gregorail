@@ -1,6 +1,6 @@
 # GregoRail
 
-**GregoRail** is a Spigot plugin containing powerful railroad management tools for Minecraft. Requires Spigot **1.19**, tested on **1.19.2, 1.19.4, 1.20.1 and 1.20.2**.
+**GregoRail** is a Spigot plugin containing powerful railroad management tools for Minecraft. Requires Spigot **1.20**, tested on **1.20.1, 1.20.2 and 1.20.4**.
 
 ## Features
 
