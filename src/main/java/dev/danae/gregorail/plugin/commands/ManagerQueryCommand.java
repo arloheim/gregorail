@@ -11,11 +11,11 @@ import dev.danae.gregorail.util.parser.ParserSupplier;
 public abstract class ManagerQueryCommand extends ManagerCommand
 {  
   // The query type of the command
-  private final QueryCommandType type;
+  private final ManagerQueryCommandType type;
   
   
   // Constructor
-  public ManagerQueryCommand(Manager manager, QueryCommandType type, String... permissions)
+  public ManagerQueryCommand(Manager manager, ManagerQueryCommandType type, String... permissions)
   {
     super(manager, permissions);
     
@@ -23,7 +23,7 @@ public abstract class ManagerQueryCommand extends ManagerCommand
   }
   
   // Constructor without permissions
-  public ManagerQueryCommand(Manager manager, QueryCommandType type)
+  public ManagerQueryCommand(Manager manager, ManagerQueryCommandType type)
   {
     super(manager);
     
@@ -32,7 +32,7 @@ public abstract class ManagerQueryCommand extends ManagerCommand
   
   
   // Return the query type of the command
-  public QueryCommandType getType()
+  public ManagerQueryCommandType getType()
   {
     return this.type;
   }
@@ -41,7 +41,7 @@ public abstract class ManagerQueryCommand extends ManagerCommand
   // Evaluate a query read from the scanner with the specified cart function
   protected QueryMatcherResult<Boolean> matchQuery(Scanner scanner, ParserSupplier<Minecart> cartFunction) throws ParserException
   {
-    if (this.getType() == QueryCommandType.CONDITIONAL)
+    if (this.getType() == ManagerQueryCommandType.CONDITIONAL)
     {
       var query = scanner.nextQuery();
       var cart = cartFunction.get();
@@ -58,7 +58,7 @@ public abstract class ManagerQueryCommand extends ManagerCommand
   // Evaluate a query metcher read from the scanner with the specified cart function
   protected <T> QueryMatcherResult<T> matchQueryMatcher(Scanner scanner, ParserSupplier<T> resultFunction, ParserSupplier<Minecart> cartFunction) throws ParserException
   {
-    if (this.getType() == QueryCommandType.CONDITIONAL)
+    if (this.getType() == ManagerQueryCommandType.CONDITIONAL)
     {
       var matcher = scanner.wrapInMatcher(resultFunction);
       var cart = cartFunction.get();

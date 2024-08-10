@@ -1,12 +1,12 @@
 package dev.danae.gregorail.plugin.commands.rail;
 
 import dev.danae.gregorail.model.Manager;
-import dev.danae.gregorail.plugin.commands.CommandContext;
-import dev.danae.gregorail.plugin.commands.CommandException;
-import dev.danae.gregorail.plugin.commands.CommandUsageException;
 import dev.danae.gregorail.plugin.commands.ManagerQueryCommand;
-import dev.danae.gregorail.plugin.commands.QueryCommandType;
+import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
 import dev.danae.gregorail.plugin.Formatter;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
 import org.bukkit.block.data.Rail;
@@ -15,7 +15,7 @@ import org.bukkit.block.data.Rail;
 public class RailSwitchCommand extends ManagerQueryCommand
 {  
   // Constructor
-  public RailSwitchCommand(Manager manager, QueryCommandType type)
+  public RailSwitchCommand(Manager manager, ManagerQueryCommandType type)
   {
     super(manager, type, "gregorail.rail.switch");
   }
@@ -31,11 +31,11 @@ public class RailSwitchCommand extends ManagerQueryCommand
       var senderLocation = context.assertSenderHasLocation();
       
       // Validate the number of arguments
-      if (!context.hasAtLeastArgumentsCount(this.getType() == QueryCommandType.CONDITIONAL ? 3 : 2))
+      if (!context.hasAtLeastArgumentsCount(this.getType() == ManagerQueryCommandType.CONDITIONAL ? 3 : 2))
         throw new CommandUsageException();
       
       // Create a scanner for the arguments
-      var scanner = context.getArgumentsScanner(this.getManager());
+      var scanner = context.getArgumentsScanner();
       
       // Parse the properties        
       var properties = scanner.wrapInPropertyBag();

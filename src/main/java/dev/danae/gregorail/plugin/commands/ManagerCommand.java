@@ -2,6 +2,8 @@ package dev.danae.gregorail.plugin.commands;
 
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.Formatter;
+import dev.danae.gregorail.util.commands.Command;
+import dev.danae.gregorail.util.commands.CommandContext;
 import java.util.ArrayList;
 import java.util.List;
 

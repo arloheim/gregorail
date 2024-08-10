@@ -4,12 +4,12 @@ import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.Minecart;
 import dev.danae.gregorail.plugin.GregoRailPlugin;
-import dev.danae.gregorail.plugin.commands.CommandContext;
-import dev.danae.gregorail.plugin.commands.CommandException;
-import dev.danae.gregorail.plugin.commands.CommandUsageException;
 import dev.danae.gregorail.plugin.commands.ManagerQueryCommand;
-import dev.danae.gregorail.plugin.commands.QueryCommandType;
+import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
 import dev.danae.gregorail.plugin.Formatter;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.parser.ParserException;
 import java.util.Collection;
 import java.util.List;
@@ -37,7 +37,7 @@ public class CartPromptSetCommand extends ManagerQueryCommand
   
   
   // Constructor
-  public CartPromptSetCommand(Manager manager, QueryCommandType type, CartPromptOptions options, GregoRailPlugin plugin)
+  public CartPromptSetCommand(Manager manager, ManagerQueryCommandType type, CartPromptOptions options, GregoRailPlugin plugin)
   {
     super(manager, type, "gregorail.cart.promptset");
     
@@ -67,7 +67,7 @@ public class CartPromptSetCommand extends ManagerQueryCommand
         throw new CommandUsageException();
       
       // Create a scanner for the arguments
-      var scanner = context.getArgumentsScanner(this.getManager());
+      var scanner = context.getArgumentsScanner();
       
       // Parse the properties
       var properties = scanner.wrapInPropertyBag();

@@ -2,10 +2,10 @@ package dev.danae.gregorail.plugin.commands.locate;
 
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
-import dev.danae.gregorail.plugin.commands.CommandContext;
-import dev.danae.gregorail.plugin.commands.CommandException;
-import dev.danae.gregorail.plugin.commands.CommandUsageException;
 import dev.danae.gregorail.plugin.Formatter;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class LocateCartCommand extends ManagerCommand
       var senderLocation = context.assertSenderHasLocation();
       
       // Create a scanner for the arguments
-      var scanner = context.getArgumentsScanner(this.getManager());
+      var scanner = context.getArgumentsScanner();
       
       // Parse the properties
       var properties = scanner.wrapInPropertyBag();

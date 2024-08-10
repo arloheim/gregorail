@@ -1,8 +1,7 @@
-package dev.danae.gregorail.plugin.commands;
+package dev.danae.gregorail.util.commands;
 
-import dev.danae.gregorail.model.Manager;
-import dev.danae.gregorail.util.parser.Scanner;
 import dev.danae.gregorail.util.Cuboid;
+import dev.danae.gregorail.util.parser.Scanner;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -50,7 +49,7 @@ public class CommandContext
   }
   
   // Return a scanner over the arguments of the context
-  public Scanner getArgumentsScanner(Manager manager)
+  public Scanner getArgumentsScanner()
   {
     return new Scanner(this.arguments);
   }

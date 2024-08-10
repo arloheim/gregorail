@@ -1,4 +1,4 @@
-package dev.danae.gregorail.plugin.commands;
+package dev.danae.gregorail.util.commands;
 
 
 public class CommandException extends Exception

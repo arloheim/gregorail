@@ -4,7 +4,7 @@ import dev.danae.gregorail.plugin.butcher.ButcherOptions;
 import dev.danae.gregorail.plugin.butcher.Butcher;
 import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
-import dev.danae.gregorail.plugin.commands.QueryCommandType;
+import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
 import dev.danae.gregorail.plugin.commands.admin.AdminReloadCommand;
 import dev.danae.gregorail.plugin.commands.admin.AdminVersionCommand;
 import dev.danae.gregorail.plugin.commands.cart.CartClearCommand;
@@ -24,7 +24,7 @@ import dev.danae.gregorail.plugin.configuration.ConfigurationMapKeyType;
 import dev.danae.gregorail.plugin.migrations.v1_1_0.CodeDisplayNamesMigration;
 import dev.danae.gregorail.plugin.commands.tag.TagClearCommand;
 import dev.danae.gregorail.plugin.commands.tag.TagListCommand;
-import dev.danae.gregorail.plugin.commands.CommandGroup;
+import dev.danae.gregorail.util.commands.CommandGroup;
 import dev.danae.gregorail.util.parser.Parser;
 import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.plugin.webhooks.Webhook;
@@ -114,23 +114,23 @@ public final class GregoRailPlugin extends JavaPlugin
       .publishCommandHandler(this, this.getCommand("gtag"));
       
     new CommandGroup()
-      .registerSubcommand("clear", new CartClearCommand(this.manager, QueryCommandType.ALWAYS))
-      .registerSubcommand("clearif", new CartClearCommand(this.manager, QueryCommandType.CONDITIONAL))
-      .registerSubcommand("promptset", new CartPromptSetCommand(this.manager, QueryCommandType.ALWAYS, this.cartPromptOptions, this))
-      .registerSubcommand("promptsetif", new CartPromptSetCommand(this.manager, QueryCommandType.CONDITIONAL, this.cartPromptOptions, this))
-      .registerSubcommand("set", new CartSetCommand(this.manager, QueryCommandType.ALWAYS))
-      .registerSubcommand("setif", new CartSetCommand(this.manager, QueryCommandType.CONDITIONAL))
-      .registerSubcommand("speed", new CartSpeedCommand(this.manager, QueryCommandType.ALWAYS))
-      .registerSubcommand("speedif", new CartSpeedCommand(this.manager, QueryCommandType.CONDITIONAL))
+      .registerSubcommand("clear", new CartClearCommand(this.manager, ManagerQueryCommandType.ALWAYS))
+      .registerSubcommand("clearif", new CartClearCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
+      .registerSubcommand("promptset", new CartPromptSetCommand(this.manager, ManagerQueryCommandType.ALWAYS, this.cartPromptOptions, this))
+      .registerSubcommand("promptsetif", new CartPromptSetCommand(this.manager, ManagerQueryCommandType.CONDITIONAL, this.cartPromptOptions, this))
+      .registerSubcommand("set", new CartSetCommand(this.manager, ManagerQueryCommandType.ALWAYS))
+      .registerSubcommand("setif", new CartSetCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
+      .registerSubcommand("speed", new CartSpeedCommand(this.manager, ManagerQueryCommandType.ALWAYS))
+      .registerSubcommand("speedif", new CartSpeedCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
       .publishCommandHandler(this, this.getCommand("gcart"));
     
     new CommandGroup()
-      .registerSubcommand("block", new RailBlockCommand(this.manager, QueryCommandType.ALWAYS))
-      .registerSubcommand("blockif", new RailBlockCommand(this.manager, QueryCommandType.CONDITIONAL))
-      .registerSubcommand("sound", new RailSoundCommand(this.manager, QueryCommandType.ALWAYS))
-      .registerSubcommand("soundif", new RailSoundCommand(this.manager, QueryCommandType.CONDITIONAL))
-      .registerSubcommand("switch", new RailSwitchCommand(this.manager, QueryCommandType.ALWAYS))
-      .registerSubcommand("switchif", new RailSwitchCommand(this.manager, QueryCommandType.CONDITIONAL))
+      .registerSubcommand("block", new RailBlockCommand(this.manager, ManagerQueryCommandType.ALWAYS))
+      .registerSubcommand("blockif", new RailBlockCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
+      .registerSubcommand("sound", new RailSoundCommand(this.manager, ManagerQueryCommandType.ALWAYS))
+      .registerSubcommand("soundif", new RailSoundCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
+      .registerSubcommand("switch", new RailSwitchCommand(this.manager, ManagerQueryCommandType.ALWAYS))
+      .registerSubcommand("switchif", new RailSwitchCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
       .publishCommandHandler(this, this.getCommand("grail"));
     
     new CommandGroup()

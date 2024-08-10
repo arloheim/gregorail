@@ -2,10 +2,10 @@ package dev.danae.gregorail.plugin.commands.tag;
 
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
-import dev.danae.gregorail.plugin.commands.CommandContext;
-import dev.danae.gregorail.plugin.commands.CommandException;
-import dev.danae.gregorail.plugin.commands.CommandUsageException;
 import dev.danae.gregorail.plugin.Formatter;
+import dev.danae.gregorail.util.commands.CommandContext;
+import dev.danae.gregorail.util.commands.CommandException;
+import dev.danae.gregorail.util.commands.CommandUsageException;
 import dev.danae.gregorail.util.parser.ParserException;
 import java.util.List;
 
