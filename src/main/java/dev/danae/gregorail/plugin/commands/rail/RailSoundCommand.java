@@ -44,7 +44,7 @@ public class RailSoundCommand extends ManagerQueryCommand
       var pitch = CommandUtils.clamp(properties.getFloat("pitch", 1.0f), 0.0f, 2.0f);
       
       // Parse the arguments
-      var result = this.matchQueryMatcher(scanner, () -> scanner.nextKey(), () -> this.getManager().findNearestCart(senderLocation, distance));
+      var result = this.matchQueryMatcher(scanner, () -> scanner.nextNamespacedKey(), () -> this.getManager().findNearestCart(senderLocation, distance));
       
       // Execute the command
       if (this.getManager().playSound(senderLocation, result.getValue(), result.getCart(), volume, pitch))

@@ -181,6 +181,19 @@ public class Scanner
   {
     return ParserSupplier.getOrElse(() -> this.rest(expected), defaultValue);
   }
+
+
+  // Return the next element in the scanner as a string
+  public String nextString() throws ParserException
+  {
+    return this.take(s -> s, "string");
+  }
+
+  // Return the next element in the scanner as a stri, or the default value if no such element exists
+  public String nextString(String defaultValue)
+  {
+    return ParserSupplier.getOrElse(() -> this.nextString(), defaultValue);
+  }
   
   // Return the next element in the scanner as an integer
   public int nextInt() throws ParserException
@@ -266,17 +279,16 @@ public class Scanner
     return ParserSupplier.getOrElse(() -> this.nextIdentifier(), defaultValue);
   }
   
-  
   // Return the next element in the scanner as a namespaced key
-  public NamespacedKey nextKey() throws ParserException
+  public NamespacedKey nextNamespacedKey() throws ParserException
   {
-    return this.take(Parser::parseKey, "namespaced key");
+    return this.take(Parser::parseNamespacedKey, "namespaced key");
   }
   
   // Return the next element in the scanner as a namespaced key, or the default value if no such element exists
-  public NamespacedKey nextKey(NamespacedKey defaultValue)
+  public NamespacedKey nextNamespacedKey(NamespacedKey defaultValue)
   {
-    return ParserSupplier.getOrElse(() -> this.nextKey(), defaultValue);
+    return ParserSupplier.getOrElse(() -> this.nextNamespacedKey(), defaultValue);
   }
   
   // Return the next element in the scanner as an enum of the specified class

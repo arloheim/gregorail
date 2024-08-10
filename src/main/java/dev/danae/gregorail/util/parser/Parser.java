@@ -154,7 +154,7 @@ public class Parser
   }
   
   // Parse a namespaced key from a string
-  public static NamespacedKey parseKey(String string) throws ParserException
+  public static NamespacedKey parseNamespacedKey(String string) throws ParserException
   {
     // Match the string against the pattern
     var m = NAMESPACED_KEY_PATTERN.matcher(string);
