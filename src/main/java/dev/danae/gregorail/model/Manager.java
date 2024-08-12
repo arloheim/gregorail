@@ -38,18 +38,6 @@ public interface Manager
   
   // Remove the tag of a code
   public void removeCodeTag(Code code);
-
-  // Return all defined dynamic signs
-  public Map<NamespacedKey, DynamicSign> getDefinedDynamicSigns();
-
-  // Return the dymaic sign with the specified key
-  public DynamicSign getDynamicSign(NamespacedKey key);
-
-  // Set the dynamic sign with the specified key
-  public void setDynamicSign(NamespacedKey key, DynamicSign dynamicSign);
-
-  // Remove the dynamic sign with the specified key
-  public void removeDynamicSign(NamespacedKey key);
   
   // Return the radius in blocks to search for blocks while parsing a location
   public int getBlockSearchRadius();

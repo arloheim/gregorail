@@ -327,6 +327,25 @@ public class Scanner
     return ParserSupplier.getOrElse(() -> this.nextMaterial(requireBlock), defaultValue);
   }
   
+  // Return the next element in the scanner as a location
+  public Location nextLocation(Location origin, int radius) throws ParserException
+  {
+    try
+    {
+      return this.takeMany(s -> Parser.parseLocation(s, origin, radius), 3, "location");
+    }
+    catch (ParserException ex)
+    {
+      return this.take(s -> Parser.parseLocation(s, origin, radius), "location");
+    }
+  }
+  
+  // Return the next element in the scanner as a location, or the default value if no such element exists
+  public Location nextLocation(Location origin, int radius, Location defaultValue)
+  {
+    return ParserSupplier.getOrElse(() -> this.nextLocation(origin, radius), defaultValue);
+  }
+  
   // Return the next element in the scanner as a code
   public Code nextCode() throws ParserException
   {
@@ -361,25 +380,6 @@ public class Scanner
   public Query nextQuery(Query defaultValue)
   {
     return ParserSupplier.getOrElse(() -> this.nextQuery(), defaultValue);
-  }
-  
-  // Return the next element in the scanner as a location
-  public Location nextLocation(Location origin, int radius) throws ParserException
-  {
-    try
-    {
-      return this.takeMany(s -> Parser.parseLocation(s, origin, radius), 3, "location");
-    }
-    catch (ParserException ex)
-    {
-      return this.take(s -> Parser.parseLocation(s, origin, radius), "location");
-    }
-  }
-  
-  // Return the next element in the scanner as a location, or the default value if no such element exists
-  public Location nextLocation(Location origin, int radius, Location defaultValue)
-  {
-    return ParserSupplier.getOrElse(() -> this.nextLocation(origin, radius), defaultValue);
   }
   
   

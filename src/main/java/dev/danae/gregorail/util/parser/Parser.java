@@ -203,6 +203,52 @@ public class Parser
     return parseEnumSet(strings, cls);
   }
   
+  // Parse a location from a string
+  public static Location parseLocation(String string, Location origin, int radius) throws ParserException
+  {
+    // Match the string against the pattern
+    var m = LOCATION_PATTERN.matcher(string);
+    if (!m.matches())
+      throw new ParserException(String.format("\"%s\" is an invalid location value", string));
+    
+    // Check for a current location
+    if (m.group("cur") != null)
+      return origin;
+    
+    // Check for a numeric location
+    if (m.group("xyz") != null)
+    {
+      var x = m.group("rx") != null ? origin.getBlockX() + (m.group("dx") != null ? parseInt(m.group("dx")) : 0) : parseInt(m.group("x"));
+      var y = m.group("ry") != null ? origin.getBlockY() + (m.group("dy") != null ? parseInt(m.group("dy")) : 0) : parseInt(m.group("y"));
+      var z = m.group("rz") != null ? origin.getBlockZ() + (m.group("dz") != null ? parseInt(m.group("dz")) : 0) : parseInt(m.group("z"));
+      
+      return new Location(origin.getWorld(), x, y, z);
+    }
+    
+    // Check for a block location
+    if (m.group("block") != null)
+    {      
+      var mode = m.group("mode");
+      var material = parseMaterial(m.group("name"), true);
+      
+      // Find the block
+      var block = Cuboid.of(origin, radius).findNearestBlockToCenter(material);
+      if (block == null)
+        throw new ParserException(String.format("No block of material %s could be found in a distance of %d blocks", material.toString().toLowerCase(), radius));
+      
+      // Return the appropriate position based on the mode
+      return switch (mode)
+      {
+        case "@" -> block.getLocation();
+        case "^" -> block.getLocation().add(0, 1, 0);
+        default -> throw new ParserException(String.format("\"%s\" is an invalid location value", string));
+      };
+    }
+    
+    // Invalid location format
+    throw new ParserException(String.format("\"%s\" is an invalid location value", string));
+  }
+  
   // Parse a material from a string
   public static Material parseMaterial(String string, boolean requireBlock) throws ParserException
   {
@@ -290,51 +336,5 @@ public class Parser
       return list.get(0);
     else
       return Query.anyMatch(list);
-  }
-  
-  // Parse a location from a string
-  public static Location parseLocation(String string, Location origin, int radius) throws ParserException
-  {
-    // Match the string against the pattern
-    var m = LOCATION_PATTERN.matcher(string);
-    if (!m.matches())
-      throw new ParserException(String.format("\"%s\" is an invalid location value", string));
-    
-    // Check for a current location
-    if (m.group("cur") != null)
-      return origin;
-    
-    // Check for a numeric location
-    if (m.group("xyz") != null)
-    {
-      var x = m.group("rx") != null ? origin.getBlockX() + (m.group("dx") != null ? parseInt(m.group("dx")) : 0) : parseInt(m.group("x"));
-      var y = m.group("ry") != null ? origin.getBlockY() + (m.group("dy") != null ? parseInt(m.group("dy")) : 0) : parseInt(m.group("y"));
-      var z = m.group("rz") != null ? origin.getBlockZ() + (m.group("dz") != null ? parseInt(m.group("dz")) : 0) : parseInt(m.group("z"));
-      
-      return new Location(origin.getWorld(), x, y, z);
-    }
-    
-    // Check for a block location
-    if (m.group("block") != null)
-    {      
-      var mode = m.group("mode");
-      var material = parseMaterial(m.group("name"), true);
-      
-      // Find the block
-      var block = Cuboid.of(origin, radius).findNearestBlockToCenter(material);
-      if (block == null)
-        throw new ParserException(String.format("No block of material %s could be found in a distance of %d blocks", material.toString().toLowerCase(), radius));
-      
-      // Return the appropriate position based on the mode
-      return switch (mode)
-      {
-        case "@" -> block.getLocation();
-        case "^" -> block.getLocation().add(0, 1, 0);
-        default -> throw new ParserException(String.format("\"%s\" is an invalid location value", string));
-      };
-    }
-    
-    // Invalid location format
-    throw new ParserException(String.format("\"%s\" is an invalid location value", string));
   }
 }
