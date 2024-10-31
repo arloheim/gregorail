@@ -2,6 +2,7 @@ package dev.danae.gregorail.plugin.commands.cart;
 
 import org.bukkit.Material;
 
+
 public class CartPromptOptions
 {
   // The title to use in the cart prompt command

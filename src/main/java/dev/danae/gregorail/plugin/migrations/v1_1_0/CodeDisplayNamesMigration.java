@@ -1,12 +1,12 @@
 package dev.danae.gregorail.plugin.migrations.v1_1_0;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 import com.google.common.io.Files;
 import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.plugin.GregoRailPlugin;
 import dev.danae.gregorail.plugin.migrations.Migration;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 

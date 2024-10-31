@@ -1,5 +1,6 @@
 package dev.danae.gregorail.plugin.webhooks.serializers;
 
+import java.lang.reflect.Type;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
@@ -11,7 +12,6 @@ import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
 import dev.danae.gregorail.model.Minecart;
-import java.lang.reflect.Type;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

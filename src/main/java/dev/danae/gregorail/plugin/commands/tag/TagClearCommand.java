@@ -1,13 +1,14 @@
 package dev.danae.gregorail.plugin.commands.tag;
 
+import java.util.List;
+import java.util.stream.Stream;
+import dev.danae.common.commands.CommandContext;
+import dev.danae.common.commands.CommandException;
+import dev.danae.common.commands.CommandUsageException;
+import dev.danae.common.commands.arguments.ArgumentType;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
 import dev.danae.gregorail.plugin.Formatter;
-import dev.danae.gregorail.util.commands.CommandContext;
-import dev.danae.gregorail.util.commands.CommandException;
-import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.parser.ParserException;
-import java.util.List;
 
 
 public class TagClearCommand extends ManagerCommand
@@ -21,7 +22,6 @@ public class TagClearCommand extends ManagerCommand
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {     
     try
     {
@@ -35,6 +35,7 @@ public class TagClearCommand extends ManagerCommand
       // Parse the arguments
       var code = scanner.nextCode();
       var propertyName = scanner.nextIdentifier();
+  public void handle(CommandContext context) throws CommandException
 
       // Set the property of the code tag
       if (propertyName.equals("name"))

@@ -1,13 +1,13 @@
 package dev.danae.gregorail.plugin.commands.locate;
 
+import java.util.List;
+import dev.danae.common.commands.CommandContext;
+import dev.danae.common.commands.CommandException;
+import dev.danae.common.commands.CommandUsageException;
+import dev.danae.common.commands.arguments.ArgumentType;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
 import dev.danae.gregorail.plugin.Formatter;
-import dev.danae.gregorail.util.commands.CommandContext;
-import dev.danae.gregorail.util.commands.CommandException;
-import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.parser.ParserException;
-import java.util.List;
 
 
 public class LocateBlockCommand extends ManagerCommand
@@ -21,7 +21,7 @@ public class LocateBlockCommand extends ManagerCommand
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException, CommandUsageException
+  public void handle(CommandContext context) throws CommandException
   {
     try
     {      

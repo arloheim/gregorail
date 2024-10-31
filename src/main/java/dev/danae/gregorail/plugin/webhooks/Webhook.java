@@ -1,13 +1,13 @@
 package dev.danae.gregorail.plugin.webhooks;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import dev.danae.gregorail.plugin.GregoRailPlugin;
-import dev.danae.gregorail.plugin.GregoRailPluginComponent;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.EnumSet;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import dev.danae.gregorail.plugin.GregoRailPlugin;
+import dev.danae.gregorail.plugin.GregoRailPluginComponent;
 import org.bukkit.Bukkit;
 
 
@@ -70,7 +70,7 @@ public final class Webhook extends GregoRailPluginComponent
       connection.setRequestMethod("POST");
       connection.setRequestProperty("Content-Type", "application/json");
       connection.setRequestProperty("Accept", "application/json");
-      connection.setRequestProperty("User-Agent", String.format("%s/%s (%s)", this.getPlugin().getDescription().getName(), this.getPlugin().getDescription().getVersion(), Bukkit.getVersion()));
+      connection.setRequestProperty("User-Agent", String.format("%s/%s (%s)", this.getPlugin().getPluginMeta().getName(), this.getPlugin().getPluginMeta().getVersion(), Bukkit.getVersion()));
       connection.setDoOutput(true);
       
       // Write the payload

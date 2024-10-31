@@ -1,15 +1,20 @@
 package dev.danae.gregorail.plugin.commands.rail;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+import dev.danae.common.commands.CommandContext;
+import dev.danae.common.commands.CommandException;
+import dev.danae.common.commands.CommandUsageException;
+import dev.danae.common.commands.CommandUtils;
+import dev.danae.common.commands.arguments.ArgumentType;
+import dev.danae.common.commands.arguments.StringArgumentType;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerQueryCommand;
 import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
 import dev.danae.gregorail.plugin.Formatter;
-import dev.danae.gregorail.util.commands.CommandContext;
-import dev.danae.gregorail.util.commands.CommandException;
-import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.commands.CommandUtils;
-import dev.danae.gregorail.util.parser.ParserException;
-import java.util.List;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 
 
 public class RailSoundCommand extends ManagerQueryCommand
@@ -23,7 +28,6 @@ public class RailSoundCommand extends ManagerQueryCommand
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
     try
     {      
@@ -54,6 +58,7 @@ public class RailSoundCommand extends ManagerQueryCommand
     {
       throw new CommandException(ex.getMessage(), ex);
     }
+  public void handle(CommandContext context) throws CommandException
   }
   
   // Handle tab completion of the command

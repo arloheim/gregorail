@@ -1,13 +1,10 @@
 package dev.danae.gregorail.plugin;
 
+import java.util.Locale;
+import java.util.Map;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Minecart;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Map;
-import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -18,57 +15,12 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Rail;
 
 
 public class Formatter
 {  
-  // Return a stream of all block material names
-  public static Stream<String> getAllMaterials(boolean requireBlock)
-  {
-    return getAllMaterials(requireBlock, UnaryOperator.identity());
-  }
-  
-  // Return a stream of all block material names prefixed with the specified string
-  public static Stream<String> getAllMaterials(boolean requireBlock, UnaryOperator<String> mapper)
-  {
-    return Arrays.stream(Material.values())
-      .filter(material -> !requireBlock || material.isBlock())
-      .map(material -> mapper.apply(material.name().toLowerCase()))
-      .sorted();
-  }
-  
-  // Return a stream of all shape names
-  public static Stream<String> getAllShapes()
-  {
-    return getAllShapes(UnaryOperator.identity());
-  }
-  
-  // Return a stream of all shape names
-  public static Stream<String> getAllShapes(UnaryOperator<String> mapper)
-  {
-    return Arrays.stream(Rail.Shape.values())
-      .map(shape -> mapper.apply(shape.name().toLowerCase()))
-      .sorted();
-  }
-  
-  // Return a stream of all sound names
-  public static Stream<String> getAllSounds()
-  {
-    return getAllSounds(UnaryOperator.identity());
-  }
-  
-  // Return a stream of all sound names
-  public static Stream<String> getAllSounds(UnaryOperator<String> mapper)
-  {
-    return Arrays.stream(Sound.values())
-      .map(sound -> mapper.apply(sound.getKey().toString()))
-      .sorted();
-  }
-  
-  
   // Format a location to a text component
   public static BaseComponent[] formatLocation(Location location)
   {

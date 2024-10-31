@@ -1,7 +1,16 @@
 package dev.danae.gregorail.plugin;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
 import dev.danae.gregorail.plugin.butcher.ButcherOptions;
 import dev.danae.gregorail.plugin.butcher.Butcher;
+import dev.danae.common.commands.CommandGroup;
+import dev.danae.common.commands.arguments.ArgumentException;
+import dev.danae.common.commands.arguments.ArgumentType;
+import dev.danae.common.plugin.PluginCommandManager;
+import dev.danae.common.plugin.PluginMessageManager;
 import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
@@ -24,15 +33,8 @@ import dev.danae.gregorail.plugin.configuration.ConfigurationMapKeyType;
 import dev.danae.gregorail.plugin.migrations.v1_1_0.CodeDisplayNamesMigration;
 import dev.danae.gregorail.plugin.commands.tag.TagClearCommand;
 import dev.danae.gregorail.plugin.commands.tag.TagListCommand;
-import dev.danae.gregorail.util.commands.CommandGroup;
-import dev.danae.gregorail.util.parser.Parser;
-import dev.danae.gregorail.util.parser.ParserException;
 import dev.danae.gregorail.plugin.webhooks.Webhook;
 import dev.danae.gregorail.plugin.webhooks.WebhookType;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -71,8 +73,7 @@ public final class GregoRailPlugin extends JavaPlugin
   {
     return this.manager;
   }
-
-
+  
 
   // Load the plugin
   @Override
@@ -104,14 +105,14 @@ public final class GregoRailPlugin extends JavaPlugin
     new CommandGroup()
       .registerSubcommand("reload", new AdminReloadCommand(this.manager, this))
       .registerSubcommand("version", new AdminVersionCommand(this.manager, this))
-      .publishCommandHandler(this, this.getCommand("gregorail"));
+      .publishCommandHandler(this, "gregorail");
 
     new CommandGroup()
       .registerSubcommand("clear", new TagClearCommand(this.manager))
       .registerSubcommand("list", new TagListCommand(this.manager))
       .registerSubcommand("remove", new TagRemoveCommand(this.manager))
       .registerSubcommand("set", new TagSetCommand(this.manager))
-      .publishCommandHandler(this, this.getCommand("gtag"));
+      .publishCommandHandler(this, "gtag");
       
     new CommandGroup()
       .registerSubcommand("clear", new CartClearCommand(this.manager, ManagerQueryCommandType.ALWAYS))
@@ -122,7 +123,7 @@ public final class GregoRailPlugin extends JavaPlugin
       .registerSubcommand("setif", new CartSetCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
       .registerSubcommand("speed", new CartSpeedCommand(this.manager, ManagerQueryCommandType.ALWAYS))
       .registerSubcommand("speedif", new CartSpeedCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
-      .publishCommandHandler(this, this.getCommand("gcart"));
+      .publishCommandHandler(this, "gcart");
     
     new CommandGroup()
       .registerSubcommand("block", new RailBlockCommand(this.manager, ManagerQueryCommandType.ALWAYS))
@@ -131,12 +132,12 @@ public final class GregoRailPlugin extends JavaPlugin
       .registerSubcommand("soundif", new RailSoundCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
       .registerSubcommand("switch", new RailSwitchCommand(this.manager, ManagerQueryCommandType.ALWAYS))
       .registerSubcommand("switchif", new RailSwitchCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
-      .publishCommandHandler(this, this.getCommand("grail"));
+      .publishCommandHandler(this, "grail");
     
     new CommandGroup()
       .registerSubcommand("block", new LocateBlockCommand(this.manager))
       .registerSubcommand("cart", new LocateCartCommand(this.manager))
-      .publishCommandHandler(this, this.getCommand("glocate"));
+      .publishCommandHandler(this, "glocate");
   }
 
 
@@ -189,11 +190,11 @@ public final class GregoRailPlugin extends JavaPlugin
           if (webhookConfig == null)
             continue;
         
-          var webhookTypes = Parser.parseEnumSet(webhookConfig.getStringList("type"), WebhookType.class);
+          var webhookTypes = ArgumentType.getEnumSetArgumentType(WebhookType.class, "").parseFromStringList(webhookConfig.getStringList("type"));
           var webhookUrl = new URL(webhookConfig.getString("url"));
           this.options.getWebhooks().add(new Webhook(this, webhookName, webhookTypes, webhookUrl));
         }
-        catch (ParserException | MalformedURLException ex)
+        catch (ArgumentException | MalformedURLException ex)
         {
           this.getLogger().log(Level.WARNING, String.format("Could not load the configuration for the webhook with name %s, so it will remain disabled", webhookName), ex);
         }
@@ -217,12 +218,12 @@ public final class GregoRailPlugin extends JavaPlugin
       {
         this.butcherOptions.setEnabled(butcherConfig.getBoolean("enabled", true));
         this.butcherOptions.setRadius(butcherConfig.getInt("radius", 5)); 
-        this.butcherOptions.setIgnoreEntitiesOfType(Parser.parseEnumSet(butcherConfig.getStringList("ignore-entities-of-type"), EntityType.class));
+        this.butcherOptions.setIgnoreEntitiesOfType(ArgumentType.getEnumSetArgumentType(EntityType.class, "").parseFromStringList(butcherConfig.getStringList("ignore-entities-of-type")));
         this.butcherOptions.setIgnoreNamedEntities(butcherConfig.getBoolean("ignore-named-entities", true));
         this.butcherOptions.setLightningBoltEffect(butcherConfig.getBoolean("lightning-bolt-effect", true));
         this.butcherOptions.setDisableItemDrops(butcherConfig.getBoolean("disable-item-drops", true));
       }
-      catch (ParserException ex)
+      catch (ArgumentException ex)
       {
         this.getLogger().log(Level.WARNING, "Could not load the configuration for the butcher, so it will remain disabled", ex);
         this.butcherOptions.setEnabled(false);

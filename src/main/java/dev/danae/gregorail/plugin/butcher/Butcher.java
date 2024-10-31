@@ -1,8 +1,8 @@
 package dev.danae.gregorail.plugin.butcher;
 
+import dev.danae.common.util.Cuboid;
 import dev.danae.gregorail.plugin.GregoRailPlugin;
 import dev.danae.gregorail.plugin.GregoRailPluginComponent;
-import dev.danae.gregorail.util.Cuboid;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Mob;
@@ -59,7 +59,7 @@ public final class Butcher extends GregoRailPluginComponent implements Listener
       return;
     
     // Get all mobs around the minecart and kill them if they are eligible
-    for (var entity : Cuboid.of(cart.getLocation(), this.options.getRadius()).findEntities(Mob.class, mob -> this.isEligibleToBeKilled(mob)))
+    for (var entity : Cuboid.around(cart.getLocation(), this.options.getRadius()).findEntities(Mob.class, mob -> this.isEligibleToBeKilled(mob)))
       this.kill(entity, player);
   }
   
@@ -90,7 +90,7 @@ public final class Butcher extends GregoRailPluginComponent implements Listener
       this.kill(mob, player);
     
     // Cancel the collision
-    e.setCollisionCancelled(true);
+    e.setCancelled(true);
   }
   
   // Event listener for when an entity dies
@@ -112,7 +112,7 @@ public final class Butcher extends GregoRailPluginComponent implements Listener
       return false;
     if (this.options.getIgnoreEntitiesOfType().contains(mob.getType()))
       return false;
-    if (this.options.isIgnoreNamedEntities() && mob.getCustomName() != null)
+    if (this.options.isIgnoreNamedEntities() && mob.customName() != null)
       return false;
     return true;
   }

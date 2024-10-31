@@ -1,12 +1,11 @@
 package dev.danae.gregorail.plugin.commands.admin;
 
+import java.util.List;
+import dev.danae.common.commands.CommandContext;
+import dev.danae.common.commands.CommandException;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.GregoRailPlugin;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
-import dev.danae.gregorail.util.commands.CommandContext;
-import dev.danae.gregorail.util.commands.CommandException;
-import dev.danae.gregorail.util.commands.CommandUsageException;
-import java.util.List;
 
 
 public class AdminVersionCommand extends ManagerCommand
@@ -26,11 +25,10 @@ public class AdminVersionCommand extends ManagerCommand
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException, CommandUsageException
+  public void handle(CommandContext context) throws CommandException
   {     
     // Send information about the version
-    var desc = this.plugin.getDescription();
-    context.sendMessage(String.format("%s %s (API version %s)", desc.getName(), desc.getVersion(), desc.getAPIVersion()));
+    context.sendMessage(String.format("%s %s (API version %s)", this.plugin.getPluginMeta().getName(), this.plugin.getPluginMeta().getVersion(), this.plugin.getPluginMeta().getAPIVersion()));
   }
 
   // Handle tab completion of the command

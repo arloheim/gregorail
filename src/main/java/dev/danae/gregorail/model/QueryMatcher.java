@@ -66,7 +66,7 @@ public class QueryMatcher<T>
     // Iterate over the branches
     for (var branch : this.branches)
     {
-      // If the query of the branch matcher, then return its result
+      // If the query of the branch matches, then return its result
       if (branch.getQuery().match(cart))
         return new QueryMatcherResult<>(branch.getValue(), cart);
     }

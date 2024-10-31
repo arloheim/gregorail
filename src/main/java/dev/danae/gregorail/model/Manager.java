@@ -1,9 +1,9 @@
 package dev.danae.gregorail.model;
 
-import dev.danae.gregorail.model.persistence.CodeDataType;
-import dev.danae.gregorail.model.persistence.MinecartDataType;
 import java.util.Map;
 import java.util.function.UnaryOperator;
+import dev.danae.gregorail.model.persistence.CodeDataType;
+import dev.danae.gregorail.model.persistence.MinecartDataType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

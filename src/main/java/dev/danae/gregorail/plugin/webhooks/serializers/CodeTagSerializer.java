@@ -1,5 +1,6 @@
 package dev.danae.gregorail.plugin.webhooks.serializers;
 
+import java.lang.reflect.Type;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
@@ -9,7 +10,6 @@ import com.google.gson.JsonSerializer;
 import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
-import java.lang.reflect.Type;
 import net.md_5.bungee.api.ChatColor;
 
 

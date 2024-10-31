@@ -1,14 +1,14 @@
 package dev.danae.gregorail.plugin.commands.cart;
 
+import java.util.List;
+import dev.danae.common.commands.CommandContext;
+import dev.danae.common.commands.CommandException;
+import dev.danae.common.commands.CommandUsageException;
+import dev.danae.common.commands.arguments.ArgumentType;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerQueryCommand;
 import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
 import dev.danae.gregorail.plugin.Formatter;
-import dev.danae.gregorail.util.commands.CommandContext;
-import dev.danae.gregorail.util.commands.CommandException;
-import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.parser.ParserException;
-import java.util.List;
 
 
 public class CartSetCommand extends ManagerQueryCommand
@@ -22,7 +22,6 @@ public class CartSetCommand extends ManagerQueryCommand
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
     try
     {      
@@ -53,6 +52,7 @@ public class CartSetCommand extends ManagerQueryCommand
         else
           context.sendMessage(Formatter.formatCartCodeRetainedMessage(result.getCart(), originalCode));
       }
+  public void handle(CommandContext context) throws CommandException
       else
       {
         context.sendMessage(Formatter.formatCart(result.getCart()));

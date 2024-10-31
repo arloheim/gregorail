@@ -1,14 +1,17 @@
 package dev.danae.gregorail.plugin.commands.rail;
 
+import java.util.List;
+import dev.danae.common.commands.CommandContext;
+import dev.danae.common.commands.CommandException;
+import dev.danae.common.commands.CommandUsageException;
+import dev.danae.common.commands.arguments.ArgumentType;
+import dev.danae.common.commands.arguments.MaterialFilter;
+import dev.danae.common.commands.arguments.StringArgumentType;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerQueryCommand;
 import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
 import dev.danae.gregorail.plugin.Formatter;
-import dev.danae.gregorail.util.commands.CommandContext;
-import dev.danae.gregorail.util.commands.CommandException;
-import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.parser.ParserException;
-import java.util.List;
+import org.bukkit.Material;
 import org.bukkit.block.data.Rail;
 
 
@@ -23,7 +26,7 @@ public class RailSwitchCommand extends ManagerQueryCommand
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException, CommandUsageException
+  public void handle(CommandContext context) throws CommandException
   {
     try
     {      

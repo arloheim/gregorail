@@ -1,8 +1,8 @@
 package dev.danae.gregorail.plugin;
 
-import dev.danae.gregorail.plugin.webhooks.Webhook;
 import java.util.LinkedList;
 import java.util.List;
+import dev.danae.gregorail.plugin.webhooks.Webhook;
 
 
 public class GregoRailPluginOptions

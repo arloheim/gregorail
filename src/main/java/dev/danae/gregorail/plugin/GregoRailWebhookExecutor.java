@@ -1,5 +1,6 @@
 package dev.danae.gregorail.plugin;
 
+import java.util.logging.Level;
 import com.google.gson.JsonObject;
 import dev.danae.gregorail.model.events.BlockMaterialChangedEvent;
 import dev.danae.gregorail.model.events.BlockShapeChangedEvent;
@@ -14,7 +15,6 @@ import dev.danae.gregorail.plugin.webhooks.WebhookException;
 import dev.danae.gregorail.plugin.webhooks.WebhookExecutor;
 import dev.danae.gregorail.plugin.webhooks.WebhookPayloadFactory;
 import dev.danae.gregorail.plugin.webhooks.WebhookType;
-import java.util.logging.Level;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

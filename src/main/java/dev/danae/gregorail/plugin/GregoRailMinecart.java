@@ -1,8 +1,8 @@
 package dev.danae.gregorail.plugin;
 
+import java.util.UUID;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Minecart;
-import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

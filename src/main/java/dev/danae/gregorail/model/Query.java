@@ -9,13 +9,38 @@ public interface Query
   // Evaluate the query
   public boolean match(Minecart cart);
   
+
+  // Return a query that always returns false
+  public static Query alwayFalse()
+  {
+    return cart -> false;
+  }
   
   // Return a query that always returns true
-  public static Query tautology()
+  public static Query alwaysTrue()
   {
     return cart -> true;
   }
+
+  // Return a query that negates the specified query
+  public static Query negate(Query query)
+  {
+    return cart -> !query.match(cart);
+  }
   
+  // Return a query that checks if any of the specified queries evaluate to true
+  public static Query anyMatch(Collection<Query> queries)
+  {
+    return cart -> queries.stream().anyMatch(q -> q.match(cart));
+  }
+  
+  // Return a query that checks if all of the specified queries evaluate to true
+  public static Query allMatch(Collection<Query> queries)
+  {
+    return cart -> queries.stream().allMatch(q -> q.match(cart));
+  }
+
+
   // Return a query that checks if the code of a minecart equals a string
   public static Query codeEquals(String string)
   {
@@ -38,17 +63,5 @@ public interface Query
   public static Query codeContains(String string)
   {
     return cart -> cart != null && !cart.getCode().isEmpty() && cart.getCode().getId().contains(string);
-  }
-  
-  // Return a query that checks if any of the specified queries evaluate to true
-  public static Query anyMatch(Collection<Query> queries)
-  {
-    return cart -> queries.stream().anyMatch(q -> q.match(cart));
-  }
-  
-  // Return a query that checks if all of the specified queries evaluate to true
-  public static Query allMatch(Collection<Query> queries)
-  {
-    return cart -> queries.stream().allMatch(q -> q.match(cart));
   }
 }

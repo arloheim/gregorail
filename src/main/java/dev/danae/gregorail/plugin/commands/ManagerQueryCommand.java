@@ -1,11 +1,12 @@
 package dev.danae.gregorail.plugin.commands;
 
+import java.util.function.Supplier;
+import dev.danae.common.commands.arguments.ArgumentException;
+import dev.danae.common.commands.arguments.ArgumentType;
+import dev.danae.common.commands.arguments.Scanner;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.Minecart;
 import dev.danae.gregorail.model.QueryMatcherResult;
-import dev.danae.gregorail.util.parser.Scanner;
-import dev.danae.gregorail.util.parser.ParserException;
-import dev.danae.gregorail.util.parser.ParserSupplier;
 
 
 public abstract class ManagerQueryCommand extends ManagerCommand
@@ -39,7 +40,7 @@ public abstract class ManagerQueryCommand extends ManagerCommand
   
   
   // Evaluate a query read from the scanner with the specified cart function
-  protected QueryMatcherResult<Boolean> matchQuery(Scanner scanner, ParserSupplier<Minecart> cartFunction) throws ParserException
+  protected QueryMatcherResult<Boolean> matchQuery(Scanner scanner, Supplier<Minecart> cartFunction) throws ArgumentException
   {
     if (this.getType() == ManagerQueryCommandType.CONDITIONAL)
     {
@@ -55,8 +56,8 @@ public abstract class ManagerQueryCommand extends ManagerCommand
     }
   }
   
-  // Evaluate a query metcher read from the scanner with the specified cart function
-  protected <T> QueryMatcherResult<T> matchQueryMatcher(Scanner scanner, ParserSupplier<T> resultFunction, ParserSupplier<Minecart> cartFunction) throws ParserException
+  // Evaluate a query matcher read from the scanner with the specified cart function
+  protected <T> QueryMatcherResult<T> matchQueryMatcher(Scanner scanner, ArgumentType<T> resultType, Supplier<Minecart> cartFunction) throws ArgumentException
   {
     if (this.getType() == ManagerQueryCommandType.CONDITIONAL)
     {

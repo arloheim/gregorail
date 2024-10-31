@@ -3,6 +3,7 @@ package dev.danae.gregorail.plugin.configuration;
 import dev.danae.gregorail.model.Code;
 import org.bukkit.NamespacedKey;
 
+
 public interface ConfigurationMapKeyType<K>
 {
   // Static key type instances

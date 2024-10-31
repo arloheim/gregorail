@@ -1,14 +1,14 @@
 package dev.danae.gregorail.plugin.commands.tag;
 
+import java.util.List;
+import java.util.stream.Stream;
+import dev.danae.common.commands.CommandContext;
+import dev.danae.common.commands.CommandException;
+import dev.danae.common.commands.CommandUsageException;
+import dev.danae.common.commands.arguments.ArgumentType;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
 import dev.danae.gregorail.plugin.Formatter;
-import dev.danae.gregorail.util.commands.CommandContext;
-import dev.danae.gregorail.util.commands.CommandException;
-import dev.danae.gregorail.util.commands.CommandUsageException;
-import dev.danae.gregorail.util.parser.ParserException;
-import java.util.List;
-import net.md_5.bungee.api.ChatColor;
 
 
 public class TagSetCommand extends ManagerCommand
@@ -22,7 +22,6 @@ public class TagSetCommand extends ManagerCommand
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {     
     try
     {
@@ -37,6 +36,7 @@ public class TagSetCommand extends ManagerCommand
       var code = scanner.nextCode();
       var propertyName = scanner.nextIdentifier();
       var propertyValue = scanner.rest("value");
+  public void handle(CommandContext context) throws CommandException
 
       // Set the property of the code tag
       if (propertyName.equals("name"))

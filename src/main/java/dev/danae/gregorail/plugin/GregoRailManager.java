@@ -1,5 +1,16 @@
 package dev.danae.gregorail.plugin;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.function.UnaryOperator;
+import dev.danae.common.commands.arguments.ArgumentType;
+import dev.danae.common.commands.arguments.LocationFormat;
+import dev.danae.common.messages.MessageDeserializer;
+import dev.danae.common.messages.minimessage.MiniMessageDeserializer;
+import dev.danae.common.plugin.PluginMessageManager;
+import dev.danae.common.util.Cuboid;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
@@ -13,11 +24,6 @@ import dev.danae.gregorail.model.persistence.CodeDataType;
 import dev.danae.gregorail.model.persistence.MinecartDataType;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMap;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMapKeyType;
-import dev.danae.gregorail.util.Cuboid;
-import java.util.EnumSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.function.UnaryOperator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -67,6 +73,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   {
     return this.codeDataType;
   }
+
   
   // Create a minecart
   @Override
@@ -133,7 +140,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   @Override
   public Minecart findNearestCart(Location center, int distance)
   {
-    return this.createCart(Cuboid.findNearestEntity(center, distance, RideableMinecart.class));
+    return this.createCart(Cuboid.around(center, distance).findNearestEntityToCenter(RideableMinecart.class));
   }
   
   // Return the nearest minecart at the specified location with the default search distance
