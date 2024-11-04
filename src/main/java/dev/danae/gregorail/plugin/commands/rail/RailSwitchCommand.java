@@ -71,10 +71,10 @@ public class RailSwitchCommand extends QueryMatcherCommand<Rail.Shape>
 
   // Return suggestions for the specified command context and argument after the query matcher arguments
   @Override
-  public Stream<String> suggestAfterQueryMatcher(CommandContext context, int argumentIndex)
+  public Stream<String> suggestAfterQueryMatcher(CommandContext context)
   {
     return Stream.concat(
-      this.getManager().getLocationArgumentType(null).suggest(context, argumentIndex),
-      super.suggestAfterQueryMatcher(context, argumentIndex));
+      this.getManager().getLocationArgumentType(null).suggest(context, 0),
+      super.suggestAfterQueryMatcher(context));
   }
 }

@@ -1,6 +1,6 @@
 package dev.danae.gregorail.plugin.commands.locate;
 
-import java.util.List;
+import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.common.commands.CommandUsageException;
@@ -38,13 +38,13 @@ public class LocateBlockCommand extends ManagerCommand
     context.sendMessage(this.getManager().formatBlock(block));
   }
   
-  // Handle tab completion of the command
+  // Return suggestions for the specified command context
   @Override
-  public List<String> handleTabCompletion(CommandContext context)
+  public Stream<String> suggest(CommandContext context)
   {    
     if (context.hasAtLeastArgumentsCount(1))
-    return this.getManager().getLocationArgumentType(null, 0).suggest(context, 0).toList();
+    return this.getManager().getLocationArgumentType(null, 0).suggest(context, 0);
     else
-      return List.of();
+      return Stream.empty();
   }
 }

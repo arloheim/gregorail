@@ -57,37 +57,37 @@ public abstract class QueryCommand extends ManagerCommand
   }
 
 
-  // Handle tab completion of the command
+  // Return suggestions for the specified command context
   @Override
-  public List<String> handleTabCompletion(CommandContext context)
+  public Stream<String> suggest(CommandContext context)
   {
     switch (this.getType())
     {
       case ALWAYS:
       {
         if (context.hasAtLeastArgumentsCount(1))
-          return this.suggestAfterQuery(context, 0).toList();
+          return this.suggestAfterQuery(context);
         else
-          return List.of();
+          return Stream.empty();
       }
         
       case CONDITIONAL:
       {
         if (context.hasAtLeastArgumentsCount(2))
-          return this.suggestAfterQuery(context, 1).toList();
+          return this.suggestAfterQuery(context.withSlicedArguments(1));
         else if (context.hasArgumentsCount(1))
-        return this.getManager().getCodeListArgumentType().suggestFromString(context.getArgument(0)).toList();
+        return this.getManager().getCodeListArgumentType().suggestFromString(context.getArgument(0));
         else
-          return List.of();
+          return Stream.empty();
       }
         
       default:
-        return List.of();
+        return Stream.empty();
     }
   }
 
   // Return suggestions for the specified command context and argument after the query arguments
-  public Stream<String> suggestAfterQuery(CommandContext context, int argumentIndex)
+  public Stream<String> suggestAfterQuery(CommandContext context)
   {
     if (this.getType() == QueryType.CONDITIONAL)
       return Stream.of("||");

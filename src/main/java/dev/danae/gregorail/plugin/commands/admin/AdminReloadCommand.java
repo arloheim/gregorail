@@ -1,6 +1,6 @@
 package dev.danae.gregorail.plugin.commands.admin;
 
-import java.util.List;
+import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.gregorail.model.Manager;
@@ -34,10 +34,10 @@ public class AdminReloadCommand extends ManagerCommand
     context.sendMessage(String.format("Reloaded %s", this.plugin.getPluginMeta().getName()));
   }
 
-  // Handle tab completion of the command
+  // Return suggestions for the specified command context
   @Override
-  public List<String> handleTabCompletion(CommandContext context)
+  public Stream<String> suggest(CommandContext context)
   {
-    return List.of();
+    return Stream.empty();
   }
 }

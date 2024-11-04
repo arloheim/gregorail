@@ -1,7 +1,7 @@
 package dev.danae.gregorail.plugin.commands.tag;
 
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.common.commands.CommandUsageException;
@@ -40,13 +40,13 @@ public class TagRemoveCommand extends ManagerCommand
       "code", code)));
   }
   
-  // Handle tab completion of the command
+  // Return suggestions for the specified command context
   @Override
-  public List<String> handleTabCompletion(CommandContext context)
+  public Stream<String> suggest(CommandContext context)
   {
     if (context.hasArgumentsCount(1))
-    return this.getManager().getCodeArgumentType().suggest(context, 0).toList();
+    return this.getManager().getCodeArgumentType().suggest(context, 0);
     else
-      return List.of();
+      return Stream.empty();
   }
 }

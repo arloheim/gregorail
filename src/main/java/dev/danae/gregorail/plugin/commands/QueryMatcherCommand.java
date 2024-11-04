@@ -64,18 +64,18 @@ public abstract class QueryMatcherCommand<T> extends ManagerCommand
   }
 
 
-  // Handle tab completion of the command
+  // Return suggestions for the specified command context
   @Override
-  public List<String> handleTabCompletion(CommandContext context)
+  public Stream<String> suggest(CommandContext context)
   {
     switch (this.getType())
     {
       case ALWAYS:
       {
         if (context.hasAtLeastArgumentsCount(2))
-          return this.suggestAfterQueryMatcher(context, 1).toList();
+          return this.suggestAfterQueryMatcher(context.withSlicedArguments(1));
         else if (context.hasArgumentsCount(1))
-          return this.queryMatcherArgumentType.getResultArgumentType().suggestFromString(context.getArgument(0)).toList();
+          return this.queryMatcherArgumentType.getResultArgumentType().suggestFromString(context.getArgument(0));
         else
           return null;
       }
@@ -84,26 +84,26 @@ public abstract class QueryMatcherCommand<T> extends ManagerCommand
       {
         var separatorIndex = context.findLastArgumentIndex("||");
         if (separatorIndex == 2)
-          return this.queryMatcherArgumentType.getResultArgumentType().suggestFromString(context.getLastArgument(0)).toList();
+          return this.queryMatcherArgumentType.getResultArgumentType().suggestFromString(context.getLastArgument(0));
         else if (separatorIndex == 1)
-          return this.queryMatcherArgumentType.getQueryArgumentType().suggestFromString(context.getLastArgument(0)).toList();
+          return this.queryMatcherArgumentType.getQueryArgumentType().suggestFromString(context.getLastArgument(0));
         else if (context.hasAtLeastArgumentsCount(3))
-          return this.suggestAfterQueryMatcher(context, separatorIndex >= 0 ? context.getArgumentsCount() - separatorIndex + 2 : 2).toList();
+          return this.suggestAfterQueryMatcher(context.withSlicedArguments(separatorIndex >= 0 ? context.getArgumentsCount() - separatorIndex + 2 : 2));
         else if (context.hasArgumentsCount(2))
-          return this.queryMatcherArgumentType.getResultArgumentType().suggestFromString(context.getArgument(1)).toList();
+          return this.queryMatcherArgumentType.getResultArgumentType().suggestFromString(context.getArgument(1));
         else if (context.hasArgumentsCount(1))
-          return this.queryMatcherArgumentType.getQueryArgumentType().suggestFromString(context.getArgument(0)).toList();
+          return this.queryMatcherArgumentType.getQueryArgumentType().suggestFromString(context.getArgument(0));
         else
-          return List.of();
+          return Stream.empty();
       }
         
       default:
-        return List.of();
+        return Stream.empty();
     }
   }
 
   // Return suggestions for the specified command context and argument after the query matcher arguments
-  public Stream<String> suggestAfterQueryMatcher(CommandContext context, int argumentIndex)
+  public Stream<String> suggestAfterQueryMatcher(CommandContext context)
   {
     if (this.getType() == QueryType.CONDITIONAL)
       return Stream.of("||");

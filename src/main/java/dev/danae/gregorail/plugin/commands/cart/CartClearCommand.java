@@ -1,6 +1,5 @@
 package dev.danae.gregorail.plugin.commands.cart;
 
-import java.util.List;
 import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
@@ -63,10 +62,10 @@ public class CartClearCommand extends QueryCommand
 
   // Return suggestions for the specified command context and argument after the query arguments
   @Override
-  public Stream<String> suggestAfterQuery(CommandContext context, int argumentIndex)
+  public Stream<String> suggestAfterQuery(CommandContext context)
   {
     return Stream.concat(
-      this.getManager().getLocationArgumentType(null).suggest(context, argumentIndex),
-      super.suggestAfterQuery(context, argumentIndex));
+      this.getManager().getLocationArgumentType(null).suggest(context, 0),
+      super.suggestAfterQuery(context));
   }
 }

@@ -1,6 +1,6 @@
 package dev.danae.gregorail.plugin.commands.tag;
 
-import java.util.List;
+import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.common.commands.CommandUsageException;
@@ -30,10 +30,10 @@ public class TagListCommand extends ManagerCommand
     context.sendRichMessage(Formatter.formatTagListMessage(this.getManager().getDefinedCodeTags()));
   }
 
-  // Handle tab completion of the command
+  // Return suggestions for the specified command context
   @Override
-  public List<String> handleTabCompletion(CommandContext context)
+  public Stream<String> suggest(CommandContext context)
   {
-    return List.of();
+    return Stream.empty();
   }
 }
