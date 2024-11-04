@@ -2,8 +2,10 @@ package dev.danae.gregorail.model;
 
 import java.util.Map;
 import java.util.function.UnaryOperator;
-import dev.danae.gregorail.model.persistence.CodeDataType;
-import dev.danae.gregorail.model.persistence.MinecartDataType;
+import dev.danae.common.messages.MessageManager;
+import dev.danae.gregorail.model.arguments.ArgumentTypeManager;
+import dev.danae.gregorail.model.persistence.DataTypeManager;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -13,14 +15,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
-public interface Manager
-{  
-  // Get the persistent minecart data type
-  public MinecartDataType getMinecartDataType();
-  
-  // Get the persistent code data type
-  public CodeDataType getCodeDataType();
-  
+public interface Manager extends MessageManager, ArgumentTypeManager, DataTypeManager
+{
   // Create a minecart
   public Minecart createCart(RideableMinecart minecart);
   
@@ -71,4 +67,41 @@ public interface Manager
   
   // Play a sound
   public boolean playSound(Location location, NamespacedKey sound, Minecart cause, float volume, float pitch);
+
+  // Run a task
+  public void runTask(Runnable task);
+
+
+  // Format a location to a component
+  public default Component formatLocation(Location location)
+  {
+    if (location == null)
+      return this.deserializeMessage("no-location-found", Map.of());
+    
+    return this.deserializeMessage("location-format", Map.of(
+      "location", String.format("%d %d %d", location.getX(), location.getY(), location.getZ())));
+  }
+
+  // Format a block to a component
+  public default Component formatBlock(Block block)
+  {
+    if (block == null)
+      return this.deserializeMessage("no-block-found", Map.of());
+    
+    return this.deserializeMessage("block-format", Map.of(
+      "material", block.getType().getKey().getKey(),
+      "location", this.formatLocation(block.getLocation())));
+  }
+
+  // Format a minecart to a component
+  public default Component formatMinecart(Minecart minecart)
+  {
+    if (minecart == null)
+      return this.deserializeMessage("no-minecart-found", Map.of());
+    
+    return this.deserializeMessage("minecart-format", Map.of(
+      "uuid", minecart.getId(),
+      "code", minecart.getCode(),
+      "location", this.formatLocation(minecart.getLocation())));
+  }
 }

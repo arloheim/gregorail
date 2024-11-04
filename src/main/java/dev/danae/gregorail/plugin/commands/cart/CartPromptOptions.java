@@ -1,12 +1,13 @@
 package dev.danae.gregorail.plugin.commands.cart;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 
 
 public class CartPromptOptions
 {
   // The title to use in the cart prompt command
-  private String title = "Select a code";
+  private Component title = Component.text("Select a code");
   
   // The material to use for items in the cart prompt command
   private Material itemMaterial = Material.MINECART;
@@ -16,13 +17,13 @@ public class CartPromptOptions
   
   
   // Return the title to use in the cart prompt command
-  public String getTitle()
+  public Component getTitle()
   {
     return this.title;
   }
   
   // Set the title to use in the cart prompt command
-  public void setTitle(String title)
+  public void setTitle(Component title)
   {
     this.title = title;
   }

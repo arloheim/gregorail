@@ -4,10 +4,8 @@ import java.util.List;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.common.commands.CommandUsageException;
-import dev.danae.common.commands.arguments.ArgumentType;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
-import dev.danae.gregorail.plugin.Formatter;
 
 
 public class LocateBlockCommand extends ManagerCommand
@@ -21,30 +19,23 @@ public class LocateBlockCommand extends ManagerCommand
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException
+  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
-    try
-    {      
-      // Assert that the command sender has a location
-      var senderLocation = context.assertSenderHasLocation();
-      
-      // Create a scanner for the arguments
-      var scanner = context.getArgumentsScanner();
-      
-      // Parse the properties
-      var properties = scanner.wrapInPropertyBag();
-      var radius = properties.getUnsignedInt("radius", this.getManager().getBlockSearchRadius());
-      
-      // Parse the arguments
-      var block = scanner.nextLocation(senderLocation, radius).getBlock();
-      
-      // Send information about the block
-      context.sendMessage(Formatter.formatBlock(block));
-    }
-    catch (ParserException ex)
-    {
-      throw new CommandException(ex.getMessage(), ex);
-    }
+    // Assert that the command sender has a location
+    var senderLocation = context.assertSenderHasLocation();
+    
+    // Create a scanner for the arguments
+    var scanner = context.getArgumentsScanner();
+    
+    // Parse the properties
+    var properties = this.getManager().getBlockPropertiesArgumentType("radius").parse(scanner);
+    var radius = this.getManager().getBlockSearchRadiusProperty(properties, "radius");
+    
+    // Parse the arguments
+    var block = this.getManager().getLocationArgumentType(senderLocation, radius).parse(scanner).getBlock();
+    
+    // Send information about the block
+    context.sendMessage(this.getManager().formatBlock(block));
   }
   
   // Handle tab completion of the command
@@ -52,7 +43,7 @@ public class LocateBlockCommand extends ManagerCommand
   public List<String> handleTabCompletion(CommandContext context)
   {    
     if (context.hasAtLeastArgumentsCount(1))
-      return this.handleLocationTabCompletion(context, 0, false);
+    return this.getManager().getLocationArgumentType(null, 0).suggest(context, 0).toList();
     else
       return List.of();
   }

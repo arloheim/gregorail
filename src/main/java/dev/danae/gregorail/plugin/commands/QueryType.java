@@ -1,7 +1,7 @@
 package dev.danae.gregorail.plugin.commands;
 
 
-public enum ManagerQueryCommandType
+public enum QueryType
 {
   // Always apply the command
   ALWAYS,

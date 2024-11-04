@@ -1,5 +1,6 @@
 package dev.danae.gregorail.model;
 
+
 public class QueryMatcherResult<T>
 {
   // The value of the result
@@ -27,5 +28,11 @@ public class QueryMatcherResult<T>
   public final Minecart getCart()
   {
     return this.cart;
+  }
+
+  // Return the code of the detected cart
+  public final Code getCartCode()
+  {
+    return this.cart != null ? cart.getCode() : Code.empty();
   }
 }

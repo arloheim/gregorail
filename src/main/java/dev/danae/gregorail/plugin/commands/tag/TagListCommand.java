@@ -20,14 +20,14 @@ public class TagListCommand extends ManagerCommand
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException
+  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {    
     // Validate the number of arguments
     if (!context.hasArgumentsCount(0))
       throw new CommandUsageException();
       
     // Send a message listing the code tags
-    context.sendMessage(Formatter.formatTagListMessage(this.getManager().getDefinedCodeTags()));
+    context.sendRichMessage(Formatter.formatTagListMessage(this.getManager().getDefinedCodeTags()));
   }
 
   // Handle tab completion of the command

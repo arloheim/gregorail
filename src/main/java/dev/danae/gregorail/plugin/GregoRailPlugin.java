@@ -3,17 +3,16 @@ package dev.danae.gregorail.plugin;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 import java.util.logging.Level;
 import dev.danae.gregorail.plugin.butcher.ButcherOptions;
 import dev.danae.gregorail.plugin.butcher.Butcher;
 import dev.danae.common.commands.CommandGroup;
 import dev.danae.common.commands.arguments.ArgumentException;
 import dev.danae.common.commands.arguments.ArgumentType;
-import dev.danae.common.plugin.PluginCommandManager;
-import dev.danae.common.plugin.PluginMessageManager;
 import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
-import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
+import dev.danae.gregorail.plugin.commands.QueryType;
 import dev.danae.gregorail.plugin.commands.admin.AdminReloadCommand;
 import dev.danae.gregorail.plugin.commands.admin.AdminVersionCommand;
 import dev.danae.gregorail.plugin.commands.cart.CartClearCommand;
@@ -115,23 +114,23 @@ public final class GregoRailPlugin extends JavaPlugin
       .publishCommandHandler(this, "gtag");
       
     new CommandGroup()
-      .registerSubcommand("clear", new CartClearCommand(this.manager, ManagerQueryCommandType.ALWAYS))
-      .registerSubcommand("clearif", new CartClearCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
-      .registerSubcommand("promptset", new CartPromptSetCommand(this.manager, ManagerQueryCommandType.ALWAYS, this.cartPromptOptions, this))
-      .registerSubcommand("promptsetif", new CartPromptSetCommand(this.manager, ManagerQueryCommandType.CONDITIONAL, this.cartPromptOptions, this))
-      .registerSubcommand("set", new CartSetCommand(this.manager, ManagerQueryCommandType.ALWAYS))
-      .registerSubcommand("setif", new CartSetCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
-      .registerSubcommand("speed", new CartSpeedCommand(this.manager, ManagerQueryCommandType.ALWAYS))
-      .registerSubcommand("speedif", new CartSpeedCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
+      .registerSubcommand("clear", new CartClearCommand(this.manager, QueryType.ALWAYS))
+      .registerSubcommand("clearif", new CartClearCommand(this.manager, QueryType.CONDITIONAL))
+      .registerSubcommand("promptset", new CartPromptSetCommand(this.manager, QueryType.ALWAYS, this.cartPromptOptions))
+      .registerSubcommand("promptsetif", new CartPromptSetCommand(this.manager, QueryType.CONDITIONAL, this.cartPromptOptions))
+      .registerSubcommand("set", new CartSetCommand(this.manager, QueryType.ALWAYS))
+      .registerSubcommand("setif", new CartSetCommand(this.manager, QueryType.CONDITIONAL))
+      .registerSubcommand("speed", new CartSpeedCommand(this.manager, QueryType.ALWAYS))
+      .registerSubcommand("speedif", new CartSpeedCommand(this.manager, QueryType.CONDITIONAL))
       .publishCommandHandler(this, "gcart");
     
     new CommandGroup()
-      .registerSubcommand("block", new RailBlockCommand(this.manager, ManagerQueryCommandType.ALWAYS))
-      .registerSubcommand("blockif", new RailBlockCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
-      .registerSubcommand("sound", new RailSoundCommand(this.manager, ManagerQueryCommandType.ALWAYS))
-      .registerSubcommand("soundif", new RailSoundCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
-      .registerSubcommand("switch", new RailSwitchCommand(this.manager, ManagerQueryCommandType.ALWAYS))
-      .registerSubcommand("switchif", new RailSwitchCommand(this.manager, ManagerQueryCommandType.CONDITIONAL))
+      .registerSubcommand("block", new RailBlockCommand(this.manager, QueryType.ALWAYS))
+      .registerSubcommand("blockif", new RailBlockCommand(this.manager, QueryType.CONDITIONAL))
+      .registerSubcommand("sound", new RailSoundCommand(this.manager, QueryType.ALWAYS))
+      .registerSubcommand("soundif", new RailSoundCommand(this.manager, QueryType.CONDITIONAL))
+      .registerSubcommand("switch", new RailSwitchCommand(this.manager, QueryType.ALWAYS))
+      .registerSubcommand("switchif", new RailSwitchCommand(this.manager, QueryType.CONDITIONAL))
       .publishCommandHandler(this, "grail");
     
     new CommandGroup()
@@ -205,7 +204,7 @@ public final class GregoRailPlugin extends JavaPlugin
     var cartPromptConfig = this.getConfig().getConfigurationSection("cart-prompt");
     if (cartPromptConfig != null)
     {
-      this.cartPromptOptions.setTitle(cartPromptConfig.getString("title", "Select a code"));
+      this.cartPromptOptions.setTitle(this.manager.getMessageDeserializer().deserialize(cartPromptConfig.getString("title", "Select a code"), Map.of()));
       this.cartPromptOptions.setItemMaterial(cartPromptConfig.contains("item-material") ? Material.matchMaterial(cartPromptConfig.getString("item-material")) : Material.MINECART);
       this.cartPromptOptions.setPlayerSearchRadius(cartPromptConfig.getInt("player-search-radius", 5));
     }
@@ -229,6 +228,10 @@ public final class GregoRailPlugin extends JavaPlugin
         this.butcherOptions.setEnabled(false);
       }
     }
+
+    // Load the messages
+    var messagesConfig = this.getConfig().getConfigurationSection("messages");
+    this.manager.loadMessagesFromConfiguration(messagesConfig);
   }
 
 

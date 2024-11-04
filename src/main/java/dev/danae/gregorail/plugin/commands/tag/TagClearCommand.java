@@ -1,6 +1,7 @@
 package dev.danae.gregorail.plugin.commands.tag;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
@@ -8,7 +9,6 @@ import dev.danae.common.commands.CommandUsageException;
 import dev.danae.common.commands.arguments.ArgumentType;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.ManagerCommand;
-import dev.danae.gregorail.plugin.Formatter;
 
 
 public class TagClearCommand extends ManagerCommand
@@ -22,47 +22,42 @@ public class TagClearCommand extends ManagerCommand
   
   // Handle the command
   @Override
-  {     
-    try
-    {
-      // Validate the number of arguments
-      if (!context.hasArgumentsCount(2))
-        throw new CommandUsageException();
-      
-      // Create a scanner for the arguments
-      var scanner = context.getArgumentsScanner(this.getManager());
-      
-      // Parse the arguments
-      var code = scanner.nextCode();
-      var propertyName = scanner.nextIdentifier();
-  public void handle(CommandContext context) throws CommandException
+  public void handle(CommandContext context) throws CommandException, CommandUsageException
+  {
+    // Validate the number of arguments
+    if (!context.hasArgumentsCount(2))
+      throw new CommandUsageException();
+    
+    // Create a scanner for the arguments
+    var scanner = context.getArgumentsScanner();
+    
+    // Parse the arguments
+    var code = this.getManager().getCodeArgumentType().parse(scanner);
+    var propertyName = ArgumentType.getIdentifierArgumentType(Stream.of("name", "url")).parse(scanner);
 
-      // Set the property of the code tag
-      if (propertyName.equals("name"))
-      {
-        // Remove the name of the code tag
-        this.getManager().setCodeTag(code, codeTag -> codeTag.withName(null));
-      
-        // Send a message about the removed name of the code tag
-        context.sendMessage(Formatter.formatTagNameClearedMessage(code));
-      }
-      else if (propertyName.equals("url"))
-      {
-        // Remove the URL of the code tag
-        this.getManager().setCodeTag(code, codeTag -> codeTag.withUrl(null));
-      
-        // Send a message about the removed URL of the code tag
-        context.sendMessage(Formatter.formatTagUrlClearedMessage(code));
-      }
-      else
-      {
-        // Invalid property
-        throw new CommandException(String.format("\"%s\" is an invalid code tag property ", propertyName));
-      }
-    }
-    catch (ParserException ex)
+    // Set the property of the code tag
+    if (propertyName.equals("name"))
     {
-      throw new CommandException(ex.getMessage(), ex);
+      // Remove the name of the code tag
+      this.getManager().setCodeTag(code, codeTag -> codeTag.withName(null));
+    
+      // Send a message about the removed name of the code tag
+      context.sendMessage(this.getManager().deserializeMessage("tag-name-cleared", 
+        Map.of("code", code)));
+    }
+    else if (propertyName.equals("url"))
+    {
+      // Remove the URL of the code tag
+      this.getManager().setCodeTag(code, codeTag -> codeTag.withUrl(null));
+    
+      // Send a message about the removed URL of the code tag
+      context.sendMessage(this.getManager().deserializeMessage("tag-url-cleared", Map.of(
+        "code", code)));
+    }
+    else
+    {
+      // Invalid property
+      throw new CommandException(String.format("\"%s\" is an invalid code tag property ", propertyName));
     }
   }
   
@@ -73,7 +68,7 @@ public class TagClearCommand extends ManagerCommand
     if (context.hasArgumentsCount(2))
       return List.of("name", "url");
     else if (context.hasArgumentsCount(1))
-      return this.handleCodeTabCompletion(context.getArgument(0));
+      return this.getManager().getCodeArgumentType().suggest(context, 0).toList();
     else
       return List.of();
   }

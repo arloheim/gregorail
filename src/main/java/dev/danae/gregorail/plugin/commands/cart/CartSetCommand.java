@@ -1,104 +1,73 @@
 package dev.danae.gregorail.plugin.commands.cart;
 
 import java.util.List;
+import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.common.commands.CommandUsageException;
 import dev.danae.common.commands.arguments.ArgumentType;
+import dev.danae.common.commands.arguments.PropertyList;
+import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Manager;
-import dev.danae.gregorail.plugin.commands.ManagerQueryCommand;
-import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
+import dev.danae.gregorail.model.arguments.CodeArgumentType;
+import dev.danae.gregorail.plugin.commands.QueryType;
+import dev.danae.gregorail.plugin.commands.QueryMatcherCommand;
 import dev.danae.gregorail.plugin.Formatter;
 
 
-public class CartSetCommand extends ManagerQueryCommand
-{  
+public class CartSetCommand extends QueryMatcherCommand<Code>
+{
   // Constructor
-  public CartSetCommand(Manager manager, ManagerQueryCommandType type)
+  public CartSetCommand(Manager manager, QueryType type)
   {
-    super(manager, type, "gregorail.cart.set");
+    super(manager, type, manager.getCodeQueryMatcherArgumentType(), "gregorail.cart.set");
   }
     
   
   // Handle the command
   @Override
-  {
-    try
-    {      
-      // Assert that the command sender has a location
-      var senderLocation = context.assertSenderHasLocation();
-      
-      // Validate the number of arguments
-      if (!context.hasAtLeastArgumentsCount(this.getType() == ManagerQueryCommandType.CONDITIONAL ? 2 : 1))
-        throw new CommandUsageException();
-      
-      // Create a scanner for the arguments
-      var scanner = context.getArgumentsScanner();
-      
-      // Parse the properties
-      var properties = scanner.wrapInPropertyBag();
-      var radius = properties.getUnsignedInt("radius", this.getManager().getBlockSearchRadius());
-      var distance = properties.getUnsignedInt("distance", this.getManager().getCartSearchDistance());
-      
-      // Parse the arguments
-      var result = this.matchQueryMatcher(scanner, () -> scanner.nextCode(), () -> this.getManager().findNearestOrRidingCart(scanner.nextLocation(senderLocation, radius, null), distance, context.getSender()));
-      
-      // Execute the command
-      if (result.getCart() != null)
-      {
-        var originalCode = result.getCart().getCode();
-        if (this.getManager().updateCartCode(result.getCart(), result.getValue()))
-          context.sendMessage(Formatter.formatCartCodeChangedMessage(result.getCart(), originalCode, result.getValue()));
-        else
-          context.sendMessage(Formatter.formatCartCodeRetainedMessage(result.getCart(), originalCode));
-      }
-  public void handle(CommandContext context) throws CommandException
-      else
-      {
-        context.sendMessage(Formatter.formatCart(result.getCart()));
-      }
-    }
-    catch (ParserException ex)
+  public void handle(CommandContext context) throws CommandException, CommandUsageException
+  {  
+    // Assert that the command sender has a location
+    var senderLocation = context.assertSenderHasLocation();
+    
+    // Validate the number of arguments
+    if (!context.hasAtLeastArgumentsCount(this.getType() == QueryType.CONDITIONAL ? 2 : 1))
+      throw new CommandUsageException();
+    
+    // Create a scanner for the arguments
+    var scanner = context.getArgumentsScanner();
+    
+    // Parse the properties
+    var properties = this.getManager().getCartBlockPropertiesArgumentType("radius", "distance").parse(scanner);
+    var radius = this.getManager().getBlockSearchRadiusProperty(properties, "radius");
+    var distance = this.getManager().getCartSearchDistanceProperty(properties, "distance");
+    
+    // Parse the arguments
+    var location = this.getManager().getLocationArgumentType(senderLocation, radius).parse(scanner);
+    var result = this.matchQueryMatcher(scanner, () -> this.getManager().findNearestOrRidingCart(location, distance, context.getSender()));
+    
+    // Execute the command
+    if (result.getCart() != null)
     {
-      throw new CommandException(ex.getMessage(), ex);
+      var originalCode = result.getCart().getCode();
+      if (this.getManager().updateCartCode(result.getCart(), result.getValue()))
+        context.sendRichMessage(Formatter.formatCartCodeChangedMessage(result.getCart(), originalCode, result.getValue()));
+      else
+        context.sendRichMessage(Formatter.formatCartCodeRetainedMessage(result.getCart(), originalCode));
+    }
+    else
+    {
+      context.sendRichMessage(Formatter.formatCart(result.getCart()));
     }
   }
-  
-  // Handle tab completion of the command
+
+  // Return suggestions for the specified command context and argument after the query matcher arguments
   @Override
-  public List<String> handleTabCompletion(CommandContext context)
-  {    
-    switch (this.getType())
-    {
-      case ALWAYS:
-      {
-        if (context.hasAtLeastArgumentsCount(2))
-          return this.handleLocationTabCompletion(context, 1, false);
-        else if (context.hasArgumentsCount(1))
-          return this.handleCodeTabCompletion(context.getArgument(0));
-        else
-          return List.of();
-      }
-        
-      case CONDITIONAL:
-      {
-        var separatorIndex = context.findLastArgumentIndex("||");
-        if (separatorIndex == 2)
-          return this.handleCodeTabCompletion(context.getLastArgument(0));
-        else if (separatorIndex == 1)
-          return this.handleCodesTabCompletion(context.getLastArgument(0));
-        else if (context.hasAtLeastArgumentsCount(3))
-          return this.handleLocationTabCompletion(context, separatorIndex >= 0 ? context.getArgumentsCount() - separatorIndex + 2 : 2, true);
-        else if (context.hasArgumentsCount(2))
-          return this.handleCodeTabCompletion(context.getArgument(1));
-        else if (context.hasArgumentsCount(1))
-          return this.handleCodesTabCompletion(context.getArgument(0));
-        else
-          return List.of();
-      }
-        
-      default:
-        return List.of();
-    }
+  public Stream<String> suggestAfterQueryMatcher(CommandContext context, int argumentIndex)
+  {
+    return Stream.concat(
+      this.getManager().getLocationArgumentType(null).suggest(context, argumentIndex),
+      super.suggestAfterQueryMatcher(context, argumentIndex));
   }
 }

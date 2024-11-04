@@ -2,16 +2,21 @@ package dev.danae.gregorail.plugin.commands.cart;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+import net.kyori.adventure.text.Component;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.common.commands.CommandUsageException;
 import dev.danae.common.commands.arguments.ArgumentType;
+import dev.danae.common.commands.arguments.PropertyList;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.Minecart;
+import dev.danae.gregorail.model.arguments.CodeArgumentType;
 import dev.danae.gregorail.plugin.GregoRailPlugin;
-import dev.danae.gregorail.plugin.commands.ManagerQueryCommand;
-import dev.danae.gregorail.plugin.commands.ManagerQueryCommandType;
+import dev.danae.gregorail.plugin.commands.QueryType;
+import dev.danae.gregorail.plugin.commands.QueryMatcherCommand;
 import dev.danae.gregorail.plugin.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -23,13 +28,10 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 
-public class CartPromptSetCommand extends ManagerQueryCommand
+public class CartPromptSetCommand extends QueryMatcherCommand<List<Code>>
 {  
   // The options for the command
   private final CartPromptOptions options;
-  
-  // The plugin of the command
-  private final GregoRailPlugin plugin;
   
   // Keys to store properties in the command
   private final NamespacedKey commandCartKey;
@@ -37,100 +39,65 @@ public class CartPromptSetCommand extends ManagerQueryCommand
   
   
   // Constructor
-  public CartPromptSetCommand(Manager manager, ManagerQueryCommandType type, CartPromptOptions options, GregoRailPlugin plugin)
+  public CartPromptSetCommand(Manager manager, QueryType type, CartPromptOptions options)
   {
-    super(manager, type, "gregorail.cart.promptset");
+    super(manager, type, manager.getCodeListQueryMatcherArgumentType(), "gregorail.cart.promptset");
     
     this.options = options;
-    this.plugin = plugin;
-    this.commandCartKey = new NamespacedKey(plugin, "command_cart");
-    this.commandCodeKey = new NamespacedKey(plugin, "command_code");
+
+    this.commandCartKey = manager.createNamespacedKey("command_cart");
+    this.commandCodeKey = manager.createNamespacedKey("command_code");
   }
     
   
   // Handle the command
   @Override
-  public void handle(CommandContext context) throws CommandException
+  public void handle(CommandContext context) throws CommandException, CommandUsageException
   {
-    try
+    // Assert that the command sender has a location
+    var senderLocation = context.assertSenderHasLocation();
+    
+    // Assert the the command sender is a player, or get the nearest player to the sender
+    var player = context.nearestPlayerOrSender(this.options.getPlayerSearchRadius());
+    if (player == null)
+      throw new CommandException("No player found");
+    
+    // Validate the number of arguments
+    if (!context.hasAtLeastArgumentsCount(1))
+      throw new CommandUsageException();
+    
+    // Create a scanner for the arguments
+    var scanner = context.getArgumentsScanner();
+    
+    // Parse the properties
+    var properties = this.getManager().getCartBlockPropertiesArgumentType("radius", "distance").parse(scanner);
+    var radius = this.getManager().getBlockSearchRadiusProperty(properties, "radius");
+    var distance = this.getManager().getCartSearchDistanceProperty(properties, "distance");
+    
+    // Parse the arguments
+    var location = this.getManager().getLocationArgumentType(senderLocation, radius).parse(scanner);
+    var result = this.matchQueryMatcher(scanner, () -> this.getManager().findNearestOrRidingCart(location, distance, context.getSender()));
+    
+    // Execute the command
+    if (result.getCart() != null)
     {
-      // Assert that the command sender has a location
-      var senderLocation = context.assertSenderHasLocation();
-      
-      // Assert the the command sender is a player, or get the nearest player to the sender
-      var player = context.nearestPlayerOrSender(this.options.getPlayerSearchRadius());
-      if (player == null)
-        throw new CommandException("No player found");
-      
-      // Validate the number of arguments
-      if (!context.hasAtLeastArgumentsCount(1))
-        throw new CommandUsageException();
-      
-      // Create a scanner for the arguments
-      var scanner = context.getArgumentsScanner();
-      
-      // Parse the properties
-      var properties = scanner.wrapInPropertyBag();
-      var radius = properties.getUnsignedInt("radius", this.getManager().getBlockSearchRadius());
-      var distance = properties.getUnsignedInt("distance", this.getManager().getCartSearchDistance());
-      
-      // Parse the arguments
-      var result = this.matchQueryMatcher(scanner, () -> scanner.nextCodeList(), () -> this.getManager().findNearestOrRidingCart(scanner.nextLocation(senderLocation, radius, null), distance, context.getSender()));
-      
-      // Execute the command
-      if (result.getCart() != null)
-      {
-        // Create and open an inventory containing the codes
-        var inventory = this.createCodeMetaInventory(player, this.options.getTitle(), result.getValue(), result.getCart());
-        player.openInventory(inventory);
-      }
-      else
-      {
-        context.sendMessage(Formatter.formatCart(result.getCart()));
-      }
+      // Create and open an inventory containing the codes
+      var inventory = this.createCodeMetaInventory(player, this.options.getTitle(), result.getValue(), result.getCart());
+      player.openInventory(inventory);
     }
-    catch (ParserException ex)
+    else
     {
-      throw new CommandException(ex.getMessage(), ex);
+      context.sendRichMessage(Formatter.formatCart(result.getCart()));
     }
   }
-  
-  // Handle tab completion of the command
+
+  // Return suggestions for the specified command context and argument after the query matcher arguments
   @Override
-  public List<String> handleTabCompletion(CommandContext context)
+  public Stream<String> suggestAfterQueryMatcher(CommandContext context, int argumentIndex)
   {
-    switch (this.getType())
-    {
-      case ALWAYS:
-      {
-        if (context.hasAtLeastArgumentsCount(2))
-          return this.handleLocationTabCompletion(context, 1, false);
-        else if (context.hasArgumentsCount(1))
-          return this.handleCodesTabCompletion(context.getArgument(0));
-        else
-          return List.of();
-      }
-        
-      case CONDITIONAL:
-      {
-        var separatorIndex = context.findLastArgumentIndex("||");
-        if (separatorIndex == 2)
-          return this.handleCodesTabCompletion(context.getLastArgument(0));
-        else if (separatorIndex == 1)
-          return this.handleCodesTabCompletion(context.getLastArgument(0));
-        else if (context.hasAtLeastArgumentsCount(3))
-          return this.handleLocationTabCompletion(context, separatorIndex >= 0 ? context.getArgumentsCount() - separatorIndex + 2 : 2, true);
-        else if (context.hasArgumentsCount(2))
-          return this.handleCodesTabCompletion(context.getArgument(1));
-        else if (context.hasArgumentsCount(1))
-          return this.handleCodesTabCompletion(context.getArgument(0));
-        else
-          return List.of();
-      }
-        
-      default:
-        return List.of();
-    }
+    return Stream.concat(
+      this.getManager().getLocationArgumentType(null).suggest(context, argumentIndex),
+      super.suggestAfterQueryMatcher(context, argumentIndex));
   }
   
   
@@ -165,18 +132,18 @@ public class CartPromptSetCommand extends ManagerQueryCommand
     {
       var originalCode = cart.getCode();
       if (this.getManager().updateCartCode(cart, code))
-        player.spigot().sendMessage(Formatter.formatCartCodeChangedMessage(cart, originalCode, code));
+        player.sendRichMessage(Formatter.formatCartCodeChangedMessage(cart, originalCode, code));
       else
-        player.spigot().sendMessage(Formatter.formatCartCodeRetainedMessage(cart, originalCode));
+        player.sendRichMessage(Formatter.formatCartCodeRetainedMessage(cart, originalCode));
     }
     else
     {
-      player.spigot().sendMessage(Formatter.formatCart(cart));
+      player.sendRichMessage(Formatter.formatCart(cart));
     }
     
     // Cancel the event and close the inventory
     e.setCancelled(true);
-    Bukkit.getScheduler().runTask(this.plugin, () -> e.getWhoClicked().closeInventory());
+    this.getManager().runTask(() -> e.getWhoClicked().closeInventory());
   }
 
 
@@ -192,7 +159,7 @@ public class CartPromptSetCommand extends ManagerQueryCommand
   }
 
   // Create an inventory containing item stacks containing a code each
-  private Inventory createCodeMetaInventory(InventoryHolder owner, String title, Collection<Code> codes, Minecart minecart)
+  private Inventory createCodeMetaInventory(InventoryHolder owner, Component title, Collection<Code> codes, Minecart minecart)
   {
     // Check the size of the codes
     if (codes.size() > 54)
@@ -222,7 +189,9 @@ public class CartPromptSetCommand extends ManagerQueryCommand
 
     // Set the display name of the item meta
     var codeTag = this.getManager().getCodeTag(code);
-    itemMeta.displayName(codeTag != null && codeTag.getName() != null ? codeTag.getName() : code.getId());
+    itemMeta.displayName(codeTag != null && codeTag.getName() != null 
+        ? this.getManager().getMessageDeserializer().deserialize(codeTag.getName(), Map.of())
+        : Component.text(code.getId()));
   
     // Set the item meta and return the item stack
     itemStack.setItemMeta(itemMeta);

@@ -5,23 +5,23 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.UnaryOperator;
-import dev.danae.common.commands.arguments.ArgumentType;
-import dev.danae.common.commands.arguments.LocationFormat;
+import dev.danae.common.messages.ConfigurationMessageManager;
 import dev.danae.common.messages.MessageDeserializer;
 import dev.danae.common.messages.minimessage.MiniMessageDeserializer;
-import dev.danae.common.plugin.PluginMessageManager;
 import dev.danae.common.util.Cuboid;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.CodeTag;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.Minecart;
+import dev.danae.gregorail.model.arguments.ArgumentTypeManager;
+import dev.danae.gregorail.model.arguments.ArgumentTypeManagerDelegate;
 import dev.danae.gregorail.model.events.BlockMaterialChangedEvent;
 import dev.danae.gregorail.model.events.BlockShapeChangedEvent;
 import dev.danae.gregorail.model.events.MinecartCodeChangedEvent;
 import dev.danae.gregorail.model.events.MinecartSpeedMultiplierChangedEvent;
 import dev.danae.gregorail.model.events.SoundPlayedEvent;
-import dev.danae.gregorail.model.persistence.CodeDataType;
-import dev.danae.gregorail.model.persistence.MinecartDataType;
+import dev.danae.gregorail.model.persistence.DataTypeManager;
+import dev.danae.gregorail.model.persistence.DataTypeManagerDelegate;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMap;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMapKeyType;
 import org.bukkit.Bukkit;
@@ -37,17 +37,26 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
-public class GregoRailManager extends GregoRailPluginComponent implements Manager
+public class GregoRailManager extends GregoRailPluginComponent implements Manager, ConfigurationMessageManager, ArgumentTypeManagerDelegate, DataTypeManagerDelegate
 {
   // The options for the manager
   private final GregoRailPluginOptions options;
   
   // The configuration map of the defined code tags
   private final ConfigurationMap<Code, CodeTag> codeTags;
-  
-  // Persistent data types
-  public final MinecartDataType minecartDataType = new MinecartDataType(this);
-  public final CodeDataType codeDataType = new CodeDataType(this);
+
+  // The argument type manager for the manager
+  private final ArgumentTypeManager argumentTypeManager;
+
+  // The data type manager for the manager
+  private final DataTypeManager dataTypeManager;
+
+
+  // The messages for the manager
+  private final Map<String, String> messages = new HashMap<>();
+
+  // The message deserializer for the manager
+  private final MessageDeserializer messageDeserializer = new MiniMessageDeserializer();
   
   
   // Constructor
@@ -57,21 +66,38 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     
     this.options = options;
     this.codeTags = plugin.createConfigurationMap("code_tags.yml", CodeTag.class, ConfigurationMapKeyType.CODE);
-  }
-  
-  
-  // Get the persistent minecart data type
-  @Override
-  public MinecartDataType getMinecartDataType()
-  {
-    return this.minecartDataType;
+    this.argumentTypeManager = new GregoRailArgumentTypeManager(this.getPlugin());
+    this.dataTypeManager = new GregoRailDataTypeManager(this.getPlugin());
   }
 
-  // Get the persistent code data type
+
+  // Return the messages
   @Override
-  public CodeDataType getCodeDataType()
+  public Map<String, String> getMessages()
   {
-    return this.codeDataType;
+    return this.messages;
+  }
+
+  // Return the message deserializer
+  @Override
+  public MessageDeserializer getMessageDeserializer()
+  {
+    return this.messageDeserializer;
+  }
+
+
+  // Get the argument type manager
+  @Override
+  public ArgumentTypeManager getArgumentTypeManager()
+  {
+    return this.argumentTypeManager;
+  }
+
+  // Return the data type manager
+  @Override
+  public DataTypeManager getDataTypeManager()
+  {
+    return this.dataTypeManager;
   }
 
   
@@ -301,5 +327,12 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     
     // Return if the sound has been set
     return sound != null;
+  }
+  
+  // Run a task using the manager
+  @Override
+  public void runTask(Runnable task)
+  {
+    Bukkit.getScheduler().runTask(this.getPlugin(), task);
   }
 }

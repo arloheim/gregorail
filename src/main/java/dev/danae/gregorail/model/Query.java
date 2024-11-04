@@ -1,6 +1,7 @@
 package dev.danae.gregorail.model;
 
 import java.util.Collection;
+import java.util.stream.Collector;
 
 
 @FunctionalInterface
@@ -33,11 +34,23 @@ public interface Query
   {
     return cart -> queries.stream().anyMatch(q -> q.match(cart));
   }
+
+  // Return a collector that checks if any of the specified queries evaluate to true
+  public static Collector<Query, ?, Query> anyMatch()
+  {
+    return new QueryCollector(queries -> anyMatch(queries));
+  }
   
   // Return a query that checks if all of the specified queries evaluate to true
   public static Query allMatch(Collection<Query> queries)
   {
     return cart -> queries.stream().allMatch(q -> q.match(cart));
+  }
+
+  // Return a collector that checks if all of the specified queries evaluate to true
+  public static Collector<Query, ?, Query> allMatch()
+  {
+    return new QueryCollector(queries -> allMatch(queries));
   }
 
 

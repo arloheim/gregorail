@@ -1,6 +1,8 @@
 package dev.danae.gregorail.plugin;
 
+import java.util.Map;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Minecart;
 import org.bukkit.Location;
@@ -76,13 +78,15 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
 
       this.minecart.getPersistentDataContainer().set(this.codeKey, this.getManager().getCodeDataType(), code);
       this.minecart.setCustomNameVisible(true);
-      this.minecart.setCustomName(codeTag != null && codeTag.getName() != null ? codeTag.getName() : code.getId());
+      this.minecart.customName(codeTag != null && codeTag.getName() != null 
+        ? this.getManager().getMessageDeserializer().deserialize(codeTag.getName(), Map.of())
+        : Component.text(code.getId()));
     }
     else
     {
       this.minecart.getPersistentDataContainer().remove(this.codeKey);
       this.minecart.setCustomNameVisible(false);
-      this.minecart.setCustomName(null);
+      this.minecart.customName(null);
     }    
   }
   
