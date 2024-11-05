@@ -1,5 +1,6 @@
 package dev.danae.gregorail.plugin.commands.admin;
 
+import java.util.Map;
 import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
@@ -31,7 +32,8 @@ public class AdminReloadCommand extends ManagerCommand
     this.plugin.loadPlugin();
     
     // Send information about the reload
-    context.sendMessage(String.format("Reloaded %s", this.plugin.getPluginMeta().getName()));
+    context.sendMessage(this.getManager().formatMessage("plugin-reloaded", Map.of(
+      "name", String.format("%s %s", this.plugin.getPluginMeta().getName(), this.plugin.getPluginMeta().getVersion()))));
   }
 
   // Return suggestions for the specified command context

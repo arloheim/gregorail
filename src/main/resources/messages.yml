@@ -1,0 +1,33 @@
+# General messages
+plugin-reloaded: "<name> has been reloaded"
+copy-to-clipboard: "Click to copy \"<text>\" to clipboard"
+location-format: "<blue><location></blue>"
+block-format: "block <material> at <location>"
+block-found: "Found <block>"
+block-not-found: "<red>No block found</red>"
+cart-format: "minecart with code <code> at <location>"
+cart-found: "Found <cart>"
+cart-not-found: "<red>No minecart found</red>"
+
+# Messages for the /gtag command
+tag-list: "<count> code tags are defined"
+tag-list-item: "- <code>: <name:'no name'> <url:'no URL'>"
+tag-name-changed: "The name of code tag <green><code></green> has been changed to <name>"
+tag-url-changed: "The URL of code tag <green><code></green> has been changed to <url>"
+tag-name-cleared: "The name of code tag <green><code></green> has been cleared"
+tag-url-cleared: "The URL of code tag <green><code></green> has been cleared"
+tag-removed: "The code tag <green><code></green> has been removed"
+
+# Messages for the /gcart command
+cart-code-changed: "The code of <cart> was changed from <green><original-code></green>"
+cart-code-cleared: "The code of <cart> was cleared from <green><original-code></green>"
+cart-code-retained: "The code of <cart> was unchanged from <green><original-code></green>"
+cart-code-speed-multiplier-changed: "The speed multiplier of <cart> was changed from <green><original-speed-multiplier:'#.0'> to <green><speed-multiplier:'#.0'></green>"
+cart-code-speed-multiplier-retained: "The speed multiplier of <cart> was unchanged from <green><original-speed-multiplier:'#.0'></green>"
+
+# Messages for the /grail command
+block-shape-changed: "The shape of <block> was changed from <green><original-shape></green> to <green><shape></green>"
+block-shape-retained: "The shape of <block> was unchanged from <green><original-shape></green>"
+block-material-changed: "The material of <block> was changed from <green><original-material> to <green><material></green>"
+block-material-retained: "The material of <block> was unchanged from <green><original-material></green>"
+sound-played: "Sound <sound> was played"

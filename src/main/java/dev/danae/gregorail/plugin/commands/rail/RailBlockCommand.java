@@ -49,18 +49,16 @@ public class RailBlockCommand extends QueryMatcherCommand<Material>
       var originalMaterial = block.getState().getType();
       if (this.getManager().updateBlockMaterial(block, result.getValue(), result.getCart()))
       {
-        context.sendMessage(this.getManager().deserializeMessage("block-material-changed", Map.of(
+        context.sendMessage(this.getManager().formatMessage("block-material-changed", Map.of(
           "block", block,
           "original-material", originalMaterial,
-          "material", result.getValue(),
-          "code", result.getCartCode())));
+          "material", result.getValue())));
       }
       else
       {
-        context.sendMessage(this.getManager().deserializeMessage("block-material-retained", Map.of(
+        context.sendMessage(this.getManager().formatMessage("block-material-retained", Map.of(
           "block", block,
-          "original-material", originalMaterial,
-          "code", result.getCartCode())));
+          "original-material", originalMaterial)));
       }
     }
     catch (IllegalArgumentException ex)

@@ -1,16 +1,13 @@
 package dev.danae.gregorail.plugin.commands.cart;
 
-import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.common.commands.CommandUsageException;
-import dev.danae.common.commands.arguments.ArgumentType;
-import dev.danae.common.commands.arguments.PropertyList;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.QueryType;
 import dev.danae.gregorail.plugin.commands.QueryMatcherCommand;
-import dev.danae.gregorail.plugin.Formatter;
 
 
 public class CartSpeedCommand extends QueryMatcherCommand<Double>
@@ -50,13 +47,22 @@ public class CartSpeedCommand extends QueryMatcherCommand<Double>
     {
       var originalSpeedMultiplier = result.getCart().getSpeedMultiplier();
       if (this.getManager().updateCartSpeedMultiplier(result.getCart(), result.getValue()))
-        context.sendRichMessage(Formatter.formatCartSpeedChangedMessage(result.getCart(), originalSpeedMultiplier, result.getValue()));
+      {
+        context.sendMessage(this.getManager().formatMessage("cart-speed-multiplier-changed", Map.of(
+          "cart", this.getManager().formatMinecart(result.getCart()),
+          "original-speed-multiplier", originalSpeedMultiplier,
+          "speed-multiplier", result.getValue())));
+      }
       else
-        context.sendRichMessage(Formatter.formatCartSpeedRetainedMessage(result.getCart(), originalSpeedMultiplier));
+      {
+        context.sendMessage(this.getManager().formatMessage("cart-speed-multiplier-retained", Map.of(
+          "cart", this.getManager().formatMinecart(result.getCart()),
+          "original-speed-multiplier", originalSpeedMultiplier)));
+      }
     }
     else
     {
-      context.sendRichMessage(Formatter.formatCart(result.getCart()));
+      context.sendMessage(this.getManager().formatMessage("cart-not-found"));
     }
   }
 

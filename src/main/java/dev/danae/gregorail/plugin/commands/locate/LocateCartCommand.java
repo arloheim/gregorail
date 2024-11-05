@@ -1,5 +1,6 @@
 package dev.danae.gregorail.plugin.commands.locate;
 
+import java.util.Map;
 import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
@@ -36,7 +37,10 @@ public class LocateCartCommand extends ManagerCommand
     var cart = this.getManager().findNearestCart(this.getManager().getLocationArgumentType(senderLocation, radius).parse(scanner), distance);
     
     // Send information about the cart
-    context.sendMessage(this.getManager().formatMinecart(cart));
+    if (cart != null)
+      context.sendMessage(this.getManager().formatMessage("cart-found", Map.of("cart", cart)));
+    else
+      context.sendMessage(this.getManager().formatMessage("cart-not-found"));
   }
   
   // Return suggestions for the specified command context

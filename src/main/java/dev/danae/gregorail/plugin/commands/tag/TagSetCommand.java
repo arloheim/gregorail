@@ -43,7 +43,7 @@ public class TagSetCommand extends ManagerCommand
       this.getManager().setCodeTag(code, codeTag -> codeTag.withName(name));
     
       // Send a message about the updated name of the code tag
-      context.sendMessage(this.getManager().deserializeMessage("tag-name-changed", Map.of(
+      context.sendMessage(this.getManager().formatMessage("tag-name-changed", Map.of(
         "code", code,
         "name", name)));
     }
@@ -54,7 +54,7 @@ public class TagSetCommand extends ManagerCommand
       this.getManager().setCodeTag(code, codeTag -> codeTag.withUrl(url));
     
       // Send a message about the updated URL of the code tag
-      context.sendMessage(this.getManager().deserializeMessage("tag-url-changed", Map.of(
+      context.sendMessage(this.getManager().formatMessage("tag-url-changed", Map.of(
         "code", code,
         "url", url)));
     }

@@ -119,11 +119,10 @@ public class WebhookPayloadFactory extends ManagerComponent
   }
   
   // Create a webhook payload fpr a played sound
-  public JsonObject createSoundPayload(Location location, NamespacedKey sound, Minecart cause)
+  public JsonObject createSoundPayload(NamespacedKey soundKey, Minecart cause)
   {
     var obj = new JsonObject();
-    obj.add("location", this.gson.toJsonTree(location, Location.class));
-    obj.add("sound", new JsonPrimitive(sound.toString()));
+    obj.add("sound", new JsonPrimitive(soundKey.toString()));
     obj.add("cause", this.gson.toJsonTree(cause, Minecart.class));
     return obj;
   }

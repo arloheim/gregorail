@@ -1,6 +1,5 @@
 package dev.danae.gregorail.plugin.commands;
 
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;

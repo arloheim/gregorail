@@ -101,7 +101,7 @@ public class GregoRailWebhookExecutor extends GregoRailPluginComponent implement
   public void onSoundPlayed(SoundPlayedEvent e)
   {
     // Execute the appropriate webhook
-    this.executeWebhook(WebhookType.SOUND_PLAYED, this.payloadFactory.createSoundPayload(e.getLocation(), e.getSoundKey(), e.getCause()));
+    this.executeWebhook(WebhookType.SOUND_PLAYED, this.payloadFactory.createSoundPayload(e.getSoundKey(), e.getCause()));
   }
   
   // Event listener for when a player has entered a minecart

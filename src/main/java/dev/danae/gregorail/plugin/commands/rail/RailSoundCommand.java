@@ -44,12 +44,10 @@ public class RailSoundCommand extends QueryMatcherCommand<NamespacedKey>
     var result = this.matchQueryMatcher(scanner, () -> this.getManager().findNearestCart(senderLocation, distance));
     
     // Execute the command
-    if (this.getManager().playSound(senderLocation, result.getValue(), result.getCart(), volume, pitch))
+    if (this.getManager().playSound(context.getSender(), result.getValue(), result.getCart(), volume, pitch))
     {
-      context.sendMessage(this.getManager().deserializeMessage("sound-played", Map.of(
-        "sound", result.getValue(),
-        "location", senderLocation,
-        "code", result.getCartCode())));
+      context.sendMessage(this.getManager().formatMessage("sound-played", Map.of(
+        "sound", result.getValue())));
     }
   }
 }

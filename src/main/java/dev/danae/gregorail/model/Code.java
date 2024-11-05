@@ -3,7 +3,7 @@ package dev.danae.gregorail.model;
 import java.util.Objects;
 
 
-public class Code
+public class Code implements Comparable<Code>
 {  
   // The identifier of the code
   private final String id;
@@ -26,6 +26,13 @@ public class Code
   public boolean isEmpty()
   {
     return this.id == null;
+  }
+
+  // Compare the code the another code
+  @Override
+  public int compareTo(Code other) 
+  {
+    return this.id.compareToIgnoreCase(other.id);
   }
   
   
@@ -52,7 +59,7 @@ public class Code
     if (!this.isEmpty())
       return this.id;
     else
-      return "<empty>";
+      return "∅";
   }
   
   

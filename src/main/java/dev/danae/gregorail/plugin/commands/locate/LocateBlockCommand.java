@@ -1,5 +1,6 @@
 package dev.danae.gregorail.plugin.commands.locate;
 
+import java.util.Map;
 import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
@@ -35,7 +36,10 @@ public class LocateBlockCommand extends ManagerCommand
     var block = this.getManager().getLocationArgumentType(senderLocation, radius).parse(scanner).getBlock();
     
     // Send information about the block
-    context.sendMessage(this.getManager().formatBlock(block));
+    if (block != null)
+      context.sendMessage(this.getManager().formatMessage("block-found", Map.of("block", block)));
+    else
+      context.sendMessage(this.getManager().formatMessage("block-not-found"));
   }
   
   // Return suggestions for the specified command context

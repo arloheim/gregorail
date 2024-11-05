@@ -36,7 +36,7 @@ public class TagRemoveCommand extends ManagerCommand
     this.getManager().removeCodeTag(code);
     
     // Send a message about the removed code tag
-    context.sendMessage(this.getManager().deserializeMessage("tag-removed", Map.of(
+    context.sendMessage(this.getManager().formatMessage("tag-removed", Map.of(
       "code", code)));
   }
   

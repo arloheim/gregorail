@@ -204,7 +204,7 @@ public final class GregoRailPlugin extends JavaPlugin
     var cartPromptConfig = this.getConfig().getConfigurationSection("cart-prompt");
     if (cartPromptConfig != null)
     {
-      this.cartPromptOptions.setTitle(this.manager.getMessageDeserializer().deserialize(cartPromptConfig.getString("title", "Select a code"), Map.of()));
+      this.cartPromptOptions.setTitle(this.manager.getMessageFormatter().format(cartPromptConfig.getString("title", "Select a code")));
       this.cartPromptOptions.setItemMaterial(cartPromptConfig.contains("item-material") ? Material.matchMaterial(cartPromptConfig.getString("item-material")) : Material.MINECART);
       this.cartPromptOptions.setPlayerSearchRadius(cartPromptConfig.getInt("player-search-radius", 5));
     }
@@ -228,10 +228,49 @@ public final class GregoRailPlugin extends JavaPlugin
         this.butcherOptions.setEnabled(false);
       }
     }
+  }
+
+  // Load the messages
+  public void loadMessages()
+  {
+    this.getLogger().log(Level.INFO, "Loading messages...");
 
     // Load the messages
-    var messagesConfig = this.getConfig().getConfigurationSection("messages");
-    this.manager.loadMessagesFromConfiguration(messagesConfig);
+    this.manager.loadMessagesFromConfiguration(this, "messages.yml", Map.ofEntries(
+      // General messages
+      Map.entry("plugin-reloaded", "<name> has been reloaded"),
+      Map.entry("copy-to-clipboard", "Click to copy \"<text>\" to clipboard"),
+      Map.entry("location-format", "<blue><location></blue>"),
+      Map.entry("block-format", "block <material> at <location>"),
+      Map.entry("block-found", "Found <block>"),
+      Map.entry("block-not-found", "<red>No block found</red>"),
+      Map.entry("cart-format", "minecart with code <code> at <location>"),
+      Map.entry("cart-found", "Found <cart>"),
+      Map.entry("cart-not-found", "<red>No minecart found</red>"),
+      
+      // Messages for the /gtag command
+      Map.entry("tag-list", "<count> code tags are defined"),
+      Map.entry("tag-list-item", "- <code>: <name:'no name'> <url:'no URL'>"),
+      Map.entry("tag-name-changed", "The name of code tag <green><code></green> has been changed to <name>"),
+      Map.entry("tag-url-changed", "The URL of code tag <green><code></green> has been changed to <url>"),
+      Map.entry("tag-name-cleared", "The name of code tag <green><code></green> has been cleared"),
+      Map.entry("tag-url-cleared", "The URL of code tag <green><code></green> has been cleared"),
+      Map.entry("tag-removed", "The code tag <green><code></green> has been removed"),
+      
+      // Messages for the /gcart command
+      Map.entry("cart-code-changed", "The code of <cart> was changed from <green><original-code></green>"),
+      Map.entry("cart-code-cleared", "The code of <cart> was cleared from <green><original-code></green>"),
+      Map.entry("cart-code-retained", "The code of <cart> was unchanged from <green><original-code></green>"),
+      Map.entry("cart-code-speed-multiplier-changed", "The speed multiplier of <cart> was changed from <green><original-speed-multiplier:'#.0'> to <green><speed-multiplier:'#.0'></green>"),
+      Map.entry("cart-code-speed-multiplier-retained", "The speed multiplier of <cart> was unchanged from <green><original-speed-multiplier:'#.0'></green>"),
+      
+      // Messages for the /grail command
+      Map.entry("block-shape-changed", "The shape of <block> was changed from <green><original-shape></green> to <green><shape></green>"),
+      Map.entry("block-shape-retained", "The shape of <block> was unchanged from <green><original-shape></green>"),
+      Map.entry("block-material-changed", "The material of <block> was changed from <green><original-material> to <green><material></green>"),
+      Map.entry("block-material-retained", "The material of <block> was unchanged from <green><original-material></green>"),
+      Map.entry("sound-played", "Sound <sound> was played")
+    ));
   }
 
 

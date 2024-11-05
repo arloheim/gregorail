@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 
 public interface Minecart
-{  
+{
   // Return the identifier of the cart
   public UUID getId();
   

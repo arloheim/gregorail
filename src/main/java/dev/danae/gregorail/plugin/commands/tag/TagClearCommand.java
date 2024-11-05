@@ -41,8 +41,8 @@ public class TagClearCommand extends ManagerCommand
       this.getManager().setCodeTag(code, codeTag -> codeTag.withName(null));
     
       // Send a message about the removed name of the code tag
-      context.sendMessage(this.getManager().deserializeMessage("tag-name-cleared", 
-        Map.of("code", code)));
+      context.sendMessage(this.getManager().formatMessage("tag-name-cleared", Map.of(
+        "code", code)));
     }
     else if (propertyName.equals("url"))
     {
@@ -50,7 +50,7 @@ public class TagClearCommand extends ManagerCommand
       this.getManager().setCodeTag(code, codeTag -> codeTag.withUrl(null));
     
       // Send a message about the removed URL of the code tag
-      context.sendMessage(this.getManager().deserializeMessage("tag-url-cleared", Map.of(
+      context.sendMessage(this.getManager().formatMessage("tag-url-cleared", Map.of(
         "code", code)));
     }
     else

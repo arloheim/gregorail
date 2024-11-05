@@ -1,16 +1,14 @@
 package dev.danae.gregorail.plugin.commands.cart;
 
+import java.util.Map;
 import java.util.stream.Stream;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.common.commands.CommandUsageException;
-import dev.danae.common.commands.arguments.ArgumentType;
-import dev.danae.common.commands.arguments.PropertyList;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.plugin.commands.QueryCommand;
 import dev.danae.gregorail.plugin.commands.QueryType;
-import dev.danae.gregorail.plugin.Formatter;
 
 
 public class CartClearCommand extends QueryCommand
@@ -50,13 +48,22 @@ public class CartClearCommand extends QueryCommand
     {
       var originalCode = result.getCart().getCode();
       if (result.getValue() && this.getManager().updateCartCode(result.getCart(), Code.empty()))
-        context.sendRichMessage(Formatter.formatCartCodeClearedMessage(result.getCart(), originalCode));
+      {
+        context.sendMessage(this.getManager().formatMessage("cart-code-cleared", Map.of(
+          "cart", this.getManager().formatMinecart(result.getCart()),
+          "original-code", originalCode,
+          "code", result.getCartCode())));
+      }
       else
-        context.sendRichMessage(Formatter.formatCartCodeRetainedMessage(result.getCart(), originalCode));
+      {
+        context.sendMessage(this.getManager().formatMessage("cart-code-retained", Map.of(
+          "cart", this.getManager().formatMinecart(result.getCart()),
+          "original-code", originalCode)));
+      }
     }
     else
     {
-      context.sendRichMessage(Formatter.formatCart(result.getCart()));
+      context.sendMessage(this.getManager().formatMessage("cart-not-found"));
     }
   }
 

@@ -49,18 +49,16 @@ public class RailSwitchCommand extends QueryMatcherCommand<Rail.Shape>
       var originalShape = ((Rail)block.getBlockData()).getShape();
       if (this.getManager().updateBlockShape(block, result.getValue(), result.getCart()))
       {
-        context.sendMessage(this.getManager().deserializeMessage("block-shape-changed", Map.of(
+        context.sendMessage(this.getManager().formatMessage("block-shape-changed", Map.of(
           "block", block,
           "original-shape", originalShape,
-          "shape", result.getValue(),
-          "code", result.getCartCode())));
+          "shape", result.getValue())));
       }
       else
       {
-        context.sendMessage(this.getManager().deserializeMessage("block-shape-retained", Map.of(
+        context.sendMessage(this.getManager().formatMessage("block-shape-retained", Map.of(
           "block", block,
-          "original-shape", originalShape,
-          "code", result.getCartCode())));
+          "original-shape", originalShape)));
       }
     }
     catch (IllegalArgumentException ex)

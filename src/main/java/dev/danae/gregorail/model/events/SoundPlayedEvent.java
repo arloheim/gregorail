@@ -1,8 +1,8 @@
 package dev.danae.gregorail.model.events;
 
-import dev.danae.gregorail.model.Minecart;
 import java.util.Arrays;
-import org.bukkit.Location;
+import dev.danae.gregorail.model.Minecart;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.event.Event;
@@ -15,8 +15,8 @@ public class SoundPlayedEvent extends Event
   private static final HandlerList HANDLERS = new HandlerList();
   
   
-  // The location of the sound
-  private final Location location;
+  // The audience of the sound
+  private final Audience audience;
   
   // The key of the sound
   private final NamespacedKey soundKey;
@@ -26,18 +26,18 @@ public class SoundPlayedEvent extends Event
   
   
   // Constructor
-  public SoundPlayedEvent(Location location, NamespacedKey soundKey, Minecart cause)
+  public SoundPlayedEvent(Audience audience, NamespacedKey soundKey, Minecart cause)
   {    
-    this.location = location;
+    this.audience = audience;
     this.soundKey = soundKey;
     this.cause = cause;
   }
   
   
-  // Return the location of the sound
-  public Location getLocation()
+  // Return the audience of the sound
+  public Audience getAudience()
   {
-    return this.location;
+    return this.audience;
   }
   
   // Return the key of the sound

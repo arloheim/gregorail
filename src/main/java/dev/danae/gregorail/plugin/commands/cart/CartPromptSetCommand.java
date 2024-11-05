@@ -8,16 +8,11 @@ import net.kyori.adventure.text.Component;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
 import dev.danae.common.commands.CommandUsageException;
-import dev.danae.common.commands.arguments.ArgumentType;
-import dev.danae.common.commands.arguments.PropertyList;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.Minecart;
-import dev.danae.gregorail.model.arguments.CodeArgumentType;
-import dev.danae.gregorail.plugin.GregoRailPlugin;
 import dev.danae.gregorail.plugin.commands.QueryType;
 import dev.danae.gregorail.plugin.commands.QueryMatcherCommand;
-import dev.danae.gregorail.plugin.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -87,7 +82,7 @@ public class CartPromptSetCommand extends QueryMatcherCommand<List<Code>>
     }
     else
     {
-      context.sendRichMessage(Formatter.formatCart(result.getCart()));
+      player.sendMessage(this.getManager().formatMessage("cart-not-found"));
     }
   }
 
@@ -132,13 +127,21 @@ public class CartPromptSetCommand extends QueryMatcherCommand<List<Code>>
     {
       var originalCode = cart.getCode();
       if (this.getManager().updateCartCode(cart, code))
-        player.sendRichMessage(Formatter.formatCartCodeChangedMessage(cart, originalCode, code));
+      {
+        player.sendMessage(this.getManager().formatMessage("cart-code-changed", Map.of(
+          "cart", this.getManager().formatMinecart(cart),
+          "original-code", originalCode)));
+      }
       else
-        player.sendRichMessage(Formatter.formatCartCodeRetainedMessage(cart, originalCode));
+      {
+        player.sendMessage(this.getManager().formatMessage("cart-code-retained", Map.of(
+          "cart", this.getManager().formatMinecart(cart),
+          "original-code", originalCode)));
+      }
     }
     else
     {
-      player.sendRichMessage(Formatter.formatCart(cart));
+      player.sendMessage(this.getManager().formatMessage("cart-not-found"));
     }
     
     // Cancel the event and close the inventory
@@ -190,7 +193,7 @@ public class CartPromptSetCommand extends QueryMatcherCommand<List<Code>>
     // Set the display name of the item meta
     var codeTag = this.getManager().getCodeTag(code);
     itemMeta.displayName(codeTag != null && codeTag.getName() != null 
-        ? this.getManager().getMessageDeserializer().deserialize(codeTag.getName(), Map.of())
+        ? this.getManager().getMessageFormatter().format(codeTag.getName())
         : Component.text(code.getId()));
   
     // Set the item meta and return the item stack

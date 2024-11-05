@@ -6,8 +6,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 import dev.danae.common.messages.ConfigurationMessageManager;
-import dev.danae.common.messages.MessageDeserializer;
-import dev.danae.common.messages.minimessage.MiniMessageDeserializer;
+import dev.danae.common.messages.MessageFormatter;
+import dev.danae.common.messages.minimessage.MiniMessageFormatter;
 import dev.danae.common.util.Cuboid;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.CodeTag;
@@ -24,6 +24,9 @@ import dev.danae.gregorail.model.persistence.DataTypeManager;
 import dev.danae.gregorail.model.persistence.DataTypeManagerDelegate;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMap;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMapKeyType;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -51,12 +54,12 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   // The data type manager for the manager
   private final DataTypeManager dataTypeManager;
 
+  // The message formatter for the manager
+  private final MessageFormatter messageDeserializer;
+
 
   // The messages for the manager
   private final Map<String, String> messages = new HashMap<>();
-
-  // The message deserializer for the manager
-  private final MessageDeserializer messageDeserializer = new MiniMessageDeserializer();
   
   
   // Constructor
@@ -68,6 +71,10 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     this.codeTags = plugin.createConfigurationMap("code_tags.yml", CodeTag.class, ConfigurationMapKeyType.CODE);
     this.argumentTypeManager = new GregoRailArgumentTypeManager(this.getPlugin());
     this.dataTypeManager = new GregoRailDataTypeManager(this.getPlugin());
+    this.messageDeserializer = new MiniMessageFormatter()
+      .registerCustomResolver(Location.class, this::formatLocation)
+      .registerCustomResolver(Block.class, this::formatBlock)
+      .registerCustomResolver(Minecart.class, this::formatMinecart);
   }
 
 
@@ -78,9 +85,9 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     return this.messages;
   }
 
-  // Return the message deserializer
+  // Return the message formatter
   @Override
-  public MessageDeserializer getMessageDeserializer()
+  public MessageFormatter getMessageFormatter()
   {
     return this.messageDeserializer;
   }
@@ -261,12 +268,12 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     if (block == null)
       throw new IllegalArgumentException("No block found");
     if (!EnumSet.of(Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL).contains(block.getType()))
-      throw new IllegalArgumentException(String.format("%s is not a rail block", Formatter.formatBlockToString(block)));
+      throw new IllegalArgumentException(String.format("%s is not a rail block", this.formatBlock(block)));
     
     // Validate the shape
     var rail = (Rail)block.getBlockData();
     if (shape != null && !rail.getShapes().contains(shape))
-      throw new IllegalArgumentException(String.format("%s cannot be set to shape %s", Formatter.formatBlockToString(block), shape.toString().toLowerCase()));
+      throw new IllegalArgumentException(String.format("%s cannot be set to shape %s", this.formatBlock(block), shape.toString().toLowerCase()));
     
     // Check if the shape has been changed
     if (shape != null)
@@ -313,20 +320,20 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   
   // Play a sound
   @Override
-  public boolean playSound(Location location, NamespacedKey sound, Minecart cause, float volume, float pitch)
+  public boolean playSound(Audience audience, NamespacedKey soundKey, Minecart cause, float volume, float pitch)
   {
     // Check if the sound has been set
-    if (sound != null)
+    if (soundKey != null)
     {
       // Play the sound
-      location.getWorld().playSound(location, sound.toString(), volume, pitch);
+      audience.playSound(Sound.sound(Key.key(soundKey.toString()), Sound.Source.MASTER, volume, pitch), Sound.Emitter.self());
       
       // Call an event
-      Bukkit.getPluginManager().callEvent(new SoundPlayedEvent(location, sound, cause));
+      Bukkit.getPluginManager().callEvent(new SoundPlayedEvent(audience, soundKey, cause));
     }
     
     // Return if the sound has been set
-    return sound != null;
+    return soundKey != null;
   }
   
   // Run a task using the manager

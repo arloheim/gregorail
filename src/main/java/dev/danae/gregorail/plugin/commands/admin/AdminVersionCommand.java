@@ -28,7 +28,7 @@ public class AdminVersionCommand extends ManagerCommand
   public void handle(CommandContext context) throws CommandException
   {     
     // Send information about the version
-    context.sendMessage(String.format("%s %s (API version %s)", this.plugin.getPluginMeta().getName(), this.plugin.getPluginMeta().getVersion(), this.plugin.getPluginMeta().getAPIVersion()));
+    context.sendPlainMessage(String.format("%s %s", this.plugin.getPluginMeta().getName(), this.plugin.getPluginMeta().getVersion()));
   }
 
   // Return suggestions for the specified command context

@@ -5,13 +5,19 @@ import java.util.function.UnaryOperator;
 import dev.danae.common.messages.MessageManager;
 import dev.danae.gregorail.model.arguments.ArgumentTypeManager;
 import dev.danae.gregorail.model.persistence.DataTypeManager;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Rail;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.minecart.RideableMinecart;
 
 
@@ -66,7 +72,7 @@ public interface Manager extends MessageManager, ArgumentTypeManager, DataTypeMa
   public boolean updateBlockMaterial(Block block, Material material, Minecart cause);
   
   // Play a sound
-  public boolean playSound(Location location, NamespacedKey sound, Minecart cause, float volume, float pitch);
+  public boolean playSound(Audience audience, NamespacedKey soundKey, Minecart cause, float volume, float pitch);
 
   // Run a task
   public void runTask(Runnable task);
@@ -75,33 +81,22 @@ public interface Manager extends MessageManager, ArgumentTypeManager, DataTypeMa
   // Format a location to a component
   public default Component formatLocation(Location location)
   {
-    if (location == null)
-      return this.deserializeMessage("no-location-found", Map.of());
-    
-    return this.deserializeMessage("location-format", Map.of(
-      "location", String.format("%d %d %d", location.getX(), location.getY(), location.getZ())));
+    var text = String.format("%d %d %d", location.getX(), location.getY(), location.getZ());
+    return this.formatMessage("location-format", Map.of("location", text))
+      .hoverEvent(HoverEvent.showText(this.formatMessage("copy-to-clipboard", Map.of("text", text))))
+      .clickEvent(ClickEvent.copyToClipboard(text));
   }
 
   // Format a block to a component
   public default Component formatBlock(Block block)
-  {
-    if (block == null)
-      return this.deserializeMessage("no-block-found", Map.of());
-    
-    return this.deserializeMessage("block-format", Map.of(
-      "material", block.getType().getKey().getKey(),
-      "location", this.formatLocation(block.getLocation())));
+  {    
+    return this.formatMessage("block-format", Map.of("material", block.getType().getKey().getKey(), "location", block.getLocation()));
   }
 
   // Format a minecart to a component
   public default Component formatMinecart(Minecart minecart)
-  {
-    if (minecart == null)
-      return this.deserializeMessage("no-minecart-found", Map.of());
-    
-    return this.deserializeMessage("minecart-format", Map.of(
-      "uuid", minecart.getId(),
-      "code", minecart.getCode(),
-      "location", this.formatLocation(minecart.getLocation())));
+  {    
+    return this.formatMessage("minecart-format", Map.of("uuid", minecart.getId(), "code", minecart.getCode(), "location", minecart.getLocation()))
+      .hoverEvent(HoverEvent.showEntity(EntityType.MINECART, minecart.getId()));
   }
 }
