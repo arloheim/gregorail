@@ -46,7 +46,7 @@ public class CodeDisplayNamesMigration extends Migration
   protected boolean canMigrate()
   {
     // Return if the code display names file exists and the code tags file does not exist
-    return this.codeDisplayNamesFile.exists() && !codeTagsFile.exists();
+    return this.codeDisplayNamesFile.exists() && !this.codeTagsFile.exists();
   }
 
   // Actually execute the migration
@@ -59,7 +59,7 @@ public class CodeDisplayNamesMigration extends Migration
 
       // Load the code display names configuration
       var codeDisplayNamesConfig = new YamlConfiguration();
-      codeDisplayNamesConfig.load(codeDisplayNamesFile);
+      codeDisplayNamesConfig.load(this.codeDisplayNamesFile);
 
       // Save the code tags configuration
       var codeTagsConfig = new YamlConfiguration();
