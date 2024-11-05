@@ -69,8 +69,8 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     
     this.options = options;
     this.codeTags = plugin.createConfigurationMap("code_tags.yml", CodeTag.class, ConfigurationMapKeyType.CODE);
-    this.argumentTypeManager = new GregoRailArgumentTypeManager(this.getPlugin());
-    this.dataTypeManager = new GregoRailDataTypeManager(this.getPlugin());
+    this.argumentTypeManager = new GregoRailArgumentTypeManager(this);
+    this.dataTypeManager = new GregoRailDataTypeManager(this);
     this.messageDeserializer = new MiniMessageFormatter()
       .registerCustomResolver(Location.class, this::formatLocation)
       .registerCustomResolver(Block.class, this::formatBlock)
@@ -326,7 +326,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     if (soundKey != null)
     {
       // Play the sound
-      audience.playSound(Sound.sound(Key.key(soundKey.toString()), Sound.Source.MASTER, volume, pitch), Sound.Emitter.self());
+      audience.playSound(Sound.sound(soundKey, Sound.Source.MASTER, volume, pitch), Sound.Emitter.self());
       
       // Call an event
       Bukkit.getPluginManager().callEvent(new SoundPlayedEvent(audience, soundKey, cause));

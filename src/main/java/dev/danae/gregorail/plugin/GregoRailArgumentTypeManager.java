@@ -7,6 +7,8 @@ import dev.danae.common.commands.arguments.MaterialFilter;
 import dev.danae.common.commands.arguments.PropertyList;
 import dev.danae.common.commands.arguments.StringArgumentType;
 import dev.danae.gregorail.model.Code;
+import dev.danae.gregorail.model.Manager;
+import dev.danae.gregorail.model.ManagerComponent;
 import dev.danae.gregorail.model.Query;
 import dev.danae.gregorail.model.arguments.ArgumentTypeManager;
 import dev.danae.gregorail.model.arguments.CodeArgumentType;
@@ -23,7 +25,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.data.Rail;
 
 
-public class GregoRailArgumentTypeManager extends GregoRailPluginComponent implements ArgumentTypeManager
+public class GregoRailArgumentTypeManager extends ManagerComponent implements ArgumentTypeManager
 {
   // Predefined names for properties
   public static final String BLOCK_SEARCH_RADIUS_PROPERTY_NAME = "radius";
@@ -58,32 +60,32 @@ public class GregoRailArgumentTypeManager extends GregoRailPluginComponent imple
 
   
   // Constructor
-  public GregoRailArgumentTypeManager(GregoRailPlugin plugin)
+  public GregoRailArgumentTypeManager(Manager manager)
   {
-    super(plugin);
+    super(manager);
 
-    this.queryType = new QueryArgumentType(this.getManager());
-    this.codeType = new CodeArgumentType(this.getManager());
-    this.codeQueryMatcherType = new QueryMatcherArgumentType<>(this.getManager(), this.codeType);
-    this.codeListType = new CodeListArgumentType(this.getManager());
-    this.codeListQueryMatcherType = new QueryMatcherArgumentType<>(this.getManager(), this.codeListType);
+    this.queryType = new QueryArgumentType(manager);
+    this.codeType = new CodeArgumentType(manager);
+    this.codeQueryMatcherType = new QueryMatcherArgumentType<>(manager, this.queryType, this.codeType);
+    this.codeListType = new CodeListArgumentType(manager);
+    this.codeListQueryMatcherType = new QueryMatcherArgumentType<>(manager, this.queryType, this.codeListType);
     this.speedMultiplierType = ArgumentType.getDoubleArgumentType(Stream.of(1.0));
-    this.speedMultiplierQueryMatcherType = new QueryMatcherArgumentType<>(this.getManager(), this.speedMultiplierType);
+    this.speedMultiplierQueryMatcherType = new QueryMatcherArgumentType<>(manager, this.queryType, this.speedMultiplierType);
     this.blockShapeType = ArgumentType.getEnumArgumentType(Rail.Shape.class);
-    this.blockShapeQueryMatcherType = new QueryMatcherArgumentType<>(this.getManager(), this.blockShapeType);
+    this.blockShapeQueryMatcherType = new QueryMatcherArgumentType<>(manager, this.queryType, this.blockShapeType);
     this.blockMaterialType = ArgumentType.getMaterialArgumentType(MaterialFilter.BLOCKS);
-    this.blockMaterialQueryMatcherType = new QueryMatcherArgumentType<>(this.getManager(), this.blockMaterialType);
+    this.blockMaterialQueryMatcherType = new QueryMatcherArgumentType<>(manager, this.queryType, this.blockMaterialType);
     this.soundType = ArgumentType.getNamespacedKeyArgumentType(Arrays.stream(Sound.values()).map(sound -> sound.getKey()));
-    this.soundQueryMatcherType = new QueryMatcherArgumentType<>(this.getManager(), this.soundType);
+    this.soundQueryMatcherType = new QueryMatcherArgumentType<>(manager, this.queryType, this.soundType);
 
-    this.blockSearchRadiusPropertyType = ArgumentType.getUnsignedIntArgumentType(Stream.of(this.getManager().getBlockSearchRadius()));
-    this.cartSearchDistancePropertyType = ArgumentType.getUnsignedIntArgumentType(Stream.of(this.getManager().getCartSearchDistance()));
+    this.blockSearchRadiusPropertyType = ArgumentType.getUnsignedIntArgumentType(Stream.of(manager.getBlockSearchRadius()));
+    this.cartSearchDistancePropertyType = ArgumentType.getUnsignedIntArgumentType(Stream.of(manager.getCartSearchDistance()));
     this.soundVolumePropertyType = ArgumentType.getFloatArgumentType(Stream.of(1.0f));
     this.soundPitchPropertyType = ArgumentType.getFloatArgumentType(Stream.of(1.0f));
 
     this.locationTypeBuilder = ArgumentType.getLocationArgumentTypeBuilder()
       .withAllowedFormats(LocationFormat.NUMERIC, LocationFormat.BLOCK, LocationFormat.ALIAS)
-      .withBlockSearchRadius(this.getManager().getBlockSearchRadius());
+      .withBlockSearchRadius(manager.getBlockSearchRadius());
   }
 
 

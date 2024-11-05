@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextDecoration;
 import dev.danae.common.commands.CommandContext;
 import dev.danae.common.commands.CommandException;
@@ -34,15 +35,12 @@ public class TagListCommand extends ManagerCommand
       throw new CommandUsageException();
       
     // Send a message listing the code tags
-    var component = this.getManager().formatMessage("tag-list");
-    this.getManager().getDefinedCodeTags().entrySet().stream()
-      .sorted(Comparator.comparing((Map.Entry<Code, CodeTag> e) -> e.getKey()))
-      .forEach(e -> component.appendNewline().append(this.getManager().formatMessage("tag-list-item", Map.of(
-        "code", e.getKey().getId(),
-        "name", this.formatCodeTagName(e.getValue()),
-        "url", this.formatCodeTagUrl(e.getValue())))));
-
-    context.sendMessage(component);
+    context.sendMessage(this.getManager().formatMessage("tag-list", Map.of("count", this.getManager().getDefinedCodeTags().size()))
+      .appendNewline()
+      .append(this.getManager().getDefinedCodeTags().entrySet().stream()
+        .sorted(Comparator.comparing(e -> e.getKey()))
+        .map(e -> this.formatCodeEntry(e.getKey(), e.getValue()))
+        .collect(Component.toComponent(Component.newline()))));
   }
 
   // Return suggestions for the specified command context
@@ -50,6 +48,27 @@ public class TagListCommand extends ManagerCommand
   public Stream<String> suggest(CommandContext context)
   {
     return Stream.empty();
+  }
+
+
+  // Format an code entry to a component
+  private Component formatCodeEntry(Code code, CodeTag codeTag)
+  {
+    return this.getManager().formatMessage("tag-list-item", Map.of(
+      "code", this.formatCode(code), 
+      "name", this.formatCodeTagName(codeTag), 
+      "url", this.formatCodeTagUrl(codeTag)));
+  }
+
+  // Format a code to a component
+  private Component formatCode(Code code)
+  {
+    var setCommand = String.format("/gcart set %s", code.getId());
+
+    return Component.text(code.getId())
+      .decorate(TextDecoration.UNDERLINED)
+      .hoverEvent(HoverEvent.showText(Component.text(setCommand)))
+      .clickEvent(ClickEvent.suggestCommand(setCommand));
   }
 
   // Format the name of a code tag to a component

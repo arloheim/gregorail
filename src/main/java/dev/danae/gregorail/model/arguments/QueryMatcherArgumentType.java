@@ -24,12 +24,12 @@ public final class QueryMatcherArgumentType<T> extends ManagerComponent implemen
 
   
   // Constructor
-  public QueryMatcherArgumentType(Manager manager, StringArgumentType<T> resultArgumentType)
+  public QueryMatcherArgumentType(Manager manager, StringArgumentType<Query> queryArgumentType, StringArgumentType<T> resultArgumentType)
   {
     super(manager);
 
     this.resultArgumentType = resultArgumentType;
-    this.queryArgumentType = manager.getQueryArgumentType();
+    this.queryArgumentType = queryArgumentType;
   }
 
 

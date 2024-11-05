@@ -78,6 +78,9 @@ public final class GregoRailPlugin extends JavaPlugin
   @Override
   public void onLoad()
   {
+    // Create the manager
+    this.manager = new GregoRailManager(this, this.options);
+
     // Register serializable classes for the configuration API
     ConfigurationSerialization.registerClass(CodeTag.class);
 
@@ -90,7 +93,6 @@ public final class GregoRailPlugin extends JavaPlugin
   public void onEnable()
   {    
     // Create the componenets
-    this.manager = new GregoRailManager(this, this.options);
     this.listener = new GregoRailListener(this);
     this.webhookExecutor = new GregoRailWebhookExecutor(this, this.options);
     this.butcher = new Butcher(this, this.butcherOptions);
@@ -148,6 +150,9 @@ public final class GregoRailPlugin extends JavaPlugin
 
     // Load the configuration
     this.loadConfiguration();
+
+    // Load the messages
+    this.loadMessages();
   }
 
   // Execute migrations
@@ -250,7 +255,7 @@ public final class GregoRailPlugin extends JavaPlugin
       
       // Messages for the /gtag command
       Map.entry("tag-list", "<count> code tags are defined"),
-      Map.entry("tag-list-item", "- <code>: <name:'no name'> <url:'no URL'>"),
+      Map.entry("tag-list-item", "- <code>: name = <name:'empty'>, url = <url:'empty'>"),
       Map.entry("tag-name-changed", "The name of code tag <green><code></green> has been changed to <name>"),
       Map.entry("tag-url-changed", "The URL of code tag <green><code></green> has been changed to <url>"),
       Map.entry("tag-name-cleared", "The name of code tag <green><code></green> has been cleared"),

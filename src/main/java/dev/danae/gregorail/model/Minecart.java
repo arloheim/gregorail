@@ -1,6 +1,7 @@
 package dev.danae.gregorail.model;
 
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -9,6 +10,9 @@ public interface Minecart
 {
   // Return the identifier of the cart
   public UUID getId();
+
+  // Return the custom name of the cart
+  public Component getName();
   
   // Return the location of the cart
   public Location getLocation();

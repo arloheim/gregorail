@@ -1,25 +1,31 @@
 package dev.danae.gregorail.plugin;
 
+import dev.danae.gregorail.model.Manager;
+import dev.danae.gregorail.model.ManagerComponent;
 import dev.danae.gregorail.model.persistence.CodeDataType;
 import dev.danae.gregorail.model.persistence.DataTypeManager;
 import dev.danae.gregorail.model.persistence.MinecartDataType;
 import org.bukkit.NamespacedKey;
 
 
-public class GregoRailDataTypeManager extends GregoRailPluginComponent implements DataTypeManager
+public class GregoRailDataTypeManager extends ManagerComponent implements DataTypeManager
 {
+  // The namespace for namespaced keys
+  private static final String NAMESPACE = "gregorail";
+
+
   // Persistent data types
   private final MinecartDataType minecartDataType;
   private final CodeDataType codeDataType;
 
 
   // Constructor
-  public GregoRailDataTypeManager(GregoRailPlugin plugin)
+  public GregoRailDataTypeManager(Manager manager)
   {
-    super(plugin);
+    super(manager);
 
-    this.minecartDataType = new MinecartDataType(this.getManager());
-    this.codeDataType = new CodeDataType(this.getManager());
+    this.minecartDataType = new MinecartDataType(manager);
+    this.codeDataType = new CodeDataType(manager);
   }
 
 
@@ -41,6 +47,6 @@ public class GregoRailDataTypeManager extends GregoRailPluginComponent implement
   @Override
   public NamespacedKey createNamespacedKey(String key)
   {
-    return new NamespacedKey(this.getPlugin(), key);
+    return new NamespacedKey(NAMESPACE, key);
   }
 }

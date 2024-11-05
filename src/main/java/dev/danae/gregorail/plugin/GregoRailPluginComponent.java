@@ -1,9 +1,8 @@
 package dev.danae.gregorail.plugin;
 
-import dev.danae.gregorail.model.ManagerComponent;
+import dev.danae.gregorail.model.Manager;
 
-
-public abstract class GregoRailPluginComponent extends ManagerComponent
+public abstract class GregoRailPluginComponent
 {
   // The plugin of the component
   private final GregoRailPlugin plugin;
@@ -12,8 +11,6 @@ public abstract class GregoRailPluginComponent extends ManagerComponent
   // Constructor
   public GregoRailPluginComponent(GregoRailPlugin plugin)
   {
-    super(plugin.getManager());
-    
     this.plugin = plugin;
   }
   
@@ -22,5 +19,11 @@ public abstract class GregoRailPluginComponent extends ManagerComponent
   protected GregoRailPlugin getPlugin()
   {
     return this.plugin;
+  }
+
+  // Return the manager of the component
+  protected Manager getManager()
+  {
+    return this.plugin.getManager();
   }
 }

@@ -11,7 +11,7 @@ cart-not-found: "<red>No minecart found</red>"
 
 # Messages for the /gtag command
 tag-list: "<count> code tags are defined"
-tag-list-item: "- <code>: <name:'no name'> <url:'no URL'>"
+tag-list-item: "- <code>: name = <name:'empty'>, url = <url:'empty'>"
 tag-name-changed: "The name of code tag <green><code></green> has been changed to <name>"
 tag-url-changed: "The URL of code tag <green><code></green> has been changed to <url>"
 tag-name-cleared: "The name of code tag <green><code></green> has been cleared"

@@ -40,6 +40,17 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
   {
     return this.minecart.getUniqueId();
   }
+
+  // Return the custom name of the cart
+  @Override
+  public Component getName()
+  {
+    var code = this.getCode();
+    var codeTag = this.getManager().getCodeTag(code);
+    return codeTag != null && codeTag.getName() != null 
+      ? this.getManager().getMessageFormatter().format(codeTag.getName())
+      : Component.text(code.toString());
+  }
   
   // Return the location of the cart
   @Override
@@ -59,7 +70,6 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
       .orElse(null);
   }
   
-  
   // Get the code of the cart
   @Override
   public Code getCode()
@@ -72,14 +82,10 @@ public class GregoRailMinecart extends GregoRailPluginComponent implements Minec
   public void setCode(Code code)
   {    
     if (!code.isEmpty())
-    {      
-      var codeTag = this.getManager().getCodeTag(code);
-
+    {
       this.minecart.getPersistentDataContainer().set(this.codeKey, this.getManager().getCodeDataType(), code);
       this.minecart.setCustomNameVisible(true);
-      this.minecart.customName(codeTag != null && codeTag.getName() != null 
-        ? this.getManager().getMessageFormatter().format(codeTag.getName())
-        : Component.text(code.getId()));
+      this.minecart.customName(this.getName());
     }
     else
     {

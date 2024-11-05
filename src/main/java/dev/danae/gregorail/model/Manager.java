@@ -81,7 +81,7 @@ public interface Manager extends MessageManager, ArgumentTypeManager, DataTypeMa
   // Format a location to a component
   public default Component formatLocation(Location location)
   {
-    var text = String.format("%d %d %d", location.getX(), location.getY(), location.getZ());
+    var text = String.format("%d %d %d", location.getBlockX(), location.getBlockY(), location.getBlockZ());
     return this.formatMessage("location-format", Map.of("location", text))
       .hoverEvent(HoverEvent.showText(this.formatMessage("copy-to-clipboard", Map.of("text", text))))
       .clickEvent(ClickEvent.copyToClipboard(text));
@@ -96,7 +96,7 @@ public interface Manager extends MessageManager, ArgumentTypeManager, DataTypeMa
   // Format a minecart to a component
   public default Component formatMinecart(Minecart minecart)
   {    
-    return this.formatMessage("minecart-format", Map.of("uuid", minecart.getId(), "code", minecart.getCode(), "location", minecart.getLocation()))
-      .hoverEvent(HoverEvent.showEntity(EntityType.MINECART, minecart.getId()));
+    return this.formatMessage("cart-format", Map.of("uuid", minecart.getId(), "code", minecart.getCode(), "location", minecart.getLocation()))
+      .hoverEvent(HoverEvent.showEntity(EntityType.MINECART, minecart.getId(), minecart.getName()));
   }
 }

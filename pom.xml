@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.github.arloheim</groupId>
             <artifactId>common-plugin-code</artifactId>
-            <version>c314362ea6</version>
+            <version>47b1ffc76c</version>
         </dependency>
     </dependencies>
     <properties>
