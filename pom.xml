@@ -33,4 +33,30 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <minimizeJar>true</minimizeJar>
+                        <relocations>
+                            <relocation>
+                                <pattern>dev.danae.common</pattern>
+                                <shadedPattern>dev.danae.gregorail.shaded.common</shadedPattern>
+                            </relocation>
+                        </relocations>
+                    </configuration>
+                    </execution>
+                </executions>
+                </plugin>
+        </plugins>
+    </build>
 </project>
