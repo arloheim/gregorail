@@ -30,6 +30,7 @@ import dev.danae.gregorail.plugin.commands.tag.TagSetCommand;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMap;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMapKeyType;
 import dev.danae.gregorail.plugin.migrations.v1_1_0.CodeDisplayNamesMigration;
+import dev.danae.gregorail.plugin.migrations.v2_1_0.CodeTagNamesToMiniMessageMigration;
 import dev.danae.gregorail.plugin.commands.tag.TagClearCommand;
 import dev.danae.gregorail.plugin.commands.tag.TagListCommand;
 import dev.danae.gregorail.plugin.webhooks.Webhook;
@@ -162,6 +163,9 @@ public final class GregoRailPlugin extends JavaPlugin
 
     // Execute v1.1.0 migrations
     new CodeDisplayNamesMigration(this).migrate();
+
+    // Execute v2.1.0 migrations
+    new CodeTagNamesToMiniMessageMigration(this).migrate();
   }
   
   // Load the configuration
