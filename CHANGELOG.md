@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added conditional commands for most `/gcart` and `/grail`commands.
+- Added conditional commands for most `/gcart` and `/grail` commands.
 - Include multiple conditional branches in `/gcart` and `/grail` commands with the `||` separator.
 - Conditionally play sounds with the `/grail sound` and `/grail soundif` commands.
 - Set the search distance for blocks and minecarts in commands as properties.
@@ -100,7 +100,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added a configurable butcher that kills living entities in a specified radius if the player is riding a minecarts.
+- Added a configurable butcher that kills living entities in a specified radius if the player is riding a minecart.
 
 ## [0.2.2] - 2023-02-11
 
