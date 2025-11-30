@@ -54,6 +54,12 @@ public interface Query
   }
 
 
+  // Return a query that checks if the code of a minecraft exists
+  public static Query codeExists()
+  {
+    return cart -> cart != null && !cart.getCode().isEmpty();
+  }
+
   // Return a query that checks if the code of a minecart equals a string
   public static Query codeEquals(String string)
   {

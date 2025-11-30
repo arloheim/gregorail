@@ -16,7 +16,7 @@ import dev.danae.gregorail.model.Query;
 public final class QueryArgumentType extends ManagerComponent implements PatternListArgumentType<Query, Query>
 {
   // The pattern for parsing a code
-  private static final Pattern QUERY_PATTERN = Pattern.compile("((!)?(\\*)?([a-zA-Z0-9_]+)(\\*)?)|(\\*)");
+  private static final Pattern QUERY_PATTERN = Pattern.compile("(?<neg>!)?(?:(?<q>(?<sw>\\*)?(?<code>[a-zA-Z0-9_]+)(?<ew>\\*)?)|(?<any>#)|(?<true>\\*))");
 
 
   // Constructor
@@ -60,33 +60,26 @@ public final class QueryArgumentType extends ManagerComponent implements Pattern
   {
     Query query;
 
-    // Check for a code query
-    if (m.group(1) != null)
-    {
-      // Parse the pattern
-      if (m.group(3) != null && m.group(5) != null)
-        query = Query.codeContains(m.group(4));
-      else if (m.group(3) != null)
-        query = Query.codeStartsWith(m.group(4));
-      else if (m.group(5) != null)
-        query = Query.codeEndsWith(m.group(4));
-      else
-        query = Query.codeEquals(m.group(4));
-    }
-    
-    // Check for an all query
-    else if (m.group(6) != null)
+    // Parse the pattern
+    if (m.group("q") != null && m.group("sw") != null && m.group("ew") != null)
+      query = Query.codeContains(m.group("code"));
+    else if (m.group("q") != null && m.group("ew") != null)
+      query = Query.codeStartsWith(m.group("code"));
+    else if (m.group("q") != null && m.group("sw") != null)
+      query = Query.codeEndsWith(m.group("code"));
+    else if (m.group("q") != null)
+      query = Query.codeEquals(m.group("code"));
+    else if (m.group("any") != null)
+      query = Query.codeExists();
+    else if (m.group("true") != null)
       query = Query.alwaysTrue();
-    
-    // Invalid query format
     else
       throw new ArgumentTypeMismatchException(this, m.group());
 
     // Check if the query should be negated
-    if (m.group(1) != null)
+    if (m.group("neg") != null)
       query = Query.negate(query);
 
-    // Return the query
     return query;
   }
 
