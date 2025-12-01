@@ -25,7 +25,6 @@ import dev.danae.gregorail.model.persistence.DataTypeManagerDelegate;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMap;
 import dev.danae.gregorail.plugin.configuration.ConfigurationMapKeyType;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -55,7 +54,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   private final DataTypeManager dataTypeManager;
 
   // The message formatter for the manager
-  private final MessageFormatter messageDeserializer;
+  private final MessageFormatter messageFormatter;
 
 
   // The messages for the manager
@@ -71,7 +70,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
     this.codeTags = plugin.createConfigurationMap("code_tags.yml", CodeTag.class, ConfigurationMapKeyType.CODE);
     this.argumentTypeManager = new GregoRailArgumentTypeManager(this);
     this.dataTypeManager = new GregoRailDataTypeManager(this);
-    this.messageDeserializer = new MiniMessageFormatter()
+    this.messageFormatter = new MiniMessageFormatter()
       .registerCustomResolver(Location.class, this::formatLocation)
       .registerCustomResolver(Block.class, this::formatBlock)
       .registerCustomResolver(Minecart.class, this::formatMinecart);
@@ -89,7 +88,7 @@ public class GregoRailManager extends GregoRailPluginComponent implements Manage
   @Override
   public MessageFormatter getMessageFormatter()
   {
-    return this.messageDeserializer;
+    return this.messageFormatter;
   }
 
 

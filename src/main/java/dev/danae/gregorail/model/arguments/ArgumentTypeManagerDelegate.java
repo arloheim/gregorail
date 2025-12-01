@@ -1,11 +1,11 @@
 package dev.danae.gregorail.model.arguments;
 
+import java.util.List;
 import dev.danae.common.commands.arguments.ArgumentType;
 import dev.danae.common.commands.arguments.PropertyList;
 import dev.danae.common.commands.arguments.StringArgumentType;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Query;
-import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

@@ -1,5 +1,11 @@
 package dev.danae.gregorail.model.arguments;
 
+import java.util.List;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import com.google.common.reflect.TypeToken;
 import dev.danae.common.commands.Suggestion;
 import dev.danae.common.commands.arguments.ArgumentException;
@@ -8,12 +14,6 @@ import dev.danae.common.commands.arguments.PatternListArgumentType;
 import dev.danae.gregorail.model.Code;
 import dev.danae.gregorail.model.Manager;
 import dev.danae.gregorail.model.ManagerComponent;
-import java.util.List;
-import java.util.regex.MatchResult;
-import java.util.regex.Pattern;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public final class CodeListArgumentType extends ManagerComponent implements PatternListArgumentType<Code, List<Code>>

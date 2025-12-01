@@ -14,7 +14,7 @@ commands:
 
   gtag:
     description: Manages tags of minecart codes.
-    usage: "Usage: /command clear <code> <property> | list | remove <code> | set <code> <property> <value>"
+    usage: "Usage: /<command> clear <code> <property> | list | remove <code> | set <code> <property> <value>"
     
   gcart:
     description: Manages properties of minecarts.

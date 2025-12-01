@@ -129,6 +129,6 @@ public final class Butcher extends GregoRailPluginComponent implements Listener
     if (this.options.isDisableItemDrops())
       mob.getPersistentDataContainer().set(this.entityButcheredKey, PersistentDataType.BYTE, (byte)1);
     
-    mob.damage(mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), source);
+    mob.damage(mob.getAttribute(Attribute.MAX_HEALTH).getValue(), source);
   }
 }

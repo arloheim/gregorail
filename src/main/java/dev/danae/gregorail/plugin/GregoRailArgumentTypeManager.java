@@ -1,5 +1,8 @@
 package dev.danae.gregorail.plugin;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 import dev.danae.common.commands.arguments.ArgumentType;
 import dev.danae.common.commands.arguments.LocationArgumentTypeBuilder;
 import dev.danae.common.commands.arguments.LocationFormat;
@@ -15,9 +18,6 @@ import dev.danae.gregorail.model.arguments.CodeArgumentType;
 import dev.danae.gregorail.model.arguments.CodeListArgumentType;
 import dev.danae.gregorail.model.arguments.QueryArgumentType;
 import dev.danae.gregorail.model.arguments.QueryMatcherArgumentType;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
