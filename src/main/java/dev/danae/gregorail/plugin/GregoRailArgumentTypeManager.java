@@ -1,6 +1,5 @@
 package dev.danae.gregorail.plugin;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 import dev.danae.common.commands.arguments.ArgumentType;
@@ -21,7 +20,7 @@ import dev.danae.gregorail.model.arguments.QueryMatcherArgumentType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
+import org.bukkit.Registry;
 import org.bukkit.block.data.Rail;
 
 
@@ -75,7 +74,7 @@ public class GregoRailArgumentTypeManager extends ManagerComponent implements Ar
     this.blockShapeQueryMatcherType = new QueryMatcherArgumentType<>(manager, this.queryType, this.blockShapeType);
     this.blockMaterialType = ArgumentType.getMaterialArgumentType(MaterialFilter.BLOCKS);
     this.blockMaterialQueryMatcherType = new QueryMatcherArgumentType<>(manager, this.queryType, this.blockMaterialType);
-    this.soundType = ArgumentType.getNamespacedKeyArgumentType(Arrays.stream(Sound.values()).map(sound -> sound.getKey()));
+    this.soundType = ArgumentType.getNamespacedKeyArgumentType(Registry.SOUNDS.keyStream());
     this.soundQueryMatcherType = new QueryMatcherArgumentType<>(manager, this.queryType, this.soundType);
 
     this.blockSearchRadiusPropertyType = ArgumentType.getUnsignedIntArgumentType(Stream.of(manager.getBlockSearchRadius()));
