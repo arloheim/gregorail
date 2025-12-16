@@ -5,11 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Planned]
+
+### Added
+
+- Query a [GregoRail Open Timetable](https://github.com/arloheim/grot) API from within the plugin.
+- Support for block data and NBT tags in the `/grail block` and `/grail blockif` commands.
+
 ## [Unreleased]
 
 ### Added
 
-- Support for block data and NBT tags in the `/grail block` and `/grail blockif` commands.
+- Queries can now check for a minecart with any code with `#` as opposed to any minecart, and be negated using `!`.
+
+### Changed
+
+- The plugin is now using the [Common Plugin Code](https://github.com/arloheim/common-plugin-code) for command and message support.
+- Code tag names are converted from legacy text to the MiniMessage format.
 
 ## [2.0.0] - 2024-03-12
 
