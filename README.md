@@ -1,6 +1,6 @@
 # GregoRail
 
-**GregoRail** is a Spigot plugin containing powerful railroad management tools. Requires Spigot **1.20**, tested on **1.20.1, 1.20.2, 1.20.4 and 1.21**.
+**GregoRail** is a [Paper](https://papermc.io/) plugin containing powerful railroad management tools. Requires Spigot **1.20**, tested on **1.20.1, 1.20.2, 1.20.4 and 1.21**.
 
 ## Features
 
@@ -15,7 +15,7 @@ The features of the plugin include:
 * Automatically kill living entities in a specified range around a player when they are riding a minecart, of which the behaviour can be customized.
 * Execute webhooks based on what's happening to carts with a code and changed blocks and rails.
 
-## Installation
+## Installation and configuration
 
 * Download the [latest release](https://github.com/arloheim/gregorail/releases) of GregoRail from the GitHub repository and place it in the `plugins/` directory of your Spigot server. No additional plugns are required to run GregoRail, but this is subject to change if future features require advanced code to be implemented.
 * Run the server and [tweak the configuration](https://github.com/arloheim/gregorail/wiki/Configuration) in `plugins/GregoRail/config.yml` if necessary. To apply the changes in the configuration, either use the `/gregorail reload` command or restart the server.
@@ -23,8 +23,8 @@ The features of the plugin include:
 
 ## Issues and feature requests
 
-GregoRail is always open for improvement! Should you encounter a bug while using the plugin or have a feature request, please [create an issue](https://github.com/arloheim/gregorail/issues) or, if you have some plugin coding experience, make a [pull request](https://github.com/arloheim/gregorail/pulls). Note that feature requests are judged on a case-by-case basis and are not guaranteed to be implemented immediately or at all.
+GregoRail is always open for improvement! Should you encounter a bug while using the plugin or have a feature request, please [create an issue](https://github.com/arloheim/gregorail/issues) or, if you have some coding experience, make a [pull request](https://github.com/arloheim/gregorail/pulls). Note that feature requests are judged on a case-by-case basis and are not guaranteed to be implemented immediately or at all.
 
 ## License
 
-GregoRail is licensed under the [GPL 3.0](https://github.com/arloheim/gregorail/blob/master/LICENSE.txt) license.
+GregoRail is licensed under the GNU LGPL 3.0 license. See the [license file](LICENSE.txt) for more information.
